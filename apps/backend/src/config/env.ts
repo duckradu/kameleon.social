@@ -8,6 +8,11 @@ const env = dotenv.config();
 dotenvExpand.expand(env);
 
 export const schema = Type.Object({
+  NODE_ENV: Type.Union([
+    Type.Literal("development"),
+    Type.Literal("production"),
+  ]),
+
   HOST: Type.String({ default: "0.0.0.0" }),
   PORT: Type.Number({ default: 3100 }),
 
