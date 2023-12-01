@@ -11,15 +11,21 @@
   "dependencies": {
     "@solidjs/meta": "^0.29.1",
     "@solidjs/router": "^0.8.3",
+    "@unocss/reset": "^0.57.7",
     "solid-js": "^1.8.5",
     "solid-start": "^0.3.10"
   },
   "devDependencies": {
     "@types/node": "^18.17.5",
+    "@unocss/preset-mini": "^0.57.7",
+    "@unocss/preset-web-fonts": "^0.57.7",
+    "@unocss/transformer-directives": "^0.57.7",
+    "@unocss/transformer-variant-group": "^0.57.7",
     "esbuild": "^0.14.54",
     "postcss": "^8.4.28",
     "solid-start-node": "^0.3.10",
     "typescript": "^4.9.5",
+    "unocss": "^0.57.7",
     "vite": "^4.4.9"
   },
   "engines": {
