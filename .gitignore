@@ -1,5 +1,14 @@
+# Dependencies
 node_modules
 
+# Build files
 dist
+.solid
 
+# Environment
 .env
+.env.local
+
+# System Files
+.DS_Store
+Thumbs.db
