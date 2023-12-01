@@ -1,4 +1,8 @@
 import fastifyAutoload from "@fastify/autoload";
+import fastifyCookie from "@fastify/cookie";
+import fastifyCors from "@fastify/cors";
+import fastifyHelmet from "@fastify/helmet";
+import fastifySensible from "@fastify/sensible";
 import { type TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import fastify from "fastify";
 import { join } from "path";
@@ -12,6 +16,17 @@ const MODULE_REGEXP = /.*module(\.ts|\.js|\.cjs|\.mjs)$/;
 
 export function createInstance() {
   const instance = fastify({ logger }).withTypeProvider<TypeBoxTypeProvider>();
+
+  // Utils
+  instance.register(fastifySensible);
+
+  // TODO: Add config
+  // Security
+  instance.register(fastifyCors);
+  instance.register(fastifyHelmet);
+
+  // Plugins
+  instance.register(fastifyCookie);
 
   instance.register(fastifyAutoload, {
     dir: join(__dirname, "..", "modules"),
