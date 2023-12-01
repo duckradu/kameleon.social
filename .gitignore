@@ -5,6 +5,9 @@ node_modules
 dist
 .solid
 
+# Logs
+pino-pretty
+
 # Environment
 .env
 .env.local
