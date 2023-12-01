@@ -1,0 +1,30 @@
+{
+  "name": "@kameleon.social/backend",
+  "version": "0.0.0",
+  "author": "radu.dascalu@pm.me",
+  "type": "module",
+  "main": "dist/root.js",
+  "scripts": {
+    "preinstall": "pnpm clean",
+    "dev": "tsx watch src/root.ts",
+    "build": "tsc",
+    "start": "node dist/root.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@fastify/autoload": "^5.8.0",
+    "@fastify/type-provider-typebox": "^3.5.0",
+    "@sinclair/typebox": "^0.31.28",
+    "dotenv": "^16.3.1",
+    "dotenv-expand": "^10.0.0",
+    "env-schema": "^5.2.1",
+    "fastify": "^4.24.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.1",
+    "rimraf": "^5.0.5",
+    "tsx": "^4.6.1",
+    "typescript": "^5.3.2"
+  }
+}

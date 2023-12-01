@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    // Language and Environment,
+    "target": "ESNext",
+
+    // Modules
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "paths": {
+      "~/db/*": ["./db/*"],
+      "~/*": ["./src/*"]
+    },
+    "resolveJsonModule": true,
+
+    // Emit
+    "outDir": "./dist",
+
+    // Interop Constraints
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Type Checking
+    "strict": true,
+    "noImplicitAny": true,
+
+    // Completeness
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"]
+}
