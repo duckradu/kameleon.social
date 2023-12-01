@@ -1,4 +1,9 @@
 {
+  "tsc-alias": {
+    "resolveFullPaths": true
+  },
+
+  // TS Config
   "compilerOptions": {
     // Language and Environment,
     "target": "ESNext",

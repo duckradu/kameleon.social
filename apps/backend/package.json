@@ -7,7 +7,7 @@
   "scripts": {
     "preinstall": "pnpm clean",
     "dev": "tsx watch src/root.ts",
-    "build": "tsc",
+    "build": "tsc && tsc-alias",
     "start": "node dist/root.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf dist"
@@ -24,6 +24,7 @@
   "devDependencies": {
     "@types/node": "^20.10.1",
     "rimraf": "^5.0.5",
+    "tsc-alias": "^1.8.8",
     "tsx": "^4.6.1",
     "typescript": "^5.3.2"
   }
