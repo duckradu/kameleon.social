@@ -11,6 +11,7 @@
     "start": "node dist/root.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf dist",
+    "db:generate-root": "tsx ./bin/generate-db-root.ts",
     "db:run": "tsx node_modules/drizzle-kit/bin.cjs",
     "db:check": "pnpm db:run check:pg --config=src/config/db.ts",
     "db:generate": "pnpm db:run generate:pg --config=src/config/db.ts",
@@ -40,6 +41,7 @@
   "devDependencies": {
     "@types/node": "^20.10.1",
     "drizzle-kit": "^0.20.6",
+    "glob": "^10.3.10",
     "pg": "^8.11.3",
     "pino-pretty": "^10.2.3",
     "rimraf": "^5.0.5",
