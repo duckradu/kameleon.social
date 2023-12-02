@@ -38,7 +38,7 @@ export const db = drizzle(queryClient, {
       schemaFilesCamelCase
         .map(
           ({ fileName, filePath }) =>
-            `import ${fileName}Schema from "${filePath}";`
+            `import * as ${fileName}Schema from "${filePath}";`
         )
         .join("\n")
     )
