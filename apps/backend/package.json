@@ -10,7 +10,14 @@
     "build": "tsc && tsc-alias",
     "start": "node dist/root.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "db:run": "tsx node_modules/drizzle-kit/bin.cjs",
+    "db:check": "pnpm db:run check:pg --config=src/config/db.ts",
+    "db:generate": "pnpm db:run generate:pg --config=src/config/db.ts",
+    "db:push": "pnpm db:run push:pg --config=src/config/db.ts",
+    "db:seed": "pnpm run db/seed.ts",
+    "db:drop": "pnpm db:run drop --config=src/config/db.ts",
+    "db:studio": "pnpm db:run studio --config=src/config/db.ts"
   },
   "dependencies": {
     "@fastify/autoload": "^5.8.0",
@@ -33,6 +40,7 @@
   "devDependencies": {
     "@types/node": "^20.10.1",
     "drizzle-kit": "^0.20.6",
+    "pg": "^8.11.3",
     "pino-pretty": "^10.2.3",
     "rimraf": "^5.0.5",
     "tsc-alias": "^1.8.8",
