@@ -36,6 +36,7 @@ const corsConfig: FastifyCorsOptions = {
 };
 
 const cookieConfig: FastifyCookieOptions = {
+  // TODO: Add secret
   parseOptions: {
     path: "/",
     httpOnly: true,
