@@ -7,6 +7,8 @@ import { type TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import fastify from "fastify";
 import { join } from "path";
 
+import appConfig from "~/config/app";
+
 import { __dirname } from "~/utils/common";
 import { logger } from "~/utils/logger";
 
@@ -22,11 +24,11 @@ export function createInstance() {
 
   // TODO: Add config
   // Security
-  instance.register(fastifyCors);
+  instance.register(fastifyCors, appConfig.cors);
   instance.register(fastifyHelmet);
 
   // Plugins
-  instance.register(fastifyCookie);
+  instance.register(fastifyCookie, appConfig.cookie);
 
   instance.register(fastifyAutoload, {
     dir: join(__dirname, "..", "modules"),
