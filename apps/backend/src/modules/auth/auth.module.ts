@@ -24,6 +24,7 @@ export default async function (instance: FastifyInstance) {
     url: "/",
     method: "POST",
     schema: {
+      body: signInWithCredentialsSchema,
       response: {
         200: Type.Object({ accessToken: Type.String() }),
       },
@@ -86,7 +87,7 @@ export default async function (instance: FastifyInstance) {
   instance.route({
     url: "/",
     method: "DELETE",
-    preHandler: verifyAccessToken,
+    preHandler: [verifyAccessToken, verifyRefreshToken],
     handler: async (request, reply) => {
       const { accessTokenDecoded: decoded } = request;
 
