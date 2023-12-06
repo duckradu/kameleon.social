@@ -1,16 +1,26 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
+    // Language and Environment
     "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "node",
     "jsxImportSource": "solid-js",
     "jsx": "preserve",
-    "strict": true,
+
+    // Modules
+    "module": "ESNext",
+    "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
+      "~/assets/*": ["./public/assets/*"],
       "~/*": ["./src/*"]
-    }
+    },
+    "types": ["unplugin-icons/types/solid"],
+
+    // Interop Constraints
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Type Checking
+    "strict": true
   }
 }
