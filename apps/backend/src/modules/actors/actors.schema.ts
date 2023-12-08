@@ -2,6 +2,7 @@ import { Type } from "@sinclair/typebox";
 import { createSelectSchema } from "drizzle-typebox";
 import {
   bigserial,
+  index,
   pgTable,
   text,
   timestamp,
@@ -9,36 +10,44 @@ import {
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
-import { authRefreshTokens } from "~/modules/auth/auth.schema";
+import { refreshTokens } from "~/modules/auth/auth.schema";
 
 import { DEFAULT_SIZE, nanoid } from "~/utils/nanoid";
 
-export const actors = pgTable("actors", {
-  id: bigserial("id", { mode: "number" }).primaryKey(),
-  publicId: varchar("public_id").notNull().unique().$defaultFn(nanoid),
+export const actors = pgTable(
+  "actors",
+  {
+    id: bigserial("id", { mode: "number" }).primaryKey(),
+    publicId: varchar("public_id").notNull().unique().$defaultFn(nanoid),
 
-  email: text("email").notNull().unique(),
-  hashedPassword: text("hashed_password").notNull(),
+    email: text("email").notNull().unique(),
+    hashedPassword: text("hashed_password").notNull(),
 
-  name: varchar("name", { length: 70 }),
-  handle: varchar("handle", { length: 32 }).notNull().unique(),
-  bio: varchar("bio", { length: 255 }),
-  dob: timestamp("dob", { mode: "string" }),
+    name: varchar("name", { length: 70 }),
+    handle: varchar("handle", { length: 32 }).notNull().unique(),
+    bio: varchar("bio", { length: 255 }),
+    dob: timestamp("dob", { mode: "string" }),
 
-  locale: varchar("locale", { length: 12 }).notNull().default("en"),
+    locale: varchar("locale", { length: 12 }).notNull().default("en"),
 
-  coverUrl: text("cover_url"),
-  avatarUrl: text("avatar_url"),
-  externalUrl: text("external_url"),
+    coverUrl: text("cover_url"),
+    avatarUrl: text("avatar_url"),
+    externalUrl: text("external_url"),
 
-  emailVerifiedAt: timestamp("email_verified_at", { mode: "string" }),
-  lastSeenAt: timestamp("last_seen_at", { mode: "string" }),
+    emailVerifiedAt: timestamp("email_verified_at", { mode: "string" }),
+    lastSeenAt: timestamp("last_seen_at", { mode: "string" }),
 
-  createdAt: timestamp("created_at", { mode: "string" }).notNull().defaultNow(),
-});
+    createdAt: timestamp("created_at", { mode: "string" })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    actorPublicIdIdx: index("actor_public_id_idx").on(table.publicId),
+  })
+);
 
 export const actorsRelations = relations(actors, ({ many }) => ({
-  authRefreshTokens: many(authRefreshTokens),
+  refreshTokens: many(refreshTokens),
 }));
 
 const selectActorSchema = createSelectSchema(actors, {
