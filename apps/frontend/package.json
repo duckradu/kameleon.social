@@ -13,7 +13,8 @@
     "@solidjs/router": "^0.8.3",
     "@unocss/reset": "^0.57.7",
     "solid-js": "^1.8.5",
-    "solid-start": "^0.3.10"
+    "solid-start": "^0.3.10",
+    "tailwind-variants": "^0.1.18"
   },
   "devDependencies": {
     "@iconify/json": "^2.2.153",
