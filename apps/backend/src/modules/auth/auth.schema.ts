@@ -10,8 +10,8 @@ import {
 
 import { actors } from "~/modules/actors/actors.schema";
 
-export const authRefreshTokens = pgTable(
-  "auth_refresh_tokens",
+export const refreshTokens = pgTable(
+  "refresh_tokens",
   {
     id: varchar("id").primaryKey(),
 
@@ -24,15 +24,12 @@ export const authRefreshTokens = pgTable(
   })
 );
 
-export const authRefreshTokensRelations = relations(
-  authRefreshTokens,
-  ({ one }) => ({
-    actor: one(actors, {
-      fields: [authRefreshTokens.actorId],
-      references: [actors.id],
-    }),
-  })
-);
+export const refreshTokensRelations = relations(refreshTokens, ({ one }) => ({
+  actor: one(actors, {
+    fields: [refreshTokens.actorId],
+    references: [actors.id],
+  }),
+}));
 
 export const signInWithCredentialsSchema = Type.Object({
   email: Type.String({ format: "email" }),
