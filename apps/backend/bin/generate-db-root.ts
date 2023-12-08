@@ -29,7 +29,7 @@ export const db = drizzle(queryClient, {
   );
   const schemaFilesCamelCase = schemaFiles.map((schemaPath) => ({
     fileName: camelCase(path.basename(schemaPath).replace(".schema.ts", "")),
-    filePath: schemaPath.replace(/.*(?=\/modules)/, "~"),
+    filePath: schemaPath.replace(/.*(?=\/modules)/, "~").replace(/.ts$/, ""),
   }));
 
   const fileContent = template
