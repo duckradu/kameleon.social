@@ -10,7 +10,6 @@ import * as AuthService from "~/modules/auth/auth.service";
 
 import {
   verifyAccessToken,
-  verifyNoAccessToken,
   verifyNoRefreshToken,
   verifyRefreshToken,
 } from "~/modules/auth/auth.utils";
@@ -29,7 +28,7 @@ export default async function (instance: FastifyInstance) {
         200: Type.Object({ accessToken: Type.String() }),
       },
     },
-    preHandler: [verifyNoAccessToken, verifyNoRefreshToken],
+    preHandler: verifyNoRefreshToken,
     handler: async (request, reply) => {
       const { body } = request;
 
@@ -87,15 +86,15 @@ export default async function (instance: FastifyInstance) {
   instance.route({
     url: "/",
     method: "DELETE",
-    preHandler: [verifyAccessToken, verifyRefreshToken],
+    preHandler: verifyRefreshToken,
     handler: async (request, reply) => {
-      const { accessTokenDecoded: decoded } = request;
+      const { refreshTokenDecoded: decoded } = request;
 
       await AuthService.deleteRefreshToken(decoded!.jti);
 
       reply.clearCookie(appConfig.auth.refreshToken.name);
 
-      return reply.send();
+      return reply.status(204).send();
     },
   });
 
@@ -116,7 +115,7 @@ export default async function (instance: FastifyInstance) {
         decoded!.sub
       );
 
-      instance.assert(newTokens, 401, "Invalid refresh token");
+      instance.assert(newTokens, 500, "Failed to create new tokens");
 
       const { access, refresh } = newTokens;
 
