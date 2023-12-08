@@ -5,8 +5,14 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
+import * as actorsSchema from "~/modules/actors/actors.schema";
+import * as authSchema from "~/modules/auth/auth.schema";
+
 const queryClient = postgres(process.env.DATABASE_URL);
 
 export const db = drizzle(queryClient, {
-  schema: {},
+  schema: {
+    actors: actorsSchema,
+    auth: authSchema,
+  },
 });
