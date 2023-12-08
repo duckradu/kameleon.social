@@ -4,7 +4,7 @@ import { InferSelectModel, and, eq, lte } from "drizzle-orm";
 import { db } from "~/db";
 
 import { actors } from "~/modules/actors/actors.schema";
-import { authRefreshTokens } from "~/modules/auth/auth.schema";
+import { refreshTokens } from "~/modules/auth/auth.schema";
 
 import {
   generateAccessToken,
@@ -33,7 +33,7 @@ export async function storeRefreshToken(
   config: Awaited<ReturnType<typeof generateRefreshToken>>["config"]
 ) {
   return await db
-    .insert(authRefreshTokens)
+    .insert(refreshTokens)
     .values({
       id: config.jti,
       actorId,
@@ -42,25 +42,30 @@ export async function storeRefreshToken(
     .returning();
 }
 
+// * Refactor to return errors/error codes instead of null?
 export async function rotateRefreshToken(
   tokenId: NonNullable<JwtPayload["jti"]>,
   actorPublicId: InferSelectModel<typeof actors>["publicId"]
 ) {
   const [matchingToken] = await db
     .select()
-    .from(authRefreshTokens)
-    .where(eq(authRefreshTokens.id, tokenId));
+    .from(refreshTokens)
+    // * REMINDER: I have not tested this
+    .innerJoin(actors, eq(actors.publicId, actorPublicId))
+    .where(eq(refreshTokens.id, tokenId));
 
   if (!matchingToken) {
     return null;
   }
 
+  const { refresh_tokens: refreshToken } = matchingToken;
+
   const now = new Date();
 
-  await deleteExpiredRefreshTokens(matchingToken.actorId, now);
+  await deleteRefreshTokensForActor(refreshToken.actorId, now);
 
-  const currentExpiresAt = new Date(matchingToken.expiresAt);
-  const extendedExpiresAt = addMinutes(currentExpiresAt, 15);
+  const currentExpiresAt = new Date(refreshToken.expiresAt);
+  const extendedExpiresAt = addMinutes(now, 15);
 
   const nextExpiresAt =
     extendedExpiresAt < currentExpiresAt ? extendedExpiresAt : currentExpiresAt;
@@ -70,49 +75,40 @@ export async function rotateRefreshToken(
   }
 
   await db
-    .update(authRefreshTokens)
+    .update(refreshTokens)
     .set({
       expiresAt: nextExpiresAt.toISOString(),
     })
-    .where(eq(authRefreshTokens.id, matchingToken.id));
+    .where(eq(refreshTokens.id, refreshToken.id));
 
   const { access, refresh } = await createTokenSession(
-    matchingToken.actorId,
+    refreshToken.actorId,
     actorPublicId
   );
 
   return { access, refresh };
 }
 
-export async function deleteExpiredRefreshTokens(
-  actorId: InferSelectModel<typeof actors>["id"],
-  now: Date = new Date()
-) {
-  return await db
-    .delete(authRefreshTokens)
-    .where(
-      and(
-        eq(authRefreshTokens.actorId, actorId),
-        lte(authRefreshTokens.expiresAt, now.toISOString())
-      )
-    )
-    .returning();
-}
-
 export async function deleteRefreshToken(
   tokenId: NonNullable<JwtPayload["jti"]>
 ) {
   return await db
-    .delete(authRefreshTokens)
-    .where(eq(authRefreshTokens.id, tokenId))
+    .delete(refreshTokens)
+    .where(eq(refreshTokens.id, tokenId))
     .returning();
 }
 
 export async function deleteRefreshTokensForActor(
-  actorId: InferSelectModel<typeof actors>["id"]
+  actorId: InferSelectModel<typeof actors>["id"],
+  now?: Date
 ) {
   return await db
-    .delete(authRefreshTokens)
-    .where(eq(authRefreshTokens.actorId, actorId))
+    .delete(refreshTokens)
+    .where(
+      and(
+        eq(refreshTokens.actorId, actorId),
+        now ? lte(refreshTokens.expiresAt, now.toISOString()) : undefined
+      )
+    )
     .returning();
 }
