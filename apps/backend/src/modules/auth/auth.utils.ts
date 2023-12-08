@@ -72,6 +72,22 @@ export async function generateRefreshToken(
   );
 }
 
+export async function decodeAccessToken(token: string) {
+  return await decode(
+    token,
+    process.env.ACCESS_TOKEN_SECRET,
+    appConfig.auth.accessToken.salt
+  );
+}
+
+export async function decodeRefreshToken(token: string) {
+  return await decode(
+    token,
+    process.env.REFRESH_TOKEN_SECRET,
+    appConfig.auth.refreshToken.salt
+  );
+}
+
 export function generateJti() {
   return crypto.randomBytes(32).toString("base64");
 }
@@ -127,15 +143,9 @@ export async function verifyAccessToken(
 
   this.assert(accessToken, 401, "Unauthorized");
 
-  const [err, decoded] = await this.to(
-    decode(
-      accessToken,
-      process.env.ACCESS_TOKEN_SECRET,
-      appConfig.auth.accessToken.salt
-    )
-  );
+  const [err, decoded] = await this.to(decodeAccessToken(accessToken));
 
-  this.assert(!err, 401, "Invalid access token");
+  this.assert(!err, 403, "Invalid access token");
 
   request.accessTokenDecoded = decoded;
 }
@@ -148,15 +158,9 @@ export async function verifyRefreshToken(
 
   this.assert(refreshToken, 401, "Unauthorized");
 
-  const [err, decoded] = await this.to(
-    decode(
-      refreshToken,
-      process.env.REFRESH_TOKEN_SECRET,
-      appConfig.auth.refreshToken.salt
-    )
-  );
+  const [err, decoded] = await this.to(decodeRefreshToken(refreshToken));
 
-  this.assert(!err, 401, "Invalid refresh token");
+  this.assert(!err, 403, "Invalid refresh token");
 
   request.refreshTokenDecoded = decoded;
 }
@@ -167,7 +171,7 @@ export async function verifyNoAccessToken(
 ) {
   const token = extractAccessToken(request);
 
-  this.assert(!token, 401, "Already logged in");
+  this.assert(!token, 403, "Already logged in");
 
   request.accessTokenDecoded = undefined;
 }
@@ -178,7 +182,7 @@ export async function verifyNoRefreshToken(
 ) {
   const token = extractRefreshToken(request);
 
-  this.assert(!token, 401, "Already logged in");
+  this.assert(!token, 403, "Already logged in");
 
   request.refreshTokenDecoded = undefined;
 }
