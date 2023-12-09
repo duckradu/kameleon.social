@@ -12,13 +12,13 @@ import { relations } from "drizzle-orm";
 
 import { refreshTokens } from "~/modules/auth/auth.schema";
 
-import { DEFAULT_SIZE, nanoid } from "~/utils/nanoid";
+import { DEFAULT_SIZE, uid } from "~/utils/uid";
 
 export const actors = pgTable(
   "actors",
   {
     id: bigserial("id", { mode: "number" }).primaryKey(),
-    publicId: varchar("public_id").notNull().unique().$defaultFn(nanoid),
+    publicId: varchar("public_id").notNull().unique().$defaultFn(uid),
 
     email: text("email").notNull().unique(),
     hashedPassword: text("hashed_password").notNull(),
