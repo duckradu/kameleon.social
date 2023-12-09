@@ -13,8 +13,6 @@ export function routeData() {
     });
     const data = await response.json();
 
-    console.log(">>>", data);
-
     return data as { hello: "world" };
   });
 }
