@@ -3,15 +3,17 @@ import { createRouteData, refetchRouteData, useRouteData } from "solid-start";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 
+import { xfetch } from "~/lib/xfetch";
+
 export function routeData() {
   return createRouteData(async () => {
-    const response = await fetch("http://127.0.0.1:3100/api/v1/test/", {
+    const response = await xfetch("/api/v1/test", {
       method: "GET",
       headers: new Headers({ "content-type": "application/json" }),
     });
     const data = await response.json();
 
-    console.error(">>>", data);
+    console.log(">>>", data);
 
     return data as { hello: "world" };
   });
