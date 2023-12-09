@@ -5,8 +5,8 @@
   "type": "module",
   "main": "dist/root.js",
   "scripts": {
-    "preinstall": "pnpm clean",
     "dev": "tsx watch src/root.ts",
+    "prebuild": "pnpm clean",
     "build": "tsc && tsc-alias",
     "start": "node dist/root.js",
     "test": "echo \"Error: no test specified\" && exit 1",
