@@ -3,7 +3,6 @@ import fastifyCookie from "@fastify/cookie";
 import fastifyCors from "@fastify/cors";
 import fastifyHelmet from "@fastify/helmet";
 import fastifySensible from "@fastify/sensible";
-import { type TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import fastify from "fastify";
 import { join } from "path";
 
@@ -17,7 +16,7 @@ export const API_PREFIX = "/api/v1";
 const MODULE_REGEXP = /.*module(\.ts|\.js|\.cjs|\.mjs)$/;
 
 export function createInstance() {
-  const instance = fastify({ logger }).withTypeProvider<TypeBoxTypeProvider>();
+  const instance = fastify({ logger });
 
   // Utils
   instance.register(fastifySensible);

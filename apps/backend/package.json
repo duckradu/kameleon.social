@@ -26,7 +26,6 @@
     "@fastify/cors": "^8.4.1",
     "@fastify/helmet": "^11.1.1",
     "@fastify/sensible": "^5.5.0",
-    "@fastify/type-provider-typebox": "^3.5.0",
     "@panva/hkdf": "^1.1.1",
     "@sinclair/typebox": "^0.31.28",
     "argon2": "^0.31.2",

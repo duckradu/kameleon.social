@@ -6,7 +6,6 @@ specifiers:
   '@fastify/cors': ^8.4.1
   '@fastify/helmet': ^11.1.1
   '@fastify/sensible': ^5.5.0
-  '@fastify/type-provider-typebox': ^3.5.0
   '@panva/hkdf': ^1.1.1
   '@sinclair/typebox': ^0.31.28
   '@types/node': ^20.10.1
@@ -37,7 +36,6 @@ dependencies:
   '@fastify/cors': 8.4.1
   '@fastify/helmet': 11.1.1
   '@fastify/sensible': 5.5.0
-  '@fastify/type-provider-typebox': 3.5.0_@sinclair+typebox@0.31.28
   '@panva/hkdf': 1.1.1
   '@sinclair/typebox': 0.31.28
   argon2: 0.31.2
@@ -818,14 +816,6 @@ packages:
       http-errors: 2.0.0
       type-is: 1.6.18
       vary: 1.1.2
-    dev: false
-
-  /@fastify/type-provider-typebox/3.5.0_@sinclair+typebox@0.31.28:
-    resolution: {integrity: sha512-f48uGzvLflE/y4pvXOS8qjAC+mZmlqev9CPHnB8NDsBSL4EbeydO61IgPuzOkeNlAYeRP9Y56UOKj1XWFibgMw==}
-    peerDependencies:
-      '@sinclair/typebox': '>=0.26 <=0.31'
-    dependencies:
-      '@sinclair/typebox': 0.31.28
     dev: false
 
   /@isaacs/cliui/8.0.2:
