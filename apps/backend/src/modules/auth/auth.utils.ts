@@ -1,7 +1,8 @@
 import hkdf from "@panva/hkdf";
-import crypto from "crypto";
 import { type FastifyInstance, type FastifyRequest } from "fastify";
 import * as jose from "jose";
+
+import { uid } from "~/utils/uid";
 
 import appConfig from "~/config/app";
 
@@ -22,7 +23,7 @@ export async function encode<TPayload extends JwtPayload>(
 ) {
   const encryptionSecret = await getDerivedEncryptionKey(secret, salt);
 
-  const jti = payload.jti || generateJti();
+  const jti = payload.jti || uid();
   const exp = payload.exp || Date.now() / 1000 + maxAge;
 
   const token = await new jose.EncryptJWT(payload)
@@ -86,10 +87,6 @@ export async function decodeRefreshToken(token: string) {
     process.env.REFRESH_TOKEN_SECRET,
     appConfig.auth.refreshToken.salt
   );
-}
-
-export function generateJti() {
-  return crypto.randomBytes(32).toString("base64");
 }
 
 async function getDerivedEncryptionKey(
