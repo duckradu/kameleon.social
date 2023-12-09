@@ -1,4 +1,4 @@
-import addMinutes from "date-fns/addMinutes";
+import { addMinutes } from "date-fns";
 import { InferSelectModel, and, eq, lte } from "drizzle-orm";
 
 import { db } from "~/db";
