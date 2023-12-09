@@ -16,23 +16,8 @@ const authConfig = {
 
 const corsConfig: FastifyCorsOptions = {
   credentials: true,
-  origin: (origin, cb) => {
-    if (origin) {
-      // TODO: Only allow localhost in dev
-      // TODO: Add config for prod
-      const { hostname } = new URL(origin);
-
-      if (hostname === "localhost") {
-        cb(null, true);
-
-        return;
-      }
-
-      cb(new Error("Not allowed"), false);
-    } else {
-      cb(null, false);
-    }
-  },
+  origin:
+    process.env.NODE_ENV === "development" ? "*" : "https://kameleon.social",
 };
 
 const cookieConfig: FastifyCookieOptions = {
