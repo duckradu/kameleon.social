@@ -1,6 +1,9 @@
 export async function xfetch(url: string, config: Parameters<typeof fetch>[1]) {
   // TODO: Remember to remove
-  console.log(">>", url, /^https?:\/\//i.test(url), process?.env?.API_URL);
+  console.log(">>", url, /^https?:\/\//i.test(url));
+  if (typeof process !== "undefined") {
+    console.log(">>", process?.env?.API_URL);
+  }
   console.log(">>", import.meta.env.VITE_API_URL);
 
   const absoluteUrl = /^https?:\/\//i.test(url)
