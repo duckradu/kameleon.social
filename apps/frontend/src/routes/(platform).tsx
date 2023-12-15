@@ -13,7 +13,7 @@ export default function PlatformLayout() {
       </aside>
 
       <div class="w-full">
-        <main class="relative w-full max-w-xl min-h-screen mx-auto border-x">
+        <main class="relative w-full max-w-2xl min-h-screen mx-auto border-x">
           <Outlet />
         </main>
       </div>
