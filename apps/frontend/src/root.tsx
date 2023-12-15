@@ -13,6 +13,8 @@ import {
   Title,
 } from "solid-start";
 
+import { Providers } from "~/components/providers";
+
 import "@unocss/reset/tailwind-compat.css";
 
 import "virtual:uno.css";
@@ -31,9 +33,11 @@ export default function Root() {
       <Body>
         <Suspense>
           <ErrorBoundary>
-            <Routes>
-              <FileRoutes />
-            </Routes>
+            <Providers>
+              <Routes>
+                <FileRoutes />
+              </Routes>
+            </Providers>
           </ErrorBoundary>
         </Suspense>
         <Scripts />
