@@ -14,19 +14,25 @@ const authConfig = {
   },
 };
 
+// TODO: Extract hardcoded values to env variables
 const corsConfig: FastifyCorsOptions = {
   credentials: true,
   origin:
-    process.env.NODE_ENV === "development" ? "*" : "https://kameleon.social",
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : "https://kameleon.social",
 };
 
+// TODO: Extract hardcoded values to env variables
 const cookieConfig: FastifyCookieOptions = {
   // TODO: Add secret
   parseOptions: {
     path: "/",
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     sameSite: process.env.NODE_ENV === "production" ? "lax" : "none",
+    domain:
+      process.env.NODE_ENV === "production" ? ".kameleon.social" : "localhost",
   },
 };
 
