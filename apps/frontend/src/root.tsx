@@ -24,7 +24,7 @@ export default function Root() {
     <Html lang="en">
       <Head>
         <Title>kameleon.social</Title>
-        <Link rel="icon" href="./public/assets/icons/favicon.svg" />
+        <Link rel="icon" href="/assets/icons/favicon.svg" />
         <Meta charset="utf-8" />
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
