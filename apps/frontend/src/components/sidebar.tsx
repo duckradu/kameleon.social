@@ -1,5 +1,9 @@
 import { A } from "solid-start";
 
+import {
+  AuthNavigation,
+  PrimaryNavigation,
+} from "~/components/primary-navigation";
 import { Icon } from "~/components/ui/icon";
 
 export function Sidebar() {
@@ -15,9 +19,9 @@ export function Sidebar() {
       </A>
 
       <div class="flex flex-col flex-grow justify-between gap-2">
-        <nav>navigation items</nav>
+        <PrimaryNavigation />
 
-        <div>actor nav</div>
+        <AuthNavigation />
       </div>
     </div>
   );
