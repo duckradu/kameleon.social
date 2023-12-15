@@ -54,16 +54,20 @@ const selectActorSchema = createSelectSchema(actors, {
   publicId: Type.String({ minLength: DEFAULT_SIZE, maxLength: DEFAULT_SIZE }),
 });
 
-export const publicSelectActorSchema = Type.Pick(selectActorSchema, [
-  "publicId",
-  "email",
-  "name",
-  "handle",
-  "bio",
-  "dob",
-  "locale",
-  "coverUrl",
-  "avatarUrl",
-  "externalUrl",
-  "emailVerifiedAt",
-]);
+export const publicSelectActorSchema = Type.Pick(
+  selectActorSchema,
+  [
+    "publicId",
+    "email",
+    "name",
+    "handle",
+    "bio",
+    "dob",
+    "locale",
+    "coverUrl",
+    "avatarUrl",
+    "externalUrl",
+    "emailVerifiedAt",
+  ],
+  { title: "publicSelectActorSchema" }
+);
