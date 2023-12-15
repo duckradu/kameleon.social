@@ -16,11 +16,14 @@ import {
 
 import appConfig from "~/config/app";
 
-const publicAccessTokenSchema = Type.Object({
-  accessToken: Type.String(),
-}, {
-  title: 'publicAccessTokenSchema'
-})
+const publicAccessTokenSchema = Type.Object(
+  {
+    accessToken: Type.String(),
+  },
+  {
+    title: "publicAccessTokenSchema",
+  }
+);
 
 export default async function (instance: FastifyInstance) {
   instance.route<{
