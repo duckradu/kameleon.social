@@ -8,7 +8,9 @@ import postgres from "postgres";
 import * as actorsSchema from "~/modules/actors/actors.schema";
 import * as authSchema from "~/modules/auth/auth.schema";
 
-const queryClient = postgres(process.env.DATABASE_URL);
+import dbConfig from "~/config/db";
+
+const queryClient = postgres(dbConfig.dbCredentials.connectionString);
 
 export const db = drizzle(queryClient, {
   schema: {

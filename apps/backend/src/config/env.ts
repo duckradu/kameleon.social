@@ -23,8 +23,6 @@ export const schema = Type.Object({
   DATABASE_HOST: Type.String(),
   DATABASE_PORT: Type.Number(),
 
-  DATABASE_URL: Type.String(),
-
   COOKIE_SECRET: Type.String(),
 
   ACCESS_TOKEN_SECRET: Type.String(),
