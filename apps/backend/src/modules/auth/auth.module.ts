@@ -16,6 +16,12 @@ import {
 
 import appConfig from "~/config/app";
 
+const publicAccessTokenSchema = Type.Object({
+  accessToken: Type.String(),
+}, {
+  title: 'publicAccessTokenSchema'
+})
+
 export default async function (instance: FastifyInstance) {
   instance.route<{
     Body: Static<typeof signInWithCredentialsSchema>;
@@ -25,7 +31,7 @@ export default async function (instance: FastifyInstance) {
     schema: {
       body: signInWithCredentialsSchema,
       response: {
-        200: Type.Object({ accessToken: Type.String() }),
+        200: publicAccessTokenSchema,
       },
     },
     preHandler: verifyNoRefreshToken,
@@ -103,7 +109,7 @@ export default async function (instance: FastifyInstance) {
     method: "POST",
     schema: {
       response: {
-        200: Type.Object({ accessToken: Type.String() }),
+        200: publicAccessTokenSchema,
       },
     },
     preHandler: verifyRefreshToken,
