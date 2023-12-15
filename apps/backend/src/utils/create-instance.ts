@@ -6,10 +6,12 @@ import fastifySensible from "@fastify/sensible";
 import fastify from "fastify";
 import { join } from "path";
 
-import appConfig from "~/config/app";
+import voyageClientGenerator from "~/plugins/voyage-client-generator";
 
 import { __dirname } from "~/utils/common";
 import { logger } from "~/utils/logger";
+
+import appConfig from "~/config/app";
 
 export const API_PREFIX = "/api/v1";
 
@@ -28,6 +30,12 @@ export function createInstance() {
 
   // Plugins
   instance.register(fastifyCookie, appConfig.cookie);
+
+  if (process.env.NODE_ENV === "development") {
+    instance.register(voyageClientGenerator, {
+      prefix: API_PREFIX,
+    });
+  }
 
   instance.register(fastifyAutoload, {
     dir: join(__dirname, "..", "modules"),
