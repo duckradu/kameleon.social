@@ -9,9 +9,12 @@
     "start": "solid-start start"
   },
   "dependencies": {
+    "@kameleon.social/backend": "workspace:*",
+    "@modular-forms/solid": "^0.20.0",
     "@solidjs/meta": "^0.29.1",
     "@solidjs/router": "^0.8.3",
     "@unocss/reset": "^0.57.7",
+    "date-fns": "^2.30.0",
     "solid-js": "^1.8.5",
     "solid-start": "^0.3.10",
     "tailwind-variants": "^0.1.18"
