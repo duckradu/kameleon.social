@@ -8,5 +8,8 @@
     "build:frontend": "pnpm --filter frontend build",
     "start:backend": "pnpm --filter backend start",
     "start:frontend": "pnpm --filter frontend start"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

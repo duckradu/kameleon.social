@@ -37,8 +37,5 @@
     "unocss": "^0.57.7",
     "unplugin-icons": "^0.18.1",
     "vite": "^4.4.9"
-  },
-  "engines": {
-    "node": ">=20"
   }
 }
