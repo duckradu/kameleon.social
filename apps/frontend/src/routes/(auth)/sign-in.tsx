@@ -8,7 +8,7 @@ export default function SignInPage() {
     <div class="space-y-6 max-w-sm w-full">
       <div class="flex flex-col gap-2 text-center">
         <A href="/" class="mx-auto">
-          <Icon.logo.solid class="w-7.5 h-7.5" />
+          <Icon.logo.solid class="w-10 h-10" />
         </A>
         <h1 class="text-2xl font-semibold tracking-tight">Welcome back</h1>
         <p class="text-sm text-muted-foreground">
