@@ -5,14 +5,16 @@ import fastifyHelmet from "@fastify/helmet";
 import fastifyRateLimiter from "@fastify/rate-limit";
 import fastifySensible from "@fastify/sensible";
 import fastify from "fastify";
-import { join } from "path";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
 
 import voyageClientGenerator from "~/plugins/voyage-client-generator";
 
-import { __dirname } from "~/utils/common";
 import { logger } from "~/utils/logger";
 
 import appConfig from "~/config/app";
+
+export const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export const API_PREFIX = "/api/v1";
 
