@@ -1,5 +1,6 @@
 import { type FastifyCookieOptions } from "@fastify/cookie";
 import { type FastifyCorsOptions } from "@fastify/cors";
+import { type RateLimitPluginOptions } from "@fastify/rate-limit";
 
 const authConfig = {
   accessToken: {
@@ -36,8 +37,15 @@ const cookieConfig: FastifyCookieOptions = {
   },
 };
 
+const rateLimiterConfig: RateLimitPluginOptions = {
+  max: 100,
+  timeWindow: 1000 * 60,
+  allowList: process.env.NODE_ENV === "production" ? [] : ["127.0.0.1"],
+};
+
 export default {
   auth: authConfig,
   cors: corsConfig,
   cookie: cookieConfig,
+  rateLimiter: rateLimiterConfig,
 };

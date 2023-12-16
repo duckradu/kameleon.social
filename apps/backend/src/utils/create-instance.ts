@@ -2,6 +2,7 @@ import fastifyAutoload from "@fastify/autoload";
 import fastifyCookie from "@fastify/cookie";
 import fastifyCors from "@fastify/cors";
 import fastifyHelmet from "@fastify/helmet";
+import fastifyRateLimiter from "@fastify/rate-limit";
 import fastifySensible from "@fastify/sensible";
 import fastify from "fastify";
 import { join } from "path";
@@ -22,14 +23,14 @@ export function createInstance() {
 
   // Utils
   instance.register(fastifySensible);
+  instance.register(fastifyCookie, appConfig.cookie);
 
-  // TODO: Add config
   // Security
   instance.register(fastifyCors, appConfig.cors);
   instance.register(fastifyHelmet);
 
   // Plugins
-  instance.register(fastifyCookie, appConfig.cookie);
+  instance.register(fastifyRateLimiter, appConfig.rateLimiter);
 
   if (process.env.NODE_ENV === "development") {
     instance.register(voyageClientGenerator, {
@@ -37,6 +38,9 @@ export function createInstance() {
     });
   }
 
+  // TODO: Add not found handler with rate limiter
+
+  // Modules
   instance.register(fastifyAutoload, {
     dir: join(__dirname, "..", "modules"),
     dirNameRoutePrefix: true,
