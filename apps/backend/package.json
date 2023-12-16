@@ -15,6 +15,7 @@
     "db:run": "tsx node_modules/drizzle-kit/bin.cjs",
     "db:check": "pnpm db:run check:pg --config=src/config/db.ts",
     "db:generate": "pnpm db:run generate:pg --config=src/config/db.ts",
+    "db:migrate": "tsx ./src/db/migrate.ts",
     "db:push": "pnpm db:run push:pg --config=src/config/db.ts",
     "db:seed": "pnpm run db/seed.ts",
     "db:drop": "pnpm db:run drop --config=src/config/db.ts",
