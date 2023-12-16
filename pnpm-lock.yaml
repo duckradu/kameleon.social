@@ -38,7 +38,6 @@ importers:
       pino-pretty: ^10.2.3
       postgres: ^3.4.3
       prettier: ^3.1.1
-      rimraf: ^5.0.5
       schema2typebox: ^1.6.2
       tsc-alias: ^1.8.8
       tsx: ^4.6.1
@@ -76,7 +75,6 @@ importers:
       pg: 8.11.3
       pino-pretty: 10.2.3
       prettier: 3.1.1
-      rimraf: 5.0.5
       schema2typebox: 1.6.2
       tsc-alias: 1.8.8
       tsx: 4.6.2
@@ -5388,14 +5386,6 @@ packages:
     dependencies:
       glob: 7.2.3
     dev: false
-
-  /rimraf/5.0.5:
-    resolution: {integrity: sha512-CqDakW+hMe/Bz202FPEymy68P+G50RfMQK+Qo5YUqc9SPipvbGjCGKd0RSKEelbsfQuw3g5NZDSrlZZAJurH1A==}
-    engines: {node: '>=14'}
-    hasBin: true
-    dependencies:
-      glob: 10.3.10
-    dev: true
 
   /rollup-plugin-inject/3.0.2:
     resolution: {integrity: sha512-ptg9PQwzs3orn4jkgXJ74bfs5vYz1NCZlSQMBUA0wKcGp5i5pA1AO3fOUEte8enhGUC+iapTCzEWw2jEFFUO/w==}
