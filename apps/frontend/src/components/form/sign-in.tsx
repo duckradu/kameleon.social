@@ -29,7 +29,11 @@ export function SignInForm() {
     validate: typeboxForm(voyage.auth.POST.$s.body),
   });
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async (
+    formData: Static<typeof voyage.auth.POST.$s.body>
+  ) => {
+    await voyage.auth.POST(formData);
+  };
 
   return (
     <Form class="grid gap-2" onSubmit={handleSubmit}>

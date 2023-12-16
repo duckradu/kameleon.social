@@ -9,8 +9,10 @@ export const voyage = createVoyageClient(
       body: payload,
     });
 
+    // TODO: Build a proper client if I want to use this
     if (!response.ok) {
-      throw new Error("HTTPError");
+      // throw new Error("HTTPError");
+      return null;
     }
 
     return await response.json();
