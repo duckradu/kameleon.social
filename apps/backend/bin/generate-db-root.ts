@@ -16,9 +16,9 @@ $IMPORTS;
 
 import dbConfig from "~/config/db";
 
-const queryClient = postgres(dbConfig.dbCredentials.connectionString);
+const pgClient = postgres(dbConfig.dbCredentials.connectionString);
 
-export const db = drizzle(queryClient, {
+export const db = drizzle(pgClient, {
   schema: {
     $SCHEMAS;
   },

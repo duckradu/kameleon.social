@@ -10,9 +10,9 @@ import * as authSchema from "~/modules/auth/auth.schema";
 
 import dbConfig from "~/config/db";
 
-const queryClient = postgres(dbConfig.dbCredentials.connectionString);
+const pgClient = postgres(dbConfig.dbCredentials.connectionString);
 
-export const db = drizzle(queryClient, {
+export const db = drizzle(pgClient, {
   schema: {
     actors: actorsSchema,
     auth: authSchema,

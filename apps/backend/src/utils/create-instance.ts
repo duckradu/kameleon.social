@@ -32,6 +32,7 @@ export function createInstance() {
   // Plugins
   instance.register(fastifyRateLimiter, appConfig.rateLimiter);
 
+  // TODO: Extract this from plugin to a generator
   if (process.env.NODE_ENV === "development") {
     instance.register(voyageClientGenerator, {
       prefix: API_PREFIX,
