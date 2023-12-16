@@ -1,5 +1,5 @@
 import { TypeGuard } from "@sinclair/typebox";
-import { compile } from "json-schema-to-typescript";
+import { schema2typebox } from "schema2typebox/dist/src/schema-to-typebox";
 
 export function capitalize(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -30,28 +30,22 @@ export async function compileSchema(
     schema.title.replace(/^public/, "").replace(/Schema$/, "")
   );
 
-  const cleanSchema = Object.keys(schema).reduce(
-    (acc, key) => ({
-      ...acc,
-      [key]: key === "title" ? IName : schema[key],
-    }),
-    {}
-  );
+  const renamedSchema = {
+    ...schema,
+    title: IName,
+  };
 
-  const compiled = await compile(cleanSchema, IName, {
-    bannerComment: "",
-    format: false,
-    additionalProperties: false,
-  });
+  const compiled = await schema2typebox(JSON.stringify(renamedSchema, null, 2));
+  const withoutBanner = compiled.replace(/\/\*\*([\s\S]*?)\*\//, "");
 
-  return { IName, compiled };
+  return { IName, compiled: withoutBanner };
 }
 
 export function generateResponseMap(
   IName: string,
   compiledResponseMap: { statusCode: string; IName: string }[]
 ) {
-  return `export interface ${IName} {\n${compiledResponseMap
+  return `\nexport interface ${IName} {\n${compiledResponseMap
     .map(
       ({ statusCode, IName: IResponseName }) =>
         `  ${statusCode}: ${IResponseName}\n`
@@ -82,11 +76,35 @@ export function generateCallback(
     genericsStr += `>`;
   }
 
-  return `callback${genericsStr}("${url}", "${method}")`;
+  // TODO: Add support for response schemas
+  let attachedSchemas = interfaces?.IBodyName // || interfaces?.IResponseMapName
+    ? ", { $s: {"
+    : undefined;
+
+  if (attachedSchemas) {
+    if (interfaces?.IBodyName) {
+      attachedSchemas += `body: ${interfaces.IBodyName}`;
+    }
+
+    // if (interfaces?.IResponseMapName) {
+    //   if (interfaces?.IBodyName) {
+    //     attachedSchemas += ", ";
+    //   }
+
+    //   attachedSchemas += `response: ${interfaces.IResponseMapName}`;
+    // }
+
+    attachedSchemas += " } }";
+  }
+
+  return `Object.assign(callback${genericsStr}("${url}", "${method}")${
+    attachedSchemas || ""
+  })`;
 }
 
-export function compileTemplate(
+export function precompileTemplate(
   template: string,
+  templateImports: string,
   InterfaceRegistry: object,
   ResourceRegistry: object
 ) {
@@ -97,5 +115,10 @@ export function compileTemplate(
       `(${JSON.stringify(ResourceRegistry)
         .replaceAll('"', "")
         .replaceAll("\\", '"')});`
-    );
+    )
+    .replaceAll(
+      /import {([\s\S]*?)} from \"@sinclair\/typebox(\/value)?\"\;?/g,
+      ""
+    )
+    .replace("$IMPORTS;", templateImports);
 }
