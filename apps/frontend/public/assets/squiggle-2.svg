@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+  width="23.667999mm"
+  height="56.124702mm"
+  viewBox="0 0 23.667999 56.124702"
+  version="1.1"
+  id="svg1"
+  xml:space="preserve"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:svg="http://www.w3.org/2000/svg"
+>
+  <style>
+    #path17 {
+      fill: black;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #path17 {
+        fill: white;
+      }
+    }
+  </style>
+  <defs id="defs1">
+    <linearGradient id="linearGradient14">
+      <stop
+        style="stop-color: #8fff00; stop-opacity: 1"
+        offset="0"
+        id="stop15"
+      />
+      <stop
+        style="stop-color: #05f29b; stop-opacity: 1"
+        offset="0.49761358"
+        id="stop16"
+      />
+      <stop
+        style="stop-color: #8d00ff; stop-opacity: 1"
+        offset="1"
+        id="stop17"
+      />
+    </linearGradient>
+    <linearGradient id="linearGradient4">
+      <stop
+        style="stop-color: #8d00ff; stop-opacity: 1"
+        offset="0"
+        id="stop4"
+      />
+      <stop
+        style="stop-color: #ee36ff; stop-opacity: 1"
+        offset="0.5"
+        id="stop7"
+      />
+      <stop
+        style="stop-color: #05f29b; stop-opacity: 1"
+        offset="1"
+        id="stop5"
+      />
+    </linearGradient>
+    <linearGradient
+      xlink:href="#linearGradient4"
+      id="linearGradient5"
+      x1="50.067814"
+      y1="162.46228"
+      x2="6.6522908"
+      y2="170.43767"
+      gradientUnits="userSpaceOnUse"
+    />
+    <linearGradient
+      xlink:href="#linearGradient14"
+      id="linearGradient16"
+      x1="105.96722"
+      y1="71.093567"
+      x2="132.36316"
+      y2="77.209953"
+      gradientUnits="userSpaceOnUse"
+    />
+  </defs>
+  <g id="layer1" transform="translate(-93.166003,-82.577344)">
+    <g id="g18" transform="translate(-13.161745,36.688622)">
+      <path
+        style="
+          fill: none;
+          stroke: url(#linearGradient16);
+          stroke-width: 3.265;
+          stroke-dasharray: none;
+          stroke-opacity: 1;
+          paint-order: markers stroke fill;
+        "
+        d="m 128.15945,47.510996 c 0,0 -21.38842,2.405607 -20.1491,23.484101 1.23933,21.078497 21.35412,29.512823 21.35412,29.512823"
+        id="path3"
+      />
+      <path
+        style="
+          fill-opacity: 1;
+          stroke: none;
+          stroke-width: 3.26501;
+          stroke-dasharray: none;
+          stroke-opacity: 1;
+          paint-order: fill markers stroke;
+        "
+        id="path17"
+        d="M 81.917984,130.37268 43.549792,125.18516 8.4457403,141.51715 13.633264,103.14896 -2.6987303,68.044907 35.669462,73.232431 70.773513,56.900437 65.58599,95.268628 Z"
+        transform="matrix(0.0274387,-0.02116406,0.02116406,0.0274387,116.34581,68.783896)"
+      />
+    </g>
+    <g id="g19" transform="translate(77.242009)" style="display: none">
+      <path
+        style="
+          fill: none;
+          stroke: url(#linearGradient5);
+          stroke-width: 3.265;
+          stroke-dasharray: none;
+          stroke-opacity: 1;
+          paint-order: markers stroke fill;
+        "
+        d="m 4.4165604,138.73278 c 0,0 43.2341236,-2.99528 45.1986716,25.7928 1.697832,24.87968 -45.0430267,35.0922 -45.0430267,35.0922"
+        id="path1"
+      />
+      <path
+        style="
+          fill-opacity: 1;
+          stroke: none;
+          stroke-width: 3.26501;
+          stroke-dasharray: none;
+          stroke-opacity: 1;
+          paint-order: fill markers stroke;
+        "
+        id="path17"
+        d="M 81.917984,130.37268 43.549792,125.18516 8.4457403,141.51715 13.633264,103.14896 -2.6987303,68.044907 35.669462,73.232431 70.773513,56.900437 65.58599,95.268628 Z"
+        transform="matrix(0.04001743,-0.03086632,0.03086632,0.04001743,28.464486,163.60071)"
+      />
+    </g>
+  </g>
+</svg>
