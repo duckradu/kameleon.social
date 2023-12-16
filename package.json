@@ -4,7 +4,7 @@
   "author": "radu.dascalu@pm.me",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "build:backend": "pnpm --filter backend build",
+    "build:backend": "pnpm --filter backend build-and-migrate",
     "build:frontend": "pnpm --filter frontend build",
     "start:backend": "pnpm --filter backend start",
     "start:frontend": "pnpm --filter frontend start"
