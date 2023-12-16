@@ -5,8 +5,8 @@ import { Sidebar } from "~/components/sidebar";
 
 export default function PlatformLayout() {
   return (
-    <div class="flex [&>:first-child]:ml-auto [&>:last-child]:mr-auto [&>aside]:px-3 [&>div>main]:px-3">
-      <aside class="relative w-64 shrink-0 z-20">
+    <div class="flex [&>:first-child]:ml-auto [&>:last-child]:mr-auto [&>aside]:px-2 [&>div>main]:px-3">
+      <aside class="relative lg:w-64 shrink-0 z-20">
         <div class="sticky top-0 w-full h-screen">
           <Sidebar />
         </div>
@@ -18,7 +18,7 @@ export default function PlatformLayout() {
         </main>
       </div>
 
-      <aside class="relative w-74 shrink-0 z-10">
+      <aside class="relative w-74 shrink-0 z-10 hidden lg:block">
         <div class="sticky top-0 w-full h-screen">
           <Footer />
         </div>

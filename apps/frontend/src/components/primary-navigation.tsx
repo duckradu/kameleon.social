@@ -53,7 +53,7 @@ export function PrimaryNavigation() {
   const primaryNavigationItems = usePrimaryNavigationItems();
 
   return (
-    <nav class="grid">
+    <nav class="grid group/container">
       <For each={primaryNavigationItems}>
         {(item) => <NavigationItem {...item} />}
       </For>
@@ -63,7 +63,7 @@ export function PrimaryNavigation() {
 
 export function AuthNavigation() {
   return (
-    <nav class="grid">
+    <nav class="grid group/container">
       <NavigationItem
         displayText="Sign in"
         href="/sign-in"
@@ -86,7 +86,7 @@ function NavigationItem(props: NavigationItem) {
       activeClass="font-semibold"
     >
       {({ isActive }) => (
-        <div class="inline-flex itemsx-center gap-3 rounded-full p-3 group-hover:bg-muted">
+        <div class="inline-flex items-center gap-3 rounded-full p-3 transition-colors duration-100 group-hover:bg-muted">
           <Dynamic
             component={isActive() ? props.icon.active : props.icon.inactive}
             class="w-7 h-7"
@@ -94,7 +94,9 @@ function NavigationItem(props: NavigationItem) {
               "text-brand": isActive(),
             }}
           />
-          <span class="inline-flex pr-2 text-xl">{props.displayText}</span>
+          <span class="pr-2 text-xl hidden opacity-0 transition-opacity duration-100 lg:inline-flex group-hover/container:opacity-100">
+            {props.displayText}
+          </span>
         </div>
       )}
     </DynamicA>
