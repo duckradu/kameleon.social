@@ -1,5 +1,7 @@
 import { TypeGuard } from "@sinclair/typebox";
-import { schema2typebox } from "schema2typebox/dist/src/schema-to-typebox";
+
+// meh...
+import { schema2typebox } from "../../../node_modules/schema2typebox/dist/src/schema-to-typebox";
 
 export function capitalize(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
