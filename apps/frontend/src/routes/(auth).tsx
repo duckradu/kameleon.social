@@ -4,7 +4,7 @@ import { Footer } from "~/components/footer";
 
 export default function AuthLayout() {
   return (
-    <div class="h-[100dvh] flex flex-col">
+    <div class="h-screen flex flex-col">
       <img
         src="/assets/squiggle-1.svg"
         class="fixed -top-2 -left-2 w-[calc(20vh)] -z-1"
