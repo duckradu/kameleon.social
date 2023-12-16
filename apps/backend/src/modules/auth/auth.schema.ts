@@ -34,7 +34,7 @@ export const refreshTokensRelations = relations(refreshTokens, ({ one }) => ({
 export const signInWithCredentialsSchema = Type.Object(
   {
     email: Type.String({ format: "email" }),
-    password: Type.String(),
+    password: Type.String({ minLength: 8 }),
   },
   { title: "signInWithCredentialsSchema" }
 );

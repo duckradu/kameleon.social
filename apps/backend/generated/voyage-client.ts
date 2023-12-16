@@ -7,7 +7,7 @@ import { Static, Type } from "@sinclair/typebox";
 export type SignInWithCredentials = Static<typeof SignInWithCredentials>;
 export const SignInWithCredentials = Type.Object({
   email: Type.String({ format: "email" }),
-  password: Type.String(),
+  password: Type.String({ minLength: 8 }),
 });
 
 export type SelectActor = Static<typeof SelectActor>;
