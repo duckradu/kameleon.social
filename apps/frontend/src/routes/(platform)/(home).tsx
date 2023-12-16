@@ -6,7 +6,7 @@ export default function HomePage() {
       <For each={new Array(50)}>
         {() => (
           <div class="flex p-4 border rounded-xl">
-            TODO: add rate limiter to BE
+            TODO: add postgres service to railway
           </div>
         )}
       </For>
