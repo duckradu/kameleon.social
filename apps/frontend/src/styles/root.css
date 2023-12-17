@@ -45,6 +45,14 @@
   }
 }
 
+@layer default {
+  @supports (-webkit-touch-callout: none) {
+    .h-screen {
+      height: -webkit-fill-available;
+    }
+  }
+}
+
 * {
   @apply border-border;
 }
