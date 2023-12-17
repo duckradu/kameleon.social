@@ -29,6 +29,17 @@ export default function Root() {
         <Link rel="icon" href="/assets/icons/favicon.svg" />
         <Meta charset="utf-8" />
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* Am not happy about this sad fruit */}
+        <Meta
+          name="theme-color"
+          media="(prefers-color-scheme: light)"
+          content="white"
+        />
+        <Meta
+          name="theme-color"
+          media="(prefers-color-scheme: dark)"
+          content="black"
+        />
       </Head>
       <Body>
         <Suspense>
