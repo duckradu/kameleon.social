@@ -5,8 +5,12 @@ node_modules
 dist
 .solid
 
-# Logs
-pino-pretty
+# IDEs and editors
+/.idea
+.project
+.classpath
+*.launch
+.settings/
 
 # Environment
 .env
