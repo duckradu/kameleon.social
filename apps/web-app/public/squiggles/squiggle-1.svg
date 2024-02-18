@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+  width="78.362465mm"
+  height="55.205688mm"
+  viewBox="0 0 78.362465 55.205688"
+  version="1.1"
+  id="svg1"
+  xml:space="preserve"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:svg="http://www.w3.org/2000/svg"
+>
+  <style>
+    #path17 {
+      fill: black;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #path17 {
+        fill: white;
+      }
+    }
+  </style>
+  <defs id="defs1">
+    <linearGradient id="linearGradient12">
+      <stop
+        style="stop-color: #ff651a; stop-opacity: 1"
+        offset="0"
+        id="stop12"
+      />
+      <stop
+        style="stop-color: #fff500; stop-opacity: 1"
+        offset="0.49893343"
+        id="stop13"
+      />
+      <stop
+        style="stop-color: #8fff00; stop-opacity: 1"
+        offset="1"
+        id="stop14"
+      />
+    </linearGradient>
+    <linearGradient
+      xlink:href="#linearGradient12"
+      id="linearGradient13"
+      x1="26.356186"
+      y1="62.492874"
+      x2="92.040825"
+      y2="26.331091"
+      gradientUnits="userSpaceOnUse"
+    />
+  </defs>
+  <g id="layer1" transform="translate(-65.818773,-24.565534)">
+    <g id="g17" transform="translate(50.513779)">
+      <path
+        style="
+          fill: none;
+          stroke: url(#linearGradient13);
+          stroke-width: 3.265;
+          stroke-dasharray: none;
+          stroke-opacity: 1;
+          paint-order: markers stroke fill;
+        "
+        d="m 16.350734,69.655681 c 0,0 24.602502,20.52342 40.824801,-2.275999 C 69.357874,50.258174 58.594803,34.880916 49.543401,36.252891 30.546412,39.132377 43.558057,83.743472 72.922292,73.662703 95.922733,65.766631 91.735745,24.731245 91.735745,24.731245"
+        id="path2"
+      />
+      <path
+        style="
+          fill-opacity: 1;
+          stroke: none;
+          stroke-width: 3.26501;
+          stroke-dasharray: none;
+          stroke-opacity: 1;
+          paint-order: fill markers stroke;
+        "
+        id="path17"
+        d="M 81.917984,130.37268 43.549792,125.18516 8.4457403,141.51715 13.633264,103.14896 -2.6987303,68.044907 35.669462,73.232431 70.773513,56.900437 65.58599,95.268628 Z"
+        transform="matrix(0.04194556,-0.03235352,0.03235352,0.04194556,47.269149,48.45793)"
+      />
+    </g>
+  </g>
+</svg>
