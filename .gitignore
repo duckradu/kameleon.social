@@ -1,0 +1,17 @@
+# Dependencies
+node_modules
+
+# Build files
+dist
+.solid
+
+# Logs
+pino-pretty
+
+# Environment
+.env
+.env.local
+
+# System Files
+.DS_Store
+Thumbs.db
