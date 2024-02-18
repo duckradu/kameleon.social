@@ -2,7 +2,7 @@ import { createAsync } from "@solidjs/router";
 
 import { api } from "~/lib/api";
 
-export default function HomePage() {
+export default function Home() {
   const rs = createAsync(() => api.example.hello.query());
 
   return (
