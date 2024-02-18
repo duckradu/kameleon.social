@@ -12,13 +12,12 @@
     "@solidjs/meta": "^0.29.3",
     "@solidjs/router": "^0.12.3",
     "@solidjs/start": "^0.5.9",
-    "@trpc/client": "^10.45.1",
-    "@trpc/server": "^10.45.1",
     "@unocss/reset": "^0.58.5",
     "date-fns": "^3.3.1",
     "solid-js": "^1.8.15",
     "tailwind-variants": "^0.2.0",
-    "vinxi": "^0.2.1"
+    "vinxi": "^0.2.1",
+    "zod": "^3.22.4"
   },
   "engines": {
     "node": ">=18"

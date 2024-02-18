@@ -19,12 +19,6 @@ importers:
       '@solidjs/start':
         specifier: ^0.5.9
         version: 0.5.9(solid-js@1.8.15)(vinxi@0.2.1)(vite@5.1.3)
-      '@trpc/client':
-        specifier: ^10.45.1
-        version: 10.45.1(@trpc/server@10.45.1)
-      '@trpc/server':
-        specifier: ^10.45.1
-        version: 10.45.1
       '@unocss/reset':
         specifier: ^0.58.5
         version: 0.58.5
@@ -40,6 +34,9 @@ importers:
       vinxi:
         specifier: ^0.2.1
         version: 0.2.1(preact@10.19.5)
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@iconify/json':
         specifier: ^2.2.183
@@ -1441,18 +1438,6 @@ packages:
       - supports-color
       - vinxi
       - vite
-    dev: false
-
-  /@trpc/client@10.45.1(@trpc/server@10.45.1):
-    resolution: {integrity: sha512-nVbAk1xpIiI64WgzXGgfxPOGgHoYvffn1IsjV1D/Ri7DL4BKuo2qtZ7UQ+OuHkzH2M8j4ikSVBDpk545fOdvpw==}
-    peerDependencies:
-      '@trpc/server': 10.45.1
-    dependencies:
-      '@trpc/server': 10.45.1
-    dev: false
-
-  /@trpc/server@10.45.1:
-    resolution: {integrity: sha512-KOzBEVaHW9IxEedUP9E50y0tYxAuvlzyjn80Bpemw4rcNbT4WtJnhkFPUY+qDJl7Crt3B/oY2qMgSxVWi9toLg==}
     dev: false
 
   /@types/babel__core@7.20.5:
@@ -3441,6 +3426,7 @@ packages:
   /lilconfig@3.1.0:
     resolution: {integrity: sha512-p3cz0JV5vw/XeouBU3Ldnp+ZkBjE+n8ydJ4mcwBrOiXXPqNlrzGBqWs9X4MWF7f+iKUBu794Y8Hh8yawiJbCjw==}
     engines: {node: '>=14'}
+    deprecated: This version contains a security issue. Please upgrade to 3.1.1 or later.
     dev: false
 
   /lines-and-columns@1.2.4:
