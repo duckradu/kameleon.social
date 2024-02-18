@@ -65,3 +65,11 @@ body {
 #app {
   @apply min-w-screen min-h-screen;
 }
+
+#app a {
+  @apply underline underline-offset-4;
+}
+
+#app a:hover {
+  @apply no-underline;
+}
