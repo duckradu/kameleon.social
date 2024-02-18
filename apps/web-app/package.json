@@ -20,9 +20,11 @@
     "node": ">=18"
   },
   "devDependencies": {
+    "@iconify/json": "^2.2.183",
     "@unocss/preset-web-fonts": "^0.58.5",
     "@unocss/transformer-directives": "^0.58.5",
     "@unocss/transformer-variant-group": "^0.58.5",
-    "unocss": "^0.58.5"
+    "unocss": "^0.58.5",
+    "unplugin-icons": "^0.18.5"
   }
 }
