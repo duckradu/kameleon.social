@@ -59,6 +59,9 @@
 
 body {
   @apply bg-background text-foreground;
-  @apply min-w-screen min-h-screen;
   @apply font-sans antialiased;
+}
+
+#app {
+  @apply min-w-screen min-h-screen;
 }
