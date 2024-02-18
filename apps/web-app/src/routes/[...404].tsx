@@ -4,7 +4,7 @@ import { HttpStatusCode } from "@solidjs/start";
 import { Footer } from "~/components/footer";
 import { KameleonTitle } from "~/components/kameleon-title";
 import { SquigglesBackground } from "~/components/squiggles-background";
-import { Icon } from "~/components/ui/icons";
+import { Icon } from "~/components/ui/icon";
 
 export default function NotFound() {
   return (
