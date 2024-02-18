@@ -7,5 +7,7 @@ export function getBaseUrl() {
     return "https://example.com"; // TODO: Replace with actual domain
   }
 
-  return `http://localhost:${process.env.PORT ?? 3000}`;
+  return `http://${process.env.HOST ?? "localhost"}:${
+    process.env.PORT ?? 3000
+  }`;
 }
