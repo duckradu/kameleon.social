@@ -6,7 +6,14 @@
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
-    "start": "vinxi start"
+    "start": "vinxi start",
+    "db:check": "drizzle-kit check:pg --config=src/server/db/config.ts",
+    "db:generate": "drizzle-kit generate:pg --config=src/server/db/config.ts",
+    "db:migrate": "tsx ./src/server/db/migrate.ts",
+    "db:push": "drizzle-kit push:pg --config=src/server/db/config.ts",
+    "db:seed": "pnpm run ./src/server/db/seed.ts",
+    "db:drop": "drizzle-kit drop --config=src/server/db/config.ts",
+    "db:studio": "drizzle-kit studio --config=src/server/db/config.ts"
   },
   "dependencies": {
     "@solidjs/meta": "^0.29.3",
