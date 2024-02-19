@@ -25,9 +25,15 @@ importers:
       date-fns:
         specifier: ^3.3.1
         version: 3.3.1
+      decode-formdata:
+        specifier: ^0.6.0
+        version: 0.6.0
       drizzle-orm:
         specifier: ^0.29.3
         version: 0.29.3(pg@8.11.3)(postgres@3.4.3)
+      nanoid:
+        specifier: ^5.0.5
+        version: 5.0.5
       postgres:
         specifier: ^3.4.3
         version: 3.4.3
@@ -2465,6 +2471,10 @@ packages:
     dependencies:
       ms: 2.1.2
 
+  /decode-formdata@0.6.0:
+    resolution: {integrity: sha512-pdrU+S6J0oEGn91IekC6oQfK6VyW41dwlJktTG1r6yPoEsexhEReffJE4UPiO2zipvz+4J7SwzfLjlymPLxTMQ==}
+    dev: false
+
   /deepmerge@4.3.1:
     resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
     engines: {node: '>=0.10.0'}
@@ -3927,6 +3937,12 @@ packages:
     resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
+
+  /nanoid@5.0.5:
+    resolution: {integrity: sha512-/Veqm+QKsyMY3kqi4faWplnY1u+VuKO3dD2binyPIybP31DRO29bPF+1mszgLnrR2KqSLceFLBNw0zmvDzN1QQ==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+    dev: false
 
   /next-tick@1.1.0:
     resolution: {integrity: sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==}
