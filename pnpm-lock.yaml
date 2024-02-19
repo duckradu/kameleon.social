@@ -37,12 +37,12 @@ importers:
       tailwind-variants:
         specifier: ^0.2.0
         version: 0.2.0(tailwindcss@3.4.1)
+      valibot:
+        specifier: ^0.28.1
+        version: 0.28.1
       vinxi:
         specifier: ^0.2.1
         version: 0.2.1(preact@10.19.5)
-      zod:
-        specifier: ^3.22.4
-        version: 3.22.4
     devDependencies:
       '@iconify/json':
         specifier: ^2.2.183
@@ -5434,6 +5434,10 @@ packages:
       is-generator-function: 1.0.10
       is-typed-array: 1.1.13
       which-typed-array: 1.1.14
+    dev: false
+
+  /valibot@0.28.1:
+    resolution: {integrity: sha512-zQnjwNJuXk6362Leu0+4eFa/SMwRom3/hEvH6s1EGf3oXIPbo2WFKDra9ymnbVh3clLRvd8hw4sKF5ruI2Lyvw==}
     dev: false
 
   /validate-html-nesting@1.2.2:
