@@ -17,6 +17,7 @@ export function SignUpForm() {
       <Show when={submission.result?.error}>
         <Alert>{submission.result?.error}</Alert>
       </Show>
+
       <div class="grid gap-1">
         <Input size="lg" name="email" type="email" placeholder="Email" />
         <Show when={submission.result?.errors?.email}>

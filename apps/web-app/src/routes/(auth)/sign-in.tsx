@@ -4,6 +4,8 @@ import { SignInForm } from "~/components/form/sign-in";
 import { KameleonTitle } from "~/components/kameleon-title";
 import { Icon } from "~/components/ui/icon";
 
+import { paths } from "~/lib/constants/paths";
+
 export default function SignIn() {
   return (
     <>
@@ -22,7 +24,7 @@ export default function SignIn() {
       <SignInForm />
 
       <div class="flex justify-between text-sm text-brand">
-        <A href="/sign-up">Create an account</A>
+        <A href={paths.signUp}>Create an account</A>
         <A href="/recover-access">Forgot your password?</A>
       </div>
     </>
