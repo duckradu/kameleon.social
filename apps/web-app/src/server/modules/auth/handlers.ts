@@ -106,7 +106,10 @@ export async function signIn$(formData: FormData) {
     return serverErrorResponse(err);
   }
 
-  // TODO: Handle mathcingActor.length === 0
+  // TODO: Handle better mathcingActor.length === 0
+  if (!matchingActor[0]) {
+    return serverErrorResponse({ message: "401 invalid credentials" });
+  }
 
   const isValid = await argon2.verify(
     matchingActor[0].encryptedPassword,
