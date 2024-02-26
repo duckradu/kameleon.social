@@ -65,7 +65,7 @@ export const Icon = {
     solid: SolarMenuDotsBold,
   },
   spinner: SolarTrafficLineDuotone,
-  validationError: SolarDangerTriangleBold,
+  dangerTriangle: SolarDangerTriangleBold,
   chevron: {
     right: SolarAltArrowRightOutline,
     bottom: SolarAltArrowDownOutline,
