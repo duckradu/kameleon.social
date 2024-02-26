@@ -20,7 +20,7 @@ export function FormFieldError(props: FormFieldErrorProps) {
 
   return (
     <p class={classes().root({ ...props, class: props.rootClass })} {...props}>
-      <Icon.validationError
+      <Icon.dangerTriangle
         class={classes().icon({ ...props, class: props.iconClass })}
       />
       <span>{props.children}</span>
