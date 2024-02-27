@@ -33,9 +33,7 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {}
 
 export function Button(props: ButtonProps) {
-  const classes = createMemo(() =>
-    buttonVariants({ ...props, class: props.class })
-  );
+  const classes = createMemo(() => buttonVariants(props));
 
   return <button {...props} class={classes()} />;
 }
