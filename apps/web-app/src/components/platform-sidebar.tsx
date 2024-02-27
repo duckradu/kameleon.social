@@ -1,5 +1,7 @@
 import { Show } from "solid-js";
-import { A, createAsync } from "@solidjs/router";
+import { A } from "@solidjs/router";
+
+import { useSession } from "~/components/context/session";
 
 import { Icon } from "~/components/ui/icon";
 import {
@@ -8,11 +10,10 @@ import {
 } from "~/components/primary-navigation-items";
 import { Button } from "~/components/ui/button";
 
-import { getSessionActor, signOut } from "~/server/modules/auth/actions";
+import { signOut } from "~/server/modules/auth/actions";
 
 export function PlatformSidebar() {
-  // TODO: Get rid of this
-  const actor = createAsync(() => getSessionActor(), { deferStream: true });
+  const sessionActor = useSession();
 
   return (
     <div class="flex flex-col h-screen py-2">
@@ -26,7 +27,7 @@ export function PlatformSidebar() {
       <div class="flex flex-col grow-1 justify-between gap-2">
         <PrimaryNavigation />
 
-        <Show when={actor()} fallback={<AuthNavigation />}>
+        <Show when={sessionActor} fallback={<AuthNavigation />}>
           <form action={signOut} method="post">
             <Button>Sign out</Button>
           </form>
