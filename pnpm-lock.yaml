@@ -34,9 +34,6 @@ importers:
       argon2:
         specifier: ^0.40.1
         version: 0.40.1
-      await-to-js:
-        specifier: ^3.0.0
-        version: 3.0.0
       date-fns:
         specifier: ^3.3.1
         version: 3.3.1
@@ -2401,11 +2398,6 @@ packages:
 
   /async@3.2.5:
     resolution: {integrity: sha512-baNZyqaaLhyLVKm/DlvdW051MSgO6b8eVfIezl9E5PqWxFgzLm/wQntEW4zOytVburDEr0JlALEpdOFwvErLsg==}
-    dev: false
-
-  /await-to-js@3.0.0:
-    resolution: {integrity: sha512-zJAaP9zxTcvTHRlejau3ZOY4V7SRpiByf3/dxx2uyKxxor19tpmpV2QRsTKikckwhaPmr2dVpxxMr7jOCYVp5g==}
-    engines: {node: '>=6.0.0'}
     dev: false
 
   /b4a@1.6.6:
