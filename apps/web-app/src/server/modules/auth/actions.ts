@@ -5,12 +5,12 @@ import {
   signIn$,
   signOut$,
   signUp$,
-} from "~/server/modules/auth/handlers";
+} from "~/server/modules/auth/rpc";
 
-export const getSessionActor = cache(getSessionActor$, "session");
+export const getSessionActor = cache(getSessionActor$, "auth:session");
 
-export const signUp = action(signUp$, "signUp");
+export const signUp = action(signUp$, "auth:signUp");
 
-export const signIn = action(signIn$, "signIn");
+export const signIn = action(signIn$, "auth:signIn");
 
-export const signOut = action(signOut$, "signOut");
+export const signOut = action(signOut$, "auth:signOut");

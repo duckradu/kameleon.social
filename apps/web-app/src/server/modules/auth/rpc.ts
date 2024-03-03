@@ -1,5 +1,6 @@
+"use server";
+
 import * as argon2 from "argon2";
-import to from "await-to-js";
 import { decode } from "decode-formdata";
 import { eq } from "drizzle-orm";
 import { object, safeParseAsync } from "valibot";
@@ -14,20 +15,17 @@ import {
   serverSuccessResponse,
 } from "~/lib/utils/server";
 import { email, password } from "~/lib/utils/validation-schemas";
+import { to } from "~/lib/utils/common";
 
 import { sessionConfig } from "~/server/config";
 
 export function getSession() {
-  "use server";
-
   return useSession<{ actorId: (typeof actors.$inferSelect)["id"] }>(
     sessionConfig
   );
 }
 
 export async function getSessionActor$() {
-  "use server";
-
   const session = await getSession();
 
   const actorId = session.data.actorId;
@@ -45,13 +43,10 @@ export async function getSessionActor$() {
   }
 
   // TODO: Check matchingActor length before returning
-
   return serverSuccessResponse(matchingActor[0]);
 }
 
 export async function signUp$(formData: FormData) {
-  "use server";
-
   const parsed = await safeParseAsync(
     object({ email, password }),
     decode(formData)
@@ -85,8 +80,6 @@ export async function signUp$(formData: FormData) {
 }
 
 export async function signIn$(formData: FormData) {
-  "use server";
-
   const parsed = await safeParseAsync(
     object({ email, password }),
     decode(formData)
@@ -128,8 +121,6 @@ export async function signIn$(formData: FormData) {
 }
 
 export async function signOut$() {
-  "use server";
-
   const session = await getSession();
 
   await session.update({ actorId: undefined });
