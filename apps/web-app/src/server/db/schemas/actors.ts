@@ -31,6 +31,12 @@ export const actors = pgTable(
       .notNull()
       .default(true),
 
+    emailConfirmationSentAt: timestamp("email_confirmation_sent_at", {
+      mode: "string",
+    }),
+    emailConfirmedAt: timestamp("email_confirmed_at", { mode: "string" }),
+    // passwordExpiresAt: timestamp("password_expires_at", { mode: "string" }),
+
     createdAt: timestamp("created_at", { mode: "string" })
       .notNull()
       .defaultNow(),
