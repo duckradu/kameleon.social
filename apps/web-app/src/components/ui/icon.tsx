@@ -53,6 +53,10 @@ import SolarUserPlusOutline from "~icons/solar/user-plus-outline";
 import SolarVolumeBold from "~icons/solar/volume-bold";
 import SolarVolumeLoudBold from "~icons/solar/volume-loud-bold";
 import SolarVolumeSmallBold from "~icons/solar/volume-small-bold";
+import SolarMapPointOutline from "~icons/solar/map-point-outline";
+import SolarLinkMinimalistic2Outline from "~icons/solar/link-minimalistic-2-outline";
+import SolarCalendarOutline from "~icons/solar/calendar-outline";
+import HeroiconsCake from "~icons/heroicons/cake";
 
 export const Icon = {
   logo: {
@@ -144,6 +148,23 @@ export const Icon = {
   },
   filter: {
     outline: SolarFilterOutline,
+  },
+
+  map: {
+    pin: {
+      outline: SolarMapPointOutline,
+    },
+  },
+  link: {
+    minimalistic: {
+      outline: SolarLinkMinimalistic2Outline,
+    },
+  },
+  calendar: {
+    outline: SolarCalendarOutline,
+  },
+  cake: {
+    outline: HeroiconsCake,
   },
 
   videoPlayer: {
