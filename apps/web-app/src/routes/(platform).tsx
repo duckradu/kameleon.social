@@ -20,7 +20,7 @@ export default function PlatformLayout(props: RouteSectionProps) {
 
   return (
     <SessionProvider sessionActor={sessionActor()?.data}>
-      <div class="flex [&>:first-child]:ml-auto [&>:last-child]:mr-auto [&>aside]:px-2 [&>div>main]:px-2">
+      <div class="flex [&>:first-child]:ml-auto [&>:last-child]:mr-auto [&>aside]:px-2 [&>div>main]:px-2xxx">
         <aside class="relative w-64 shrink-0 z-10">
           <div class="sticky top-0 w-full h-screen">
             <PlatformSidebar />
