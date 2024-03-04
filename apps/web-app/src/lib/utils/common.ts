@@ -14,6 +14,22 @@ export function getBaseUrl() {
   }`;
 }
 
+export function replaceURLProtocol(url: string, replaceWith = "") {
+  return url.replace(/^(https?:\/\/)/, replaceWith);
+}
+
+export function replaceURLWWW(url: string, replaceWith = "") {
+  return url.replace(/^(www.)/, replaceWith);
+}
+
+export function replaceURLTrailingSlash(url: string, replaceWith = "") {
+  return url.replace(/\/$/, replaceWith);
+}
+
+export function stripURL(url: string) {
+  return replaceURLTrailingSlash(replaceURLWWW(replaceURLProtocol(url)));
+}
+
 export const NANO_ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyz";
 export const NANO_LENGTH = 12;
 
