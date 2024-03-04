@@ -14,6 +14,8 @@ import { Icon } from "~/components/ui/icon";
 
 import { findOneByPID } from "~/server/modules/actors/actions";
 
+import { stripURL } from "~/lib/utils/common";
+
 import { paths } from "~/lib/constants/paths";
 
 export const route = {
@@ -56,25 +58,27 @@ export default function ActorLayout(props: RouteSectionProps) {
           </div>
         </div>
 
-        <p class="text-center">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-          efficitur orci non hendrerit consectetur.
-        </p>
+        <Show when={actor()?.note}>
+          <p class="text-center">{actor()!.note}</p>
+        </Show>
 
         <div class="flex py-1 justify-evenly text-sm [&>span>svg]-(inline-flex mr-1)">
           <span>
             <Icon.map.pin.outline />
             London
           </span>
-          <span>
-            <Icon.link.minimalistic.outline />
-            <A
-              href="https://kameleon.social"
-              class="text-brand hover:underline"
-            >
-              kameleon.social
-            </A>
-          </span>
+          <Show when={actor()?.externalUrl}>
+            <span>
+              <Icon.link.minimalistic.outline />
+              <A
+                href={actor()!.externalUrl!}
+                target="_blank"
+                class="text-brand hover:underline"
+              >
+                {stripURL(actor()!.externalUrl!)}
+              </A>
+            </span>
+          </Show>
           <Show when={actor()?.createdAt}>
             <span>
               <Icon.calendar.outline />
