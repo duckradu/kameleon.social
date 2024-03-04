@@ -24,6 +24,10 @@ export const avatarVariants = tv({
       md: {
         root: "w-10 h-10",
       },
+      profile: {
+        root: "w-24 h-24",
+        fallback: "text-4xl",
+      },
     },
   },
   defaultVariants: {
