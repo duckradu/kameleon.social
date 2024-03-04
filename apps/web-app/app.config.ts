@@ -15,5 +15,4 @@ export default defineConfig({
       UnoCSS(),
     ],
   },
-  middleware: "./src/middleware.ts",
 });
