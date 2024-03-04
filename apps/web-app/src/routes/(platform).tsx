@@ -1,16 +1,25 @@
-import { RouteSectionProps } from "@solidjs/router";
-import { getRequestEvent } from "solid-js/web";
+import {
+  RouteDefinition,
+  RouteSectionProps,
+  createAsync,
+} from "@solidjs/router";
 
 import { SessionProvider } from "~/components/context/session";
 
 import { Footer } from "~/components/footer";
 import { PlatformSidebar } from "~/components/platform-sidebar";
 
+import { getSessionActor } from "~/server/modules/auth/actions";
+
+export const route = {
+  load: () => getSessionActor(),
+} satisfies RouteDefinition;
+
 export default function PlatformLayout(props: RouteSectionProps) {
-  const event = getRequestEvent();
+  const sessionActor = createAsync(() => getSessionActor());
 
   return (
-    <SessionProvider sessionActor={event?.locals.sessionActor}>
+    <SessionProvider sessionActor={sessionActor()?.data}>
       <div class="flex [&>:first-child]:ml-auto [&>:last-child]:mr-auto [&>aside]:px-2 [&>div>main]:px-2">
         <aside class="relative w-64 shrink-0 z-10">
           <div class="sticky top-0 w-full h-screen">

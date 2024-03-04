@@ -1,15 +1,33 @@
-import { ParentProps, createContext, useContext } from "solid-js";
+import {
+  Accessor,
+  ParentProps,
+  createContext,
+  createEffect,
+  createSignal,
+  useContext,
+} from "solid-js";
 
-export const SessionContext = createContext();
+// TODO: Clean the types :D
+export const SessionContext = createContext<{
+  sessionActor: Accessor<SessionProviderProps["sessionActor"]>;
+}>();
 
 // TODO: Type the value
 export type SessionProviderProps = ParentProps<{
-  sessionActor?: any | null;
+  sessionActor: any | undefined;
 }>;
 
 export function SessionProvider(props: SessionProviderProps) {
+  const [sessionActor, setSessionActor] = createSignal<
+    SessionProviderProps["sessionActor"]
+  >(props.sessionActor);
+
+  createEffect(() => {
+    setSessionActor(props.sessionActor);
+  });
+
   return (
-    <SessionContext.Provider value={props.sessionActor}>
+    <SessionContext.Provider value={{ sessionActor }}>
       {props.children}
     </SessionContext.Provider>
   );

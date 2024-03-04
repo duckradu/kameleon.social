@@ -1,19 +1,17 @@
-import { Show } from "solid-js";
 import { A } from "@solidjs/router";
+import { Show } from "solid-js";
 
 import { useSession } from "~/components/context/session";
 
-import { Icon } from "~/components/ui/icon";
+import { ActorNavigationMenu } from "~/components/actor-navigation-menu";
 import {
   AuthNavigation,
   PrimaryNavigation,
 } from "~/components/primary-navigation-items";
-import { Button } from "~/components/ui/button";
-
-import { signOut } from "~/server/modules/auth/actions";
+import { Icon } from "~/components/ui/icon";
 
 export function PlatformSidebar() {
-  const sessionActor = useSession();
+  const { sessionActor } = useSession();
 
   return (
     <div class="flex flex-col h-screen py-2">
@@ -27,10 +25,8 @@ export function PlatformSidebar() {
       <div class="flex flex-col grow-1 justify-between gap-2">
         <PrimaryNavigation />
 
-        <Show when={sessionActor} fallback={<AuthNavigation />}>
-          <form action={signOut} method="post">
-            <Button>Sign out</Button>
-          </form>
+        <Show when={sessionActor()} fallback={<AuthNavigation />}>
+          <ActorNavigationMenu />
         </Show>
       </div>
     </div>
