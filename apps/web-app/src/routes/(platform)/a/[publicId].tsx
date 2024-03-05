@@ -94,7 +94,7 @@ export default function ActorLayout(props: RouteSectionProps) {
         </div>
       </header>
 
-      <div class="flex [&>a]-(flex flex-1 items-center justify-center h-12 font-medium border-b border-brand) [&>a:not(.active)]-(text-muted-foreground border-muted)">
+      <div class="flex [&>a]-(flex flex-1 items-center justify-center h-12 font-medium border-b border-brand) [&>a:hover]:bg-muted [&>a:not(.active)]-(text-muted-foreground border-muted)">
         <A href={paths.actor.profile(actor()?.pid || "")} end>
           Activity
         </A>
