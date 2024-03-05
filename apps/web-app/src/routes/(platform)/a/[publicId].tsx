@@ -15,6 +15,7 @@ import { Icon } from "~/components/ui/icon";
 import { findOneByPID } from "~/server/modules/actors/actions";
 
 import { stripURL } from "~/lib/utils/common";
+import { getShortName } from "~/lib/utils/actors";
 
 import { paths } from "~/lib/constants/paths";
 
@@ -39,7 +40,11 @@ export default function ActorLayout(props: RouteSectionProps) {
             <div />
 
             <div class="flex flex-col items-center justify-center space-y-2">
-              <Avatar size="profile" fallback="RD" rootClass="-mt-12" />
+              <Avatar
+                size="profile"
+                fallback={getShortName(actor()?.name || "")}
+                rootClass="-mt-12"
+              />
 
               <div class="text-center">
                 <h1 class="text-xl font-semibold">{actor()?.name}</h1>
