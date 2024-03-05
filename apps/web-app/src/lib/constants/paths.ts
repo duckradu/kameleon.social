@@ -4,8 +4,8 @@ export const paths = {
 
   notFound: "/404",
 
-  actor: {
-    profile: (actorPublicId: string) => `/a/${actorPublicId}`,
-    connections: (actorPublicId: string) => `/a/${actorPublicId}/connections`,
-  },
+  actor: (actorPublicId: string) => ({
+    profile: `/a/${actorPublicId}`,
+    connections: `/a/${actorPublicId}/connections`,
+  }),
 };

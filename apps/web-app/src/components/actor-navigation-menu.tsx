@@ -32,7 +32,7 @@ const useActorNavigationItems = (
   [
     {
       displayText: "Profile",
-      href: paths.actor.profile(actor().pid),
+      href: paths.actor(actor().pid).profile,
       icon: {
         active: Icon.user.solid,
         inactive: Icon.user.outline,
