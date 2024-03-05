@@ -49,30 +49,30 @@ const usePrimaryNavigationItems = (): NavigationItem[] => [
     },
   },
   // Temporary placeholder items
-  {
-    displayText: "News",
-    href: "/news",
-    icon: {
-      active: Icon.news.solid,
-      inactive: Icon.news.outline,
-    },
-  },
-  {
-    displayText: "Explore",
-    href: "/explore",
-    icon: {
-      active: Icon.compass.solid,
-      inactive: Icon.compass.outline,
-    },
-  },
-  {
-    displayText: "Shop",
-    href: "/shop",
-    icon: {
-      active: Icon.shop.solid,
-      inactive: Icon.shop.outline,
-    },
-  },
+  // {
+  //   displayText: "News",
+  //   href: "/news",
+  //   icon: {
+  //     active: Icon.news.solid,
+  //     inactive: Icon.news.outline,
+  //   },
+  // },
+  // {
+  //   displayText: "Explore",
+  //   href: "/explore",
+  //   icon: {
+  //     active: Icon.compass.solid,
+  //     inactive: Icon.compass.outline,
+  //   },
+  // },
+  // {
+  //   displayText: "Shop",
+  //   href: "/shop",
+  //   icon: {
+  //     active: Icon.shop.solid,
+  //     inactive: Icon.shop.outline,
+  //   },
+  // },
 ];
 
 export function PrimaryNavigation() {

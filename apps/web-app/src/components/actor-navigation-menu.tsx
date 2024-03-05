@@ -29,30 +29,30 @@ const useActorNavigationItems = (): NavigationItem[] =>
         inactive: Icon.user.outline,
       },
     },
-    {
-      displayText: "Notifications",
-      href: "/a/notifications",
-      icon: {
-        active: Icon.bell.solid,
-        inactive: Icon.bell.outline,
-      },
-    },
-    {
-      displayText: "Saved",
-      href: "/a/saved",
-      icon: {
-        active: Icon.galleryFavourite.solid,
-        inactive: Icon.galleryFavourite.outline,
-      },
-    },
-    {
-      displayText: "Settings",
-      href: "/a/settings",
-      icon: {
-        active: Icon.gear.solid,
-        inactive: Icon.gear.outline,
-      },
-    },
+    // {
+    //   displayText: "Notifications",
+    //   href: "/a/notifications",
+    //   icon: {
+    //     active: Icon.bell.solid,
+    //     inactive: Icon.bell.outline,
+    //   },
+    // },
+    // {
+    //   displayText: "Saved",
+    //   href: "/a/saved",
+    //   icon: {
+    //     active: Icon.galleryFavourite.solid,
+    //     inactive: Icon.galleryFavourite.outline,
+    //   },
+    // },
+    // {
+    //   displayText: "Settings",
+    //   href: "/a/settings",
+    //   icon: {
+    //     active: Icon.gear.solid,
+    //     inactive: Icon.gear.outline,
+    //   },
+    // },
   ].map((i) => ({ ...i, id: createUniqueId() }));
 
 const MENU_ITEM_CLASS =
