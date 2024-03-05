@@ -27,6 +27,9 @@ export const inviteCodesRelations = relations(inviteCodes, ({ one, many }) => ({
   issuer: one(actors, {
     fields: [inviteCodes.issuerId],
     references: [actors.id],
+    relationName: "issued_invite",
   }),
-  usedByActorIds: many(actors),
+  usedByActorIds: many(actors, {
+    relationName: "accepted_invite",
+  }),
 }));
