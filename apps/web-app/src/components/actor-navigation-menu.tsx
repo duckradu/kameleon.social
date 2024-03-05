@@ -4,10 +4,13 @@ import { For, createMemo, createUniqueId } from "solid-js";
 import { Dynamic } from "solid-js/web";
 
 import { ActiveAnchor } from "~/components/active-anchor";
+import { SessionProviderProps, useSession } from "~/components/context/session";
 import { Avatar } from "~/components/ui/avatar";
 import { Icon } from "~/components/ui/icon";
 
 import { signOut } from "~/server/modules/auth/actions";
+
+import { paths } from "~/lib/constants/paths";
 
 type NavigationItem = {
   id: string;
@@ -17,17 +20,22 @@ type NavigationItem = {
     active: SVGIcon;
     inactive: SVGIcon;
   };
+  end?: boolean;
 };
 
-const useActorNavigationItems = (): NavigationItem[] =>
+const useActorNavigationItems = (
+  // TODO: Type this properly
+  actor: SessionProviderProps["sessionActor"]
+): NavigationItem[] =>
   [
     {
       displayText: "Profile",
-      href: "/a/duckradu",
+      href: paths.actor.profile(actor().pid),
       icon: {
         active: Icon.user.solid,
         inactive: Icon.user.outline,
       },
+      end: true,
     },
     // {
     //   displayText: "Notifications",
@@ -59,7 +67,8 @@ const MENU_ITEM_CLASS =
   "flex flex-row gap-3 items-center w-full px-2.5 py-3 bg-popover hover:bg-popover-foreground/5 focus:bg-popover-foreground/5";
 
 export function ActorNavigationMenu() {
-  const actorNavigationItems = useActorNavigationItems();
+  const { sessionActor } = useSession();
+  const actorNavigationItems = useActorNavigationItems(sessionActor);
 
   const [state, send] = useMachine(
     menu.machine({
@@ -84,10 +93,10 @@ export function ActorNavigationMenu() {
         <span class="inline-flex items-center justify-between w-full overflow-hidden">
           <span class="text-sm text-left mr-1 overflow-hidden">
             <p class="font-semibold text-ellipsis overflow-hidden">
-              Radu Dascalu
+              {sessionActor().name}
             </p>
             <p class="text-muted-foreground text-ellipsis overflow-hidden">
-              @duckradu
+              @{sessionActor().pid}
             </p>
           </span>
 
@@ -105,7 +114,7 @@ export function ActorNavigationMenu() {
           <For each={actorNavigationItems}>
             {(item) => (
               <li {...api().getItemProps({ id: item.id })}>
-                <ActiveAnchor href={item.href}>
+                <ActiveAnchor href={item.href} end={item.end}>
                   {({ isActive }) => (
                     <div class={MENU_ITEM_CLASS}>
                       <Dynamic
