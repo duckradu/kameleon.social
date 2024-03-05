@@ -10,6 +10,8 @@ import { Icon } from "~/components/ui/icon";
 
 import { signOut } from "~/server/modules/auth/actions";
 
+import { getShortName } from "~/lib/utils/actors";
+
 import { paths } from "~/lib/constants/paths";
 
 type NavigationItem = {
@@ -89,7 +91,7 @@ export function ActorNavigationMenu() {
         {...api().triggerProps}
         class="group flex gap-3 p-3 w-full rounded-full bg-transparent hover:bg-popover focus:bg-popover data-[state=open]:bg-popover"
       >
-        <Avatar fallback="RD" />
+        <Avatar fallback={getShortName(sessionActor().name || "")} />
         <span class="inline-flex items-center justify-between w-full overflow-hidden">
           <span class="text-sm text-left mr-1 overflow-hidden">
             <p class="font-semibold text-ellipsis overflow-hidden">
