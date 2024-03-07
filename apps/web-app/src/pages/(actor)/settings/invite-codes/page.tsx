@@ -7,6 +7,7 @@ import { Icon } from "~/components/ui/icon";
 
 import {
   createInviteCode,
+  deleteInviteCode,
   getInviteCodes,
 } from "~/server/modules/invite-codes/actions";
 
@@ -42,7 +43,7 @@ export default function SettingsInviteCodes() {
             {(inviteCode) => (
               <li>
                 <div class="bg-gradient-to-tr from-brand to-green rounded-md p-1">
-                  <div class="bg-background rounded-sm flex divide-x divide-dashed divide-muted-foreground">
+                  <div class="bg-background rounded-sm flex divide-x divide-dashed divide-muted-foreground relative">
                     <A
                       href={inviteCode.signUpWithInviteCodeURL}
                       target="_blank"
@@ -73,6 +74,20 @@ export default function SettingsInviteCodes() {
                         <strong>2 ppl</strong>
                       </li>
                     </ul>
+                    <form
+                      action={deleteInviteCode}
+                      method="post"
+                      class="absolute bottom-0 right-0 !border-0"
+                    >
+                      <input
+                        name="inviteCode"
+                        type="hidden"
+                        value={inviteCode.code}
+                      />
+                      <button class="bg-transparent">
+                        <Icon.trashBin.outline />
+                      </button>
+                    </form>
                   </div>
                 </div>
               </li>
