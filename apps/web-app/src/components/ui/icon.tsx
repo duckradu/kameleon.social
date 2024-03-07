@@ -58,6 +58,7 @@ import SolarLinkMinimalistic2Outline from "~icons/solar/link-minimalistic-2-outl
 import SolarCalendarOutline from "~icons/solar/calendar-outline";
 import HeroiconsCake from "~icons/heroicons/cake";
 import HeroiconsPlus from "~icons/heroicons/plus";
+import SolarTrashBinTrashOutline from "~icons/solar/trash-bin-trash-outline";
 
 export const Icon = {
   logo: {
@@ -169,6 +170,9 @@ export const Icon = {
   },
 
   plus: HeroiconsPlus,
+  trashBin: {
+    outline: SolarTrashBinTrashOutline,
+  },
 
   videoPlayer: {
     play: {
