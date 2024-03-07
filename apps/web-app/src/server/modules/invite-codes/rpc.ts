@@ -3,7 +3,8 @@
 import { redirect } from "@solidjs/router";
 import { addWeeks } from "date-fns";
 import { decode } from "decode-formdata";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
+import QRCode from "qrcode";
 import { object, safeParseAsync, string } from "valibot";
 
 import { db } from "~/server/db";
@@ -12,7 +13,7 @@ import { inviteCodes } from "~/server/db/schemas/invite-codes";
 import { getSessionActor$ } from "~/server/modules/auth/rpc";
 
 import { paths } from "~/lib/constants/paths";
-import { to } from "~/lib/utils/common";
+import { getBaseUrl, to } from "~/lib/utils/common";
 import {
   rpcErrorResponse,
   rpcSuccessResponse,
@@ -31,13 +32,33 @@ export async function getInviteCodes$() {
       .select()
       .from(inviteCodes)
       .where(eq(inviteCodes.issuerId, sessionActor.data.id))
+      .orderBy(desc(inviteCodes.createdAt))
   );
 
   if (err) {
     return rpcErrorResponse(err);
   }
 
-  return rpcSuccessResponse(matchingInviteCodes);
+  const inviteCodesWithQRCodeDataURL = matchingInviteCodes.map(
+    async (inviteCode) => {
+      const signUpWithInviteCodeURL = `${getBaseUrl()}${
+        paths.signUp
+      }?inviteCode=${inviteCode.code}`;
+
+      return {
+        ...inviteCode,
+
+        signUpWithInviteCodeURL,
+        qrCodeDataURL: await QRCode.toDataURL(signUpWithInviteCodeURL, {
+          margin: 1,
+        }),
+      };
+    }
+  );
+
+  const successResponse = await Promise.all(inviteCodesWithQRCodeDataURL);
+
+  return rpcSuccessResponse(successResponse);
 }
 
 export async function createInviteCode$() {
