@@ -4,12 +4,12 @@ import { MetaProvider } from "@solidjs/meta";
 import { RouteDefinition, Router } from "@solidjs/router";
 import { Suspense, lazy } from "solid-js";
 
-import { KameleonTitle } from "~/components/kameleon-title";
-import { SessionProvider } from "~/components/context/session";
-
 import "@unocss/reset/tailwind-compat.css";
 
 import "virtual:uno.css";
+
+import { KameleonTitle } from "~/components/kameleon-title";
+import { SessionProvider } from "~/components/context/session";
 
 import "~/styles/root.css";
 
