@@ -19,7 +19,7 @@ export const actors = pgTable(
     id: serial("id").primaryKey(),
     pid: varchar("pid").notNull().unique().$defaultFn(nanoid), // TODO: Generate nicer handles
 
-    acceptedInviteCode: varchar("accepted_invite_code"),
+    usedInviteCode: varchar("used_invite_code"),
 
     email: varchar("email").notNull().unique(),
     encryptedPassword: varchar("encrypted_password").notNull(),
@@ -42,7 +42,7 @@ export const actors = pgTable(
     emailConfirmedAt: timestamp("email_confirmed_at", { mode: "string" }),
     // passwordExpiresAt: timestamp("password_expires_at", { mode: "string" }),
 
-    // * Represents `used_at` for `accepted_invite_code`
+    // * Represents `used_at` for `used_invite_code`
     createdAt: timestamp("created_at", { mode: "string" })
       .notNull()
       .defaultNow(),
@@ -54,12 +54,12 @@ export const actors = pgTable(
 );
 
 export const actorsRelations = relations(actors, ({ one, many }) => ({
-  acceptedInvite: one(inviteCodes, {
-    fields: [actors.acceptedInviteCode],
+  usedInvite: one(inviteCodes, {
+    fields: [actors.usedInviteCode],
     references: [inviteCodes.code],
-    relationName: "accepted_invite",
+    relationName: "used_invite_code",
   }),
   inviteCodes: many(inviteCodes, {
-    relationName: "issued_invite",
+    relationName: "issued_invite_code",
   }),
 }));
