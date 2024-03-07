@@ -55,14 +55,14 @@ const useActorNavigationItems = (
     //     inactive: Icon.galleryFavourite.outline,
     //   },
     // },
-    // {
-    //   displayText: "Settings",
-    //   href: "/a/settings",
-    //   icon: {
-    //     active: Icon.gear.solid,
-    //     inactive: Icon.gear.outline,
-    //   },
-    // },
+    {
+      displayText: "Settings",
+      href: paths.settings().root,
+      icon: {
+        active: Icon.gear.solid,
+        inactive: Icon.gear.outline,
+      },
+    },
   ].map((i) => ({ ...i, id: createUniqueId() }));
 
 const MENU_ITEM_CLASS =

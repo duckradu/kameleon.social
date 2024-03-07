@@ -9,9 +9,20 @@ export const paths = {
 
     return {
       profile: basePath,
+
       connections: `${basePath}/connections`,
 
       record: (recordPublicId: string) => `${basePath}/r/${recordPublicId}`,
+    };
+  },
+
+  settings: () => {
+    const basePath = "/settings";
+
+    return {
+      root: basePath,
+
+      // inviteCodes: `${basePath}/invite-codes`,
     };
   },
 };
