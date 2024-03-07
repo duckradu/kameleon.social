@@ -12,17 +12,13 @@ export const paths = {
 
       connections: `${basePath}/connections`,
 
+      settings: {
+        root: `${basePath}/settings`,
+
+        // inviteCodes: `${basePath}/invite-codes`,
+      },
+
       record: (recordPublicId: string) => `${basePath}/r/${recordPublicId}`,
-    };
-  },
-
-  settings: () => {
-    const basePath = "/settings";
-
-    return {
-      root: basePath,
-
-      // inviteCodes: `${basePath}/invite-codes`,
     };
   },
 };

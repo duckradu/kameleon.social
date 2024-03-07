@@ -6,7 +6,7 @@ export function getBaseUrl() {
   }
 
   if (process.env.NODE_ENV === "production") {
-    return "https://example.com"; // TODO: Replace with actual domain
+    return "https://kameleon.social"; // TODO: Replace with value from .env
   }
 
   return `http://${process.env.HOST ?? "localhost"}:${

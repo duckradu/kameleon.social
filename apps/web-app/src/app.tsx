@@ -1,9 +1,8 @@
 // @refresh reload
 
 import { MetaProvider } from "@solidjs/meta";
-import { Router } from "@solidjs/router";
-import { FileRoutes } from "@solidjs/start";
-import { Suspense } from "solid-js";
+import { RouteDefinition, Router } from "@solidjs/router";
+import { Suspense, lazy } from "solid-js";
 
 import { KameleonTitle } from "~/components/kameleon-title";
 import { SessionProvider } from "~/components/context/session";
@@ -13,6 +12,73 @@ import "@unocss/reset/tailwind-compat.css";
 import "virtual:uno.css";
 
 import "~/styles/root.css";
+
+const routes: RouteDefinition[] = [
+  // * Auth
+  {
+    path: "/",
+    component: lazy(() => import("~/pages/external-layout")),
+    children: [
+      {
+        path: "/sign-in",
+        component: lazy(() => import("~/pages/(auth)/sign-in/page")),
+      },
+      {
+        path: "/sign-up",
+        component: lazy(() => import("~/pages/(auth)/sign-up/page")),
+      },
+    ],
+  },
+  {
+    path: "/",
+    component: lazy(() => import("~/pages/layout")),
+    children: [
+      {
+        path: "/",
+        component: lazy(() => import("~/pages/page")),
+      },
+      // * Actor profile
+      {
+        path: "/a/:actorPublicId",
+        component: lazy(() => import("~/pages/(actor)/(profile)/layout")),
+        children: [
+          {
+            path: "/",
+            component: lazy(
+              () => import("~/pages/(actor)/(profile)/activity/page")
+            ),
+          },
+          {
+            path: "/connections",
+            component: lazy(
+              () => import("~/pages/(actor)/(profile)/connections/page")
+            ),
+          },
+        ],
+      },
+      // * Settings
+      {
+        path: "/a/:actorPublicId/settings",
+        component: lazy(() => import("~/pages/(actor)/settings/page")),
+      },
+      // * Record
+      {
+        path: "/a/:actorPublicId/r/:recordPublicId",
+        component: lazy(() => import("~/pages/(actor)/record/page")),
+      },
+    ],
+  },
+  {
+    path: "/",
+    component: lazy(() => import("~/pages/external-layout")),
+    children: [
+      {
+        path: "*404",
+        component: lazy(() => import("~/pages/[...404]")),
+      },
+    ],
+  },
+];
 
 export default function App() {
   return (
@@ -26,7 +92,7 @@ export default function App() {
         </MetaProvider>
       )}
     >
-      <FileRoutes />
+      {routes}
     </Router>
   );
 }

@@ -1,5 +1,6 @@
-import { A, useSearchParams } from "@solidjs/router";
+import { A, Navigate, useSearchParams } from "@solidjs/router";
 
+import { useSession } from "~/components/context/session";
 import { SignUpForm } from "~/components/form/sign-up";
 import { KameleonTitle } from "~/components/kameleon-title";
 import { Icon } from "~/components/ui/icon";
@@ -7,6 +8,12 @@ import { Icon } from "~/components/ui/icon";
 import { paths } from "~/lib/constants/paths";
 
 export default function SignUp() {
+  const { actor } = useSession();
+
+  if (actor()) {
+    return <Navigate href="/" />;
+  }
+
   const [searchParams] = useSearchParams();
 
   return (

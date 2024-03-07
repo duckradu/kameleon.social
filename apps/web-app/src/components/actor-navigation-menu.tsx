@@ -28,6 +28,7 @@ const useActorNavigationItems = (): IconNavigationItem<{
         active: Icon.user.solid,
         inactive: Icon.user.outline,
       },
+      end: true,
     },
     // {
     //   displayText: "Notifications",
@@ -47,7 +48,7 @@ const useActorNavigationItems = (): IconNavigationItem<{
     // },
     {
       displayText: "Settings",
-      href: paths.settings().root,
+      href: paths.actor(actor()!.pid).settings.root,
       icon: {
         active: Icon.gear.solid,
         inactive: Icon.gear.outline,
