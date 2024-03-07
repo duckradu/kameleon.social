@@ -57,6 +57,7 @@ import SolarMapPointOutline from "~icons/solar/map-point-outline";
 import SolarLinkMinimalistic2Outline from "~icons/solar/link-minimalistic-2-outline";
 import SolarCalendarOutline from "~icons/solar/calendar-outline";
 import HeroiconsCake from "~icons/heroicons/cake";
+import HeroiconsPlus from "~icons/heroicons/plus";
 
 export const Icon = {
   logo: {
@@ -166,6 +167,8 @@ export const Icon = {
   cake: {
     outline: HeroiconsCake,
   },
+
+  plus: HeroiconsPlus,
 
   videoPlayer: {
     play: {
