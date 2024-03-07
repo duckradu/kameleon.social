@@ -9,11 +9,19 @@ import { Input } from "~/components/ui/input";
 
 import { signUp } from "~/server/modules/auth/actions";
 
-export function SignUpForm() {
+export type SignUpFormProps = {
+  inviteCode?: string;
+  redirectTo?: string;
+};
+
+export function SignUpForm(props: SignUpFormProps) {
   const submission = useSubmission(signUp);
 
   return (
     <form action={signUp} method="post" class="grid gap-2">
+      <input name="inviteCode" type="hidden" value={props.inviteCode} />
+      <input name="redirectTo" type="hidden" value={props.redirectTo} />
+
       <Show when={submission.result?.error}>
         <Alert>{submission.result?.error}</Alert>
       </Show>

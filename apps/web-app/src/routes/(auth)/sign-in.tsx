@@ -1,4 +1,4 @@
-import { A } from "@solidjs/router";
+import { A, useSearchParams } from "@solidjs/router";
 
 import { SignInForm } from "~/components/form/sign-in";
 import { KameleonTitle } from "~/components/kameleon-title";
@@ -7,6 +7,8 @@ import { Icon } from "~/components/ui/icon";
 import { paths } from "~/lib/constants/paths";
 
 export default function SignIn() {
+  const [searchParams] = useSearchParams();
+
   return (
     <>
       <KameleonTitle>Sign in</KameleonTitle>
@@ -21,7 +23,7 @@ export default function SignIn() {
         </p>
       </div>
 
-      <SignInForm />
+      <SignInForm redirectTo={searchParams.redirectTo || "/"} />
 
       <div class="flex justify-between text-sm text-brand">
         <A href={paths.signUp}>Create an account</A>

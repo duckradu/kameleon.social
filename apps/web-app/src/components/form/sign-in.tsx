@@ -9,11 +9,17 @@ import { Input } from "~/components/ui/input";
 
 import { signIn } from "~/server/modules/auth/actions";
 
-export function SignInForm() {
+export type SignInFormProps = {
+  redirectTo?: string;
+};
+
+export function SignInForm(props: SignInFormProps) {
   const submission = useSubmission(signIn);
 
   return (
     <form action={signIn} method="post" class="grid gap-2">
+      <input name="redirectTo" type="hidden" value={props.redirectTo} />
+
       <Show when={submission.result?.error}>
         <Alert>{submission.result?.error}</Alert>
       </Show>
