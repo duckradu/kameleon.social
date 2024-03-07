@@ -12,10 +12,10 @@ import { actors } from "~/server/db/schemas/actors";
 
 import { to } from "~/lib/utils/common";
 import {
-  serverErrorResponse,
-  serverParseErrorResponse,
-  serverSuccessResponse,
-} from "~/lib/utils/server";
+  rpcErrorResponse,
+  rpcSuccessResponse,
+  rpcValidationErrorResponse,
+} from "~/lib/utils/rpc";
 import { email, password } from "~/lib/utils/validation-schemas";
 
 import { sessionConfig } from "~/server/config";
@@ -32,7 +32,7 @@ export async function getSessionActor$() {
   const actorId = session.data.actorId;
 
   if (!actorId) {
-    return null;
+    return rpcErrorResponse({ message: "Invalid session" });
   }
 
   const [err, matchingActor] = await to(
@@ -40,22 +40,22 @@ export async function getSessionActor$() {
   );
 
   if (err) {
-    return serverErrorResponse(err);
+    return rpcErrorResponse(err);
   }
 
   if (matchingActor.length !== 1) {
     // TODO: Is this the correct message and/or predicate?
-    return serverErrorResponse({ message: "Invalid session" });
+    return rpcErrorResponse({ message: "Invalid session" });
   }
 
-  return serverSuccessResponse(matchingActor[0]);
+  return rpcSuccessResponse(matchingActor[0]);
 }
 
 export async function signUp$(formData: FormData) {
   const sessionActor = await getSessionActor$();
 
   if (sessionActor?.success) {
-    return serverErrorResponse({ message: "Already authenticated" });
+    return rpcErrorResponse({ message: "Already authenticated" });
   }
 
   const parsed = await safeParseAsync(
@@ -70,7 +70,7 @@ export async function signUp$(formData: FormData) {
   );
 
   if (!parsed.success) {
-    return serverParseErrorResponse(parsed.issues);
+    return rpcValidationErrorResponse(parsed.issues);
   }
 
   const {
@@ -93,11 +93,11 @@ export async function signUp$(formData: FormData) {
   );
 
   if (err) {
-    return serverErrorResponse(err);
+    return rpcErrorResponse(err);
   }
 
   if (newActor.length !== 1) {
-    return serverErrorResponse({ message: "Internal server error" });
+    return rpcErrorResponse({ message: "Internal server error" });
   }
 
   const session = await getSession();
@@ -108,14 +108,14 @@ export async function signUp$(formData: FormData) {
     throw redirect(redirectTo);
   }
 
-  return serverSuccessResponse(newActor[0]);
+  return rpcSuccessResponse(newActor[0]);
 }
 
 export async function signIn$(formData: FormData) {
   const sessionActor = await getSessionActor$();
 
   if (sessionActor?.success) {
-    return serverErrorResponse({ message: "Already authenticated" });
+    return rpcErrorResponse({ message: "Already authenticated" });
   }
 
   const parsed = await safeParseAsync(
@@ -124,7 +124,7 @@ export async function signIn$(formData: FormData) {
   );
 
   if (!parsed.success) {
-    return serverParseErrorResponse(parsed.issues);
+    return rpcValidationErrorResponse(parsed.issues);
   }
 
   const {
@@ -139,12 +139,12 @@ export async function signIn$(formData: FormData) {
   );
 
   if (err) {
-    return serverErrorResponse(err);
+    return rpcErrorResponse(err);
   }
 
   if (matchingActor.length !== 1) {
     // TODO: Is this the correct message and/or predicate?
-    return serverErrorResponse({ message: "Invalid credentials" });
+    return rpcErrorResponse({ message: "Invalid credentials" });
   }
 
   const isValidPassword = await argon2.verify(
@@ -153,7 +153,7 @@ export async function signIn$(formData: FormData) {
   );
 
   if (!isValidPassword) {
-    return serverErrorResponse({ message: "Invalid credentials" });
+    return rpcErrorResponse({ message: "Invalid credentials" });
   }
 
   const session = await getSession();
@@ -164,13 +164,11 @@ export async function signIn$(formData: FormData) {
     throw redirect(redirectTo);
   }
 
-  return serverSuccessResponse(matchingActor[0]);
+  return rpcSuccessResponse(matchingActor[0]);
 }
 
 export async function signOut$() {
   const session = await getSession();
 
   await session.update({ actorId: undefined });
-
-  return serverSuccessResponse();
 }
