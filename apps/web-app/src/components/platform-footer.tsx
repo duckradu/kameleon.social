@@ -3,7 +3,7 @@ import { format } from "date-fns/format";
 
 import { paths } from "~/lib/constants/paths";
 
-export function Footer() {
+export function PlatformFooter() {
   // TODO: Probably move the paths to constants. Or use .env for actor id
   return (
     <footer class="text-xs text-muted-foreground space-y-2">

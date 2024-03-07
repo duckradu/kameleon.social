@@ -1,6 +1,6 @@
 import { RouteSectionProps } from "@solidjs/router";
 
-import { Footer } from "~/components/footer";
+import { PlatformFooter } from "~/components/platform-footer";
 import { PlatformSidebar } from "~/components/platform-sidebar";
 
 export default function PlatformLayout(props: RouteSectionProps) {
@@ -22,7 +22,7 @@ export default function PlatformLayout(props: RouteSectionProps) {
       <aside class="relative w-74 shrink-0 z-10">
         <div class="sticky top-0 w-full h-screen">
           <div class="py-2">
-            <Footer />
+            <PlatformFooter />
           </div>
         </div>
       </aside>

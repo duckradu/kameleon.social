@@ -1,6 +1,6 @@
 import { ParentProps } from "solid-js";
 
-import { Footer } from "~/components/footer";
+import { PlatformFooter } from "~/components/platform-footer";
 import { SquigglesBackground } from "~/components/squiggles-background";
 
 export type CentralFocusLayoutProps = ParentProps;
@@ -16,7 +16,7 @@ export function CentralFocusLayout(props: CentralFocusLayoutProps) {
         </div>
 
         <div class="max-w-sm mx-auto text-center">
-          <Footer />
+          <PlatformFooter />
         </div>
       </div>
     </>
