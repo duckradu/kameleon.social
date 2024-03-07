@@ -28,6 +28,8 @@ declare global {
       inactive: SVGIcon;
     };
   } & P;
+
+  type Unpacked<T> = T extends (infer U)[] ? U : T;
 }
 
 export {};
