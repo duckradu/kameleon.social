@@ -1,3 +1,4 @@
+import { createAsync } from "@solidjs/router";
 import {
   Accessor,
   ParentProps,
@@ -7,27 +8,29 @@ import {
   useContext,
 } from "solid-js";
 
-// TODO: Clean the types :D
-export const SessionContext = createContext<{
-  sessionActor: Accessor<SessionProviderProps["sessionActor"]>;
-}>();
+import { actors } from "~/server/db/schemas/actors";
 
-// TODO: Type the value
-export type SessionProviderProps = ParentProps<{
-  sessionActor: any | undefined;
-}>;
+import { getSessionActor } from "~/server/modules/auth/actions";
 
-export function SessionProvider(props: SessionProviderProps) {
-  const [sessionActor, setSessionActor] = createSignal<
-    SessionProviderProps["sessionActor"]
-  >(props.sessionActor);
+export type ISessionContext = {
+  actor: Accessor<typeof actors.$inferSelect | null>;
+};
+
+const SessionContext = createContext<ISessionContext>();
+
+export function SessionProvider(props: ParentProps) {
+  const sessionActor = createAsync(() => getSessionActor());
+
+  const [actor, setActor] = createSignal<typeof actors.$inferSelect | null>(
+    sessionActor()?.data || null
+  );
 
   createEffect(() => {
-    setSessionActor(props.sessionActor);
+    setActor(sessionActor()?.data || null);
   });
 
   return (
-    <SessionContext.Provider value={{ sessionActor }}>
+    <SessionContext.Provider value={{ actor }}>
       {props.children}
     </SessionContext.Provider>
   );

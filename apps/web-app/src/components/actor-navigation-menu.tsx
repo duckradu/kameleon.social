@@ -4,7 +4,7 @@ import { For, createMemo, createUniqueId } from "solid-js";
 import { Dynamic } from "solid-js/web";
 
 import { ActiveAnchor } from "~/components/active-anchor";
-import { SessionProviderProps, useSession } from "~/components/context/session";
+import { useSession } from "~/components/context/session";
 import { Avatar } from "~/components/ui/avatar";
 import { Icon } from "~/components/ui/icon";
 
@@ -14,30 +14,20 @@ import { getShortName } from "~/lib/utils/actors";
 
 import { paths } from "~/lib/constants/paths";
 
-type NavigationItem = {
+const useActorNavigationItems = (): IconNavigationItem<{
   id: string;
-  displayText: string;
-  href: string;
-  icon: {
-    active: SVGIcon;
-    inactive: SVGIcon;
-  };
   end?: boolean;
-};
+}>[] => {
+  const { actor } = useSession();
 
-const useActorNavigationItems = (
-  // TODO: Type this properly
-  actor: SessionProviderProps["sessionActor"]
-): NavigationItem[] =>
-  [
+  return [
     {
       displayText: "Profile",
-      href: paths.actor(actor().pid).profile,
+      href: paths.actor(actor()!.pid).profile,
       icon: {
         active: Icon.user.solid,
         inactive: Icon.user.outline,
       },
-      end: true,
     },
     // {
     //   displayText: "Notifications",
@@ -64,13 +54,14 @@ const useActorNavigationItems = (
       },
     },
   ].map((i) => ({ ...i, id: createUniqueId() }));
+};
 
 const MENU_ITEM_CLASS =
   "flex flex-row gap-3 items-center w-full px-2.5 py-3 bg-popover hover:bg-popover-foreground/5 focus:bg-popover-foreground/5";
 
 export function ActorNavigationMenu() {
-  const { sessionActor } = useSession();
-  const actorNavigationItems = useActorNavigationItems(sessionActor);
+  const { actor } = useSession();
+  const actorNavigationItems = useActorNavigationItems();
 
   const [state, send] = useMachine(
     menu.machine({
@@ -91,14 +82,14 @@ export function ActorNavigationMenu() {
         {...api().triggerProps}
         class="group flex gap-3 p-3 w-full rounded-full bg-transparent hover:bg-popover focus:bg-popover data-[state=open]:bg-popover"
       >
-        <Avatar fallback={getShortName(sessionActor().name || "")} />
+        <Avatar fallback={getShortName(actor()?.name || "")} />
         <span class="inline-flex items-center justify-between w-full overflow-hidden">
           <span class="text-sm text-left mr-1 overflow-hidden">
             <p class="font-semibold text-ellipsis overflow-hidden">
-              {sessionActor().name}
+              {actor()?.name}
             </p>
             <p class="text-muted-foreground text-ellipsis overflow-hidden">
-              @{sessionActor().pid}
+              @{actor()?.pid}
             </p>
           </span>
 

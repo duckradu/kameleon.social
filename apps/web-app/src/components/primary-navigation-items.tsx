@@ -4,16 +4,7 @@ import { Dynamic } from "solid-js/web";
 import { Icon } from "~/components/ui/icon";
 import { ActiveAnchor } from "~/components/active-anchor";
 
-type NavigationItem = {
-  displayText: string;
-  href: string;
-  icon: {
-    active: SVGIcon;
-    inactive: SVGIcon;
-  };
-};
-
-function NavigationItem(props: NavigationItem) {
+function NavigationItem(props: IconNavigationItem) {
   return (
     <ActiveAnchor
       href={props.href}
@@ -39,7 +30,7 @@ function NavigationItem(props: NavigationItem) {
   );
 }
 
-const usePrimaryNavigationItems = (): NavigationItem[] => [
+const usePrimaryNavigationItems = (): IconNavigationItem[] => [
   {
     displayText: "Home",
     href: "/",

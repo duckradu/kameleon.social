@@ -6,6 +6,7 @@ import { FileRoutes } from "@solidjs/start";
 import { Suspense } from "solid-js";
 
 import { KameleonTitle } from "~/components/kameleon-title";
+import { SessionProvider } from "~/components/context/session";
 
 import "@unocss/reset/tailwind-compat.css";
 
@@ -19,7 +20,9 @@ export default function App() {
       root={(props) => (
         <MetaProvider>
           <KameleonTitle />
-          <Suspense>{props.children}</Suspense>
+          <Suspense>
+            <SessionProvider>{props.children}</SessionProvider>
+          </Suspense>
         </MetaProvider>
       )}
     >

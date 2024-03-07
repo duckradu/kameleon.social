@@ -19,6 +19,15 @@ declare global {
 
   type VariantSlotsClassProps<Component extends (...args: any) => any> =
     UnionToIntersection<VariantSlotsClassType<keyof ReturnType<Component>>>;
+
+  type IconNavigationItem<P extends object = {}> = {
+    displayText: string;
+    href: string;
+    icon: {
+      active: SVGIcon;
+      inactive: SVGIcon;
+    };
+  } & P;
 }
 
 export {};

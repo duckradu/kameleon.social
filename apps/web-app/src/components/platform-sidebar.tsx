@@ -11,7 +11,7 @@ import {
 import { Icon } from "~/components/ui/icon";
 
 export function PlatformSidebar() {
-  const { sessionActor } = useSession();
+  const { actor } = useSession();
 
   return (
     <div class="flex flex-col h-screen py-2">
@@ -25,7 +25,7 @@ export function PlatformSidebar() {
       <div class="flex flex-col grow-1 justify-between gap-2">
         <PrimaryNavigation />
 
-        <Show when={sessionActor()} fallback={<AuthNavigation />}>
+        <Show when={actor()} fallback={<AuthNavigation />}>
           <ActorNavigationMenu />
         </Show>
       </div>
