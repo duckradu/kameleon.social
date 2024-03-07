@@ -59,7 +59,18 @@ const routes: RouteDefinition[] = [
       // * Settings
       {
         path: "/a/:actorPublicId/settings",
-        component: lazy(() => import("~/pages/(actor)/settings/page")),
+        children: [
+          {
+            path: "/",
+            component: lazy(() => import("~/pages/(actor)/settings/page")),
+          },
+          {
+            path: "/invite-codes",
+            component: lazy(
+              () => import("~/pages/(actor)/settings/invite-codes/page")
+            ),
+          },
+        ],
       },
       // * Record
       {
