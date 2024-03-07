@@ -1,21 +1,22 @@
 "use server";
 
+import { redirect } from "@solidjs/router";
 import * as argon2 from "argon2";
 import { decode } from "decode-formdata";
 import { eq } from "drizzle-orm";
-import { object, safeParseAsync } from "valibot";
+import { object, optional, safeParseAsync, string } from "valibot";
 import { useSession } from "vinxi/http";
 
 import { db } from "~/server/db";
 import { actors } from "~/server/db/schemas/actors";
 
+import { to } from "~/lib/utils/common";
 import {
   serverErrorResponse,
   serverParseErrorResponse,
   serverSuccessResponse,
 } from "~/lib/utils/server";
 import { email, password } from "~/lib/utils/validation-schemas";
-import { to } from "~/lib/utils/common";
 
 import { sessionConfig } from "~/server/config";
 
@@ -42,13 +43,29 @@ export async function getSessionActor$() {
     return serverErrorResponse(err);
   }
 
-  // TODO: Check matchingActor length before returning
+  if (matchingActor.length !== 1) {
+    // TODO: Is this the correct message and/or predicate?
+    return serverErrorResponse({ message: "Invalid session" });
+  }
+
   return serverSuccessResponse(matchingActor[0]);
 }
 
 export async function signUp$(formData: FormData) {
+  const sessionActor = await getSessionActor$();
+
+  if (sessionActor?.success) {
+    return serverErrorResponse({ message: "Already authenticated" });
+  }
+
   const parsed = await safeParseAsync(
-    object({ email, password }),
+    object({
+      inviteCode: optional(string()),
+      redirectTo: optional(string()),
+
+      email,
+      password,
+    }),
     decode(formData)
   );
 
@@ -56,7 +73,14 @@ export async function signUp$(formData: FormData) {
     return serverParseErrorResponse(parsed.issues);
   }
 
-  const { password: passwordParsed, ...rest } = parsed.output;
+  const {
+    inviteCode,
+    redirectTo,
+
+    password: passwordParsed,
+
+    ...rest
+  } = parsed.output;
 
   const actorForDB: typeof actors.$inferInsert = {
     ...rest,
@@ -72,16 +96,30 @@ export async function signUp$(formData: FormData) {
     return serverErrorResponse(err);
   }
 
+  if (newActor.length !== 1) {
+    return serverErrorResponse({ message: "Internal server error" });
+  }
+
   const session = await getSession();
 
   await session.update({ actorId: newActor[0].id });
+
+  if (redirectTo?.length) {
+    throw redirect(redirectTo);
+  }
 
   return serverSuccessResponse(newActor[0]);
 }
 
 export async function signIn$(formData: FormData) {
+  const sessionActor = await getSessionActor$();
+
+  if (sessionActor?.success) {
+    return serverErrorResponse({ message: "Already authenticated" });
+  }
+
   const parsed = await safeParseAsync(
-    object({ email, password }),
+    object({ redirectTo: optional(string()), email, password }),
     decode(formData)
   );
 
@@ -89,7 +127,12 @@ export async function signIn$(formData: FormData) {
     return serverParseErrorResponse(parsed.issues);
   }
 
-  const { email: emailParsed, password: passwordParsed } = parsed.output;
+  const {
+    redirectTo,
+
+    email: emailParsed,
+    password: passwordParsed,
+  } = parsed.output;
 
   const [err, matchingActor] = await to(
     db.select().from(actors).where(eq(actors.email, emailParsed))
@@ -99,23 +142,27 @@ export async function signIn$(formData: FormData) {
     return serverErrorResponse(err);
   }
 
-  // TODO: Handle better mathcingActor.length === 0
-  if (!matchingActor[0]) {
-    return serverErrorResponse({ message: "401 invalid credentials" });
+  if (matchingActor.length !== 1) {
+    // TODO: Is this the correct message and/or predicate?
+    return serverErrorResponse({ message: "Invalid credentials" });
   }
 
-  const isValid = await argon2.verify(
+  const isValidPassword = await argon2.verify(
     matchingActor[0].encryptedPassword,
     passwordParsed
   );
 
-  if (!isValid) {
-    return serverErrorResponse({ message: "401 invalid credentials" });
+  if (!isValidPassword) {
+    return serverErrorResponse({ message: "Invalid credentials" });
   }
 
   const session = await getSession();
 
   await session.update({ actorId: matchingActor[0].id });
+
+  if (redirectTo?.length) {
+    throw redirect(redirectTo);
+  }
 
   return serverSuccessResponse(matchingActor[0]);
 }
