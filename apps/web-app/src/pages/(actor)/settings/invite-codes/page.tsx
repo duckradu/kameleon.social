@@ -1,4 +1,4 @@
-import { A, RouteDefinition, createAsync } from "@solidjs/router";
+import { A, RouteDefinition, createAsyncStore } from "@solidjs/router";
 import { format } from "date-fns/format";
 import { For } from "solid-js";
 
@@ -15,7 +15,11 @@ export const route = {
 } satisfies RouteDefinition;
 
 export default function SettingsInviteCodes() {
-  const inviteCodes = createAsync(() => getInviteCodes());
+  const inviteCodes = createAsyncStore(() => getInviteCodes(), {
+    reconcile: {
+      key: "code",
+    },
+  });
 
   // TODO: Replace hardcoded strings
   return (
