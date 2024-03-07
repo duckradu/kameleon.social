@@ -11,7 +11,7 @@ import { actors } from "~/server/db/schemas/actors";
 
 import { nanoid } from "~/lib/utils/common";
 
-export const inviteCodes = pgTable("invitation_codes", {
+export const inviteCodes = pgTable("invite_codes", {
   code: varchar("code").primaryKey().$defaultFn(nanoid),
 
   issuerId: serial("issuer_id").notNull(),
