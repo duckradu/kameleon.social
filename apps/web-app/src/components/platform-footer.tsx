@@ -9,28 +9,28 @@ export function PlatformFooter() {
     <footer class="text-xs text-muted-foreground space-y-2">
       <nav class="flex flex-wrap gap-1 p-3 bg-muted rounded-md">
         <A
-          href={paths.actor("first_kameleon").record("about-us")}
+          href={paths.actor("start").record("about-us")}
           class="hover:underline underline-offset-3"
         >
           About us
         </A>
         &middot;
         <A
-          href={paths.actor("first_kameleon").record("terms-and-privacy")}
+          href={paths.actor("start").record("terms-and-privacy")}
           class="hover:underline underline-offset-3"
         >
           Terms & Privacy
         </A>
         &middot;
         <A
-          href={paths.actor("first_kameleon").record("help")}
+          href={paths.actor("start").record("help")}
           class="hover:underline underline-offset-3"
         >
           Help
         </A>
         &middot;
         <A
-          href={paths.actor("first_kameleon").record("send-feedback")}
+          href={paths.actor("start").record("send-feedback")}
           class="hover:underline underline-offset-3"
         >
           Send feedback
