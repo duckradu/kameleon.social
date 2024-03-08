@@ -11,7 +11,7 @@ import {
   getInviteCodes,
 } from "~/server/modules/invite-codes/actions";
 
-const MAX_INVITE_CODES_PER_ACTOR = 2;
+import { MAX_INVITE_CODES_PER_ACTOR } from "~/server/modules/invite-codes/constants";
 
 function c(n: number, word: { singular: string; plural: string }) {
   if (n === 1) {

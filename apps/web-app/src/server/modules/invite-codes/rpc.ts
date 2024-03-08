@@ -3,7 +3,7 @@
 import { redirect } from "@solidjs/router";
 import { addWeeks } from "date-fns";
 import { decode } from "decode-formdata";
-import { and, desc, eq } from "drizzle-orm";
+import { and, count, desc, eq } from "drizzle-orm";
 import QRCode from "qrcode";
 import { object, safeParseAsync, string } from "valibot";
 
@@ -11,6 +11,7 @@ import { db } from "~/server/db";
 import { inviteCodes } from "~/server/db/schemas/invite-codes";
 
 import { getSessionActor$ } from "~/server/modules/auth/rpc";
+import { MAX_INVITE_CODES_PER_ACTOR } from "~/server/modules/invite-codes/constants";
 
 import { paths } from "~/lib/constants/paths";
 import { getBaseUrl, to } from "~/lib/utils/common";
@@ -61,6 +62,7 @@ export async function getInviteCodes$() {
   return rpcSuccessResponse(successResponse);
 }
 
+// TODO: Check actor can create invites
 export async function createInviteCode$() {
   const sessionActor = await getSessionActor$();
 
@@ -68,8 +70,16 @@ export async function createInviteCode$() {
     throw redirect(paths.signIn);
   }
 
-  // TODO: check actor can create invites
-  // TODO: check actor has available invites
+  const [{ count: inviteCodesCount }] = await db
+    .select({ count: count() })
+    .from(inviteCodes)
+    .where(eq(inviteCodes.issuerId, sessionActor.data.id));
+
+  if (inviteCodesCount === MAX_INVITE_CODES_PER_ACTOR) {
+    return rpcErrorResponse({
+      message: "You've reached the limit of invite codes",
+    });
+  }
 
   const now = new Date();
 
@@ -95,6 +105,7 @@ export async function createInviteCode$() {
   return rpcSuccessResponse(newInviteCode[0]);
 }
 
+// TODO: Check if invite code has been used
 export async function deleteInviteCode$(formData: FormData) {
   const sessionActor = await getSessionActor$();
 
