@@ -19,12 +19,27 @@ export function SignUpForm(props: SignUpFormProps) {
 
   return (
     <form action={signUp} method="post" class="grid gap-2">
-      <input name="inviteCode" type="hidden" value={props.inviteCode} />
       <input name="redirectTo" type="hidden" value={props.redirectTo} />
 
       <Show when={submission.result?.error}>
         <Alert>{submission.result?.error}</Alert>
       </Show>
+
+      {/* TODO: Flag to turn off invites? */}
+      <div class="grid gap-1">
+        <Input
+          size="lg"
+          name="inviteCode"
+          type="text"
+          placeholder="Invite code"
+          value={props.inviteCode}
+        />
+        <Show when={submission.result?.validationErrors?.inviteCode}>
+          <FormFieldError>
+            {submission.result!.validationErrors!.inviteCode}
+          </FormFieldError>
+        </Show>
+      </div>
 
       <div class="grid gap-1">
         <Input size="lg" name="email" type="email" placeholder="Email" />
