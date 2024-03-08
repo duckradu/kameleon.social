@@ -11,7 +11,6 @@ import { db } from "~/server/db";
 import { inviteCodes } from "~/server/db/schemas/invite-codes";
 
 import { getSessionActor$ } from "~/server/modules/auth/rpc";
-import { MAX_INVITE_CODES_PER_ACTOR } from "~/server/modules/invite-codes/constants";
 
 import { paths } from "~/lib/constants/paths";
 import { getBaseUrl, to } from "~/lib/utils/common";
@@ -20,6 +19,8 @@ import {
   rpcSuccessResponse,
   rpcValidationErrorResponse,
 } from "~/lib/utils/rpc";
+
+import { MAX_INVITE_CODES_PER_ACTOR } from "~/server/modules/invite-codes/constants";
 
 export async function getInviteCodes$() {
   const sessionActor = await getSessionActor$();

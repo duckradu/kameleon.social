@@ -51,3 +51,14 @@ export function to<T, U = Error>(
       return [err, undefined];
     });
 }
+
+export function dynamicWord(
+  n: number,
+  word: { singular: string; plural: string }
+) {
+  if (n === 1) {
+    return word.singular;
+  }
+
+  return word.plural;
+}

@@ -11,15 +11,9 @@ import {
   getInviteCodes,
 } from "~/server/modules/invite-codes/actions";
 
+import { dynamicWord } from "~/lib/utils/common";
+
 import { MAX_INVITE_CODES_PER_ACTOR } from "~/server/modules/invite-codes/constants";
-
-function c(n: number, word: { singular: string; plural: string }) {
-  if (n === 1) {
-    return word.singular;
-  }
-
-  return word.plural;
-}
 
 export const route = {
   load: () => getInviteCodes(),
@@ -40,7 +34,7 @@ export default function SettingsInviteCodes() {
     <div class="py-2 space-y-4 w-full">
       <SettingsSection
         header="Invite codes"
-        description={`You have ${nInviteCodesLeft()} invite ${c(
+        description={`You have ${nInviteCodesLeft()} invite ${dynamicWord(
           nInviteCodesLeft(),
           {
             singular: "code",
