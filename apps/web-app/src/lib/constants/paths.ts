@@ -9,7 +9,7 @@ export const paths = {
 
     return {
       profile: basePath,
-
+      moments: `${basePath}/moments`,
       connections: `${basePath}/connections`,
 
       settings: {

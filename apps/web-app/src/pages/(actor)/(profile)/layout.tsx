@@ -103,7 +103,7 @@ export default function ActorLayout(props: RouteSectionProps) {
         <A href={paths.actor(actor()?.pid || "").profile} end>
           Activity
         </A>
-        <A href="/stories">Stories</A>
+        <A href={paths.actor(actor()?.pid || "").moments}>Moments</A>
         <A href={paths.actor(actor()?.pid || "").connections}>Connections</A>
       </div>
 
