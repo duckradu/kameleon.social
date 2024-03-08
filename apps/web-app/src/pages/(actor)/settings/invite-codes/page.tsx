@@ -34,21 +34,25 @@ export default function SettingsInviteCodes() {
     <div class="py-2 space-y-4 w-full">
       <SettingsSection
         header="Invite codes"
-        description={`You have ${nInviteCodesLeft()} invite ${dynamicWord(
+        description={`You can create ${nInviteCodesLeft()} invite ${dynamicWord(
           nInviteCodesLeft(),
           {
             singular: "code",
             plural: "codes",
           }
         )}`}
-        quickActions={() => (
-          // TODO: Make it pretty
-          <form action={createInviteCode} method="post">
-            <button class="bg-transparent">
-              <Icon.plus />
-            </button>
-          </form>
-        )}
+        quickActions={
+          nInviteCodesLeft() === 0
+            ? undefined
+            : () => (
+                // TODO: Make it pretty
+                <form action={createInviteCode} method="post">
+                  <button class="bg-transparent">
+                    <Icon.plus />
+                  </button>
+                </form>
+              )
+        }
       >
         {/* TODO: Replace with a slider */}
         <ul class="grid grid-cols-2 gap-2">
