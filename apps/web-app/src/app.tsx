@@ -49,6 +49,12 @@ const routes: RouteDefinition[] = [
             ),
           },
           {
+            path: "/moments",
+            component: lazy(
+              () => import("~/pages/(actor)/(profile)/moments/page")
+            ),
+          },
+          {
             path: "/connections",
             component: lazy(
               () => import("~/pages/(actor)/(profile)/connections/page")
