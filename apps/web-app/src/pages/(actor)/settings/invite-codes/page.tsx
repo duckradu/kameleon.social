@@ -1,6 +1,6 @@
 import { A, RouteDefinition, createAsyncStore } from "@solidjs/router";
 import { format } from "date-fns/format";
-import { For } from "solid-js";
+import { For, createMemo } from "solid-js";
 
 import { SettingsSection } from "~/components/settings-section";
 import { Icon } from "~/components/ui/icon";
@@ -10,6 +10,16 @@ import {
   deleteInviteCode,
   getInviteCodes,
 } from "~/server/modules/invite-codes/actions";
+
+const MAX_INVITE_CODES_PER_ACTOR = 2;
+
+function c(n: number, word: { singular: string; plural: string }) {
+  if (n === 1) {
+    return word.singular;
+  }
+
+  return word.plural;
+}
 
 export const route = {
   load: () => getInviteCodes(),
@@ -21,13 +31,22 @@ export default function SettingsInviteCodes() {
       key: "code",
     },
   });
+  const nInviteCodesLeft = createMemo(
+    () => MAX_INVITE_CODES_PER_ACTOR - (inviteCodes()?.data?.length || 0)
+  );
 
   // TODO: Replace hardcoded strings
   return (
     <div class="py-2 space-y-4 w-full">
       <SettingsSection
         header="Invite codes"
-        description="1 invite code available"
+        description={`You have ${nInviteCodesLeft()} invite ${c(
+          nInviteCodesLeft(),
+          {
+            singular: "code",
+            plural: "codes",
+          }
+        )}`}
         quickActions={() => (
           // TODO: Make it pretty
           <form action={createInviteCode} method="post">
