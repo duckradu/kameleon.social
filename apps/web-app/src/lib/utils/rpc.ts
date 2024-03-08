@@ -37,10 +37,10 @@ export function rpcSuccessResponse<TData = unknown>(
 
 export function rpcErrorResponse<TError extends { message: string }>(
   error: TError
-): RPCResponse<null, TError, undefined> {
+): RPCResponse<null, string, undefined> {
   return {
     data: undefined,
-    error,
+    error: error.message,
     validationErrors: null,
     success: false,
   };

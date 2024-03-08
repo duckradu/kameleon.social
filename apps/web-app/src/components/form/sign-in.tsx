@@ -26,8 +26,10 @@ export function SignInForm(props: SignInFormProps) {
 
       <div class="grid gap-1">
         <Input size="lg" name="email" type="email" placeholder="Email" />
-        <Show when={submission.result?.errors?.email}>
-          <FormFieldError>{submission.result!.errors!.email}</FormFieldError>
+        <Show when={submission.result?.validationErrors?.email}>
+          <FormFieldError>
+            {submission.result!.validationErrors!.email}
+          </FormFieldError>
         </Show>
       </div>
 
@@ -38,8 +40,10 @@ export function SignInForm(props: SignInFormProps) {
           type="password"
           placeholder="Password"
         />
-        <Show when={submission.result?.errors?.password}>
-          <FormFieldError>{submission.result!.errors!.password}</FormFieldError>
+        <Show when={submission.result?.validationErrors?.password}>
+          <FormFieldError>
+            {submission.result!.validationErrors!.password}
+          </FormFieldError>
         </Show>
       </div>
 
