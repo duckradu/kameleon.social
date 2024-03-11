@@ -29,7 +29,7 @@ export default function ActorLayout(props: RouteSectionProps) {
   const actor = createAsync(() => findOneByPID(params.actorPublicId));
 
   return (
-    <div class="no-layout-p">
+    <div>
       {/* <div class="w-screen h-screen absolute w-full left-0 right-0 -z-1 bg-foreground/10" /> */}
 
       <header class="space-y-2">
@@ -99,15 +99,17 @@ export default function ActorLayout(props: RouteSectionProps) {
         </div>
       </header>
 
-      <div class="flex [&>a]-(flex flex-1 items-center justify-center h-12 font-medium border-b border-brand) [&>a:hover]:bg-muted [&>a:not(.active)]-(text-muted-foreground border-muted)">
-        <A href={paths.actor(actor()?.pid || "").profile} end>
-          Activity
-        </A>
-        <A href={paths.actor(actor()?.pid || "").moments}>Moments</A>
-        <A href={paths.actor(actor()?.pid || "").connections}>Connections</A>
-      </div>
+      <div class="relative">
+        <div class="sticky-header flex [&>a]-(flex flex-1 items-center justify-center py-3 font-medium border-b border-brand) [&>a:hover]:bg-muted [&>a:not(.active)]-(text-muted-foreground border-muted)">
+          <A href={paths.actor(actor()?.pid || "").profile} end>
+            Activity
+          </A>
+          <A href={paths.actor(actor()?.pid || "").moments}>Moments</A>
+          <A href={paths.actor(actor()?.pid || "").connections}>Connections</A>
+        </div>
 
-      {props.children}
+        {props.children}
+      </div>
     </div>
   );
 }

@@ -57,7 +57,7 @@ body {
 body {
   &,
   & * {
-    @apply transition-colors ease-in-out;
+    @apply transition-property-colors transition-duration-150 transition-ease-in-out;
   }
 }
 
