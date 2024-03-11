@@ -3,6 +3,7 @@ import { format } from "date-fns/format";
 import { For, createMemo } from "solid-js";
 
 import { SettingsSection } from "~/components/settings-section";
+import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 
 import {
@@ -45,11 +46,16 @@ export default function SettingsInviteCodes() {
           nInviteCodesLeft() === 0
             ? undefined
             : () => (
-                // TODO: Make it pretty
                 <form action={createInviteCode} method="post">
-                  <button class="bg-transparent">
-                    <Icon.plus />
-                  </button>
+                  <Button
+                    type="submit"
+                    size="sm"
+                    shape="squircle"
+                    variant="ghost"
+                    class="rounded-full"
+                  >
+                    <Icon.plus class="text-base" />
+                  </Button>
                 </form>
               )
         }
@@ -101,9 +107,15 @@ export default function SettingsInviteCodes() {
                         type="hidden"
                         value={inviteCode.code}
                       />
-                      <button class="bg-transparent">
-                        <Icon.trashBin.outline />
-                      </button>
+                      <Button
+                        type="submit"
+                        size="sm"
+                        shape="squircle"
+                        variant="ghost"
+                        class="rounded-full"
+                      >
+                        <Icon.trashBin.outline class="text-base" />
+                      </Button>
                     </form>
                   </div>
                 </div>
