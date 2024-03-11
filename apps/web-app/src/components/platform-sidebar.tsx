@@ -14,7 +14,7 @@ export function PlatformSidebar() {
   const { actor } = useSession();
 
   return (
-    <div class="flex flex-col h-screen py-2">
+    <div class="flex flex-col h-screen py-3">
       <A
         href="/"
         class="flex justify-center items-center gap-3 px-3 pt-1 pb-2 w-13 h-13 hover:bg-muted rounded-full"
