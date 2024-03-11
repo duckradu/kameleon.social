@@ -31,7 +31,7 @@ export default function SettingsInviteCodes() {
 
   // TODO: Replace hardcoded strings
   return (
-    <div class="space-y-4 w-full">
+    <div>
       <SettingsSection
         header="Invite codes"
         description={`You can create ${nInviteCodesLeft()} invite ${dynamicWord(
