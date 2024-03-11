@@ -94,4 +94,8 @@ export default defineConfig({
       },
     ],
   ],
+  shortcuts: {
+    "sticky-header":
+      "sticky top-0 backdrop-blur-lg bg-gradient-to-r from-background via-transparent to-background",
+  },
 });
