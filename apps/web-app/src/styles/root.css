@@ -63,7 +63,8 @@ body * {
   @apply min-w-screen min-h-screen;
 }
 
-#app * {
+/* Sigh */
+* {
   @apply border-border;
 }
 
