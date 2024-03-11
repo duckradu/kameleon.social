@@ -9,7 +9,6 @@ export const inputVariants = tv({
     "text-sm",
     "px-4",
     "placeholder:text-muted-foreground",
-    "focus-visible-(outline-none ring-2 ring-ring ring-offset-2 ring-offset-background)",
     "disabled:(cursor-not-allowed opacity-50)",
   ],
   variants: {

@@ -13,7 +13,7 @@ function NavigationItem(props: IconNavigationItem) {
       end
     >
       {({ isActive }) => (
-        <div class="inline-flex items-center gap-3 rounded-full p-3 transition-colors duration-100 group-hover:bg-muted">
+        <div class="inline-flex items-center gap-3 rounded-full p-3 group-hover:bg-muted">
           <Dynamic
             component={isActive() ? props.icon.active : props.icon.inactive}
             class="w-7 h-7"
@@ -21,7 +21,7 @@ function NavigationItem(props: IconNavigationItem) {
               "text-brand": isActive(),
             }}
           />
-          <span class="pr-2 text-xl hidden opacity-0 transition-opacity duration-100 lg:inline-flex group-hover/container:opacity-100">
+          <span class="pr-2 text-xl hidden opacity-0 transition-opacity lg:inline-flex group-hover/container:opacity-100">
             {props.displayText}
           </span>
         </div>

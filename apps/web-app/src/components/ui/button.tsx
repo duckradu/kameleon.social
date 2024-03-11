@@ -7,8 +7,6 @@ export const buttonVariants = tv({
     "rounded-md",
     "text-sm font-medium",
     "px-4",
-    "transition-colors",
-    "focus-visible-(outline-none ring-2 ring-ring ring-offset-2 ring-offset-background)",
     "disabled-(opacity-50 pointer-events-none)",
   ],
   variants: {
