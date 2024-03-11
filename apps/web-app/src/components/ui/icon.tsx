@@ -4,6 +4,7 @@ import SolarAltArrowDownOutline from "~icons/solar/alt-arrow-down-outline";
 import SolarAltArrowLeftOutline from "~icons/solar/alt-arrow-left-outline";
 import SolarAltArrowRightOutline from "~icons/solar/alt-arrow-right-outline";
 import SolarArrowUpOutline from "~icons/solar/arrow-up-outline";
+import SolarArrowLeftOutline from "~icons/solar/arrow-left-outline";
 import SolarBagHeartBold from "~icons/solar/bag-heart-bold";
 import SolarBagHeartOutline from "~icons/solar/bag-heart-outline";
 import SolarBellBold from "~icons/solar/bell-bold";
@@ -126,6 +127,7 @@ export const Icon = {
   },
   arrow: {
     up: SolarArrowUpOutline,
+    left: SolarArrowLeftOutline,
   },
   share: {
     outline: SolarSquareShareLineOutline,
