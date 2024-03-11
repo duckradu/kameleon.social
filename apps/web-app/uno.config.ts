@@ -71,4 +71,27 @@ export default defineConfig({
     }),
   ],
   transformers: [transformerVariantGroup(), transformerDirectives()],
+  rules: [
+    [
+      /^p(x|y)?-layout$/,
+      ([, dir], { theme }) => {
+        console.log(dir);
+
+        if (dir === "x") {
+          return {
+            "padding-left": theme.spacing.xs,
+            "padding-right": theme.spacing.xs,
+          };
+        }
+        if (dir === "y") {
+          return {
+            "padding-top": theme.spacing.xs,
+            "padding-bottom": theme.spacing.xs,
+          };
+        }
+
+        return { padding: theme.spacing.xs };
+      },
+    ],
+  ],
 });

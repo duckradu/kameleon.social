@@ -31,7 +31,7 @@ export default function SettingsInviteCodes() {
 
   // TODO: Replace hardcoded strings
   return (
-    <div>
+    <div class="py-layout">
       <SettingsSection
         header="Invite codes"
         description={`You can create ${nInviteCodesLeft()} invite ${dynamicWord(
