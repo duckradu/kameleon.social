@@ -83,7 +83,10 @@ export function ActorNavigationMenu() {
         {...api().triggerProps}
         class="group flex gap-3 p-3 w-full rounded-full bg-transparent hover:bg-popover focus:bg-popover data-[state=open]:bg-popover"
       >
-        <Avatar fallback={getShortName(actor()?.name || "")} />
+        <Avatar
+          fallback={getShortName(actor()?.name || "")}
+          rootClass="border border-background"
+        />
         <span class="inline-flex items-center justify-between w-full overflow-hidden">
           <span class="text-sm text-left mr-1 overflow-hidden">
             <p class="font-semibold text-ellipsis overflow-hidden">
