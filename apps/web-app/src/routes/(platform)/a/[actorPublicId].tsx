@@ -34,7 +34,7 @@ export default function ActorLayout(props: RouteSectionProps) {
 
       <header class="space-y-2">
         <div>
-          <div class="h-[200px] bg-brand/50 rounded-b-xl" />
+          <div class="h-[200px] bg-muted rounded-b-xl" />
 
           <div class="relative grid grid-cols-3">
             <div />
@@ -43,7 +43,7 @@ export default function ActorLayout(props: RouteSectionProps) {
               <Avatar
                 size="profile"
                 fallback={getShortName(actor()?.name || "")}
-                rootClass="-mt-12"
+                rootClass="-mt-12 border-3 border-background"
               />
 
               <div class="text-center">
