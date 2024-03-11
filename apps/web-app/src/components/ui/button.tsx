@@ -5,7 +5,7 @@ export const buttonVariants = tv({
   base: [
     "inline-flex justify-center items-center",
     "rounded-md",
-    "text-sm font-medium",
+    "text-sm font-medium leading-relaxed",
     "px-4",
     "disabled-(opacity-50 pointer-events-none)",
   ],
@@ -15,9 +15,9 @@ export const buttonVariants = tv({
       secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/90",
     },
     size: {
-      sm: "h-10",
-      md: "h-12",
-      lg: "h-14 rounded-lg",
+      sm: "h-10 gap-1.5 px-3",
+      md: "h-12 gap-2",
+      lg: "h-14 gap-3 rounded-lg",
     },
   },
   defaultVariants: {
