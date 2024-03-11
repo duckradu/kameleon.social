@@ -92,9 +92,9 @@ export async function createInviteCode$() {
 
         availableUses: 5, // TODO: Move to some sort of app config
 
-        expiresAt: addWeeks(now, 1).toString(), // TODO: Move to some sort of app config
+        expiresAt: addWeeks(now, 1).toISOString(), // TODO: Move to some sort of app config
 
-        createdAt: now.toString(),
+        createdAt: now.toISOString(),
       })
       .returning()
   );
