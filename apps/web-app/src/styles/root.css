@@ -54,13 +54,20 @@ body {
   @apply font-sans antialiased;
 }
 
-body,
-body * {
-  @apply transition-colors ease-in-out;
+body {
+  &,
+  & * {
+    @apply transition-colors ease-in-out;
+  }
 }
 
 #app {
   @apply min-w-screen min-h-screen;
+
+  *:focus-visible {
+    /* Get rid of !important; */
+    @apply outline-none ring-2 ring-ring;
+  }
 }
 
 /* Sigh */
@@ -68,16 +75,11 @@ body * {
   @apply border-border;
 }
 
-#app *:focus-visible {
-  /* Get rid of !important; */
-  @apply outline-none ring-2 ring-ring;
-}
-
 /* Figure out this... */
 a {
   @apply underline underline-offset-4;
-}
 
-a:hover {
-  @apply no-underline;
+  &:hover {
+    @apply no-underline;
+  }
 }
