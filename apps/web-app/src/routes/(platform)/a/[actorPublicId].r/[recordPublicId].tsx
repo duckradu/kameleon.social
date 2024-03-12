@@ -1,15 +1,12 @@
-import { useParams } from "@solidjs/router";
-import { For } from "solid-js";
-
+import { Record as RecordComponent } from "~/components/record";
+import { RecordFeed } from "~/components/record-feed";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 
 export default function Record() {
-  const params = useParams();
-
   return (
     <div class="relative no-layout-space">
-      <div class="sticky-header border-b border-border py-layout">
+      <div class="sticky-header py-layout z-10">
         <Button
           size="sm"
           variant="secondary"
@@ -22,12 +19,20 @@ export default function Record() {
         </Button>
       </div>
 
-      <div>record - {params.recordPublicId}</div>
+      <div class="space-y-3">
+        <RecordComponent />
 
-      <div>
-        <For each={new Array(50)}>
-          {() => <div>reply - {params.recordPublicId}</div>}
-        </For>
+        <div>
+          <header class="flex justify-between items-center">
+            <h2 class="text-2xl font-bold">Replies</h2>
+            <Button>
+              <Icon.signature.outline class="text-lg -ml-1" />
+              Reply
+            </Button>
+          </header>
+
+          <RecordFeed recordList={new Array(10)} />
+        </div>
       </div>
     </div>
   );
