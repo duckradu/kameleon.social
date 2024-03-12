@@ -43,9 +43,9 @@ export interface AvatarProps
   displayImage?: boolean;
 }
 
-export function Avatar($props: AvatarProps) {
-  const props = mergeProps({ displayImage: true }, $props);
-  const [, $imgHTMLProps] = splitProps(props, [
+export function Avatar(originalProps: AvatarProps) {
+  const props = mergeProps({ displayImage: true }, originalProps);
+  const [componentProps, imgNodeProps] = splitProps(props, [
     "fallback",
     "displayImage",
     "rootClass",
@@ -56,25 +56,25 @@ export function Avatar($props: AvatarProps) {
   const [state, send] = useMachine(avatar.machine({ id: createUniqueId() }));
 
   const api = createMemo(() => avatar.connect(state, send, normalizeProps));
-  const classes = createMemo(() => avatarVariants(props));
+  const classes = createMemo(() => avatarVariants(imgNodeProps));
 
   return (
     <div
       {...api().rootProps}
-      class={classes().root({ class: props.rootClass })}
+      class={classes().root({ class: componentProps.rootClass })}
     >
       <span
         {...api().fallbackProps}
-        class={classes().fallback({ class: props.fallbackClass })}
+        class={classes().fallback({ class: componentProps.fallbackClass })}
       >
-        {props.fallback}
+        {componentProps.fallback}
       </span>
 
-      <Show when={$props.displayImage}>
+      <Show when={componentProps.displayImage}>
         <img
           {...api().imageProps}
-          {...$imgHTMLProps}
-          class={classes().image({ class: $props.imageClass })}
+          {...imgNodeProps}
+          class={classes().image({ class: componentProps.imageClass })}
         />
       </Show>
     </div>

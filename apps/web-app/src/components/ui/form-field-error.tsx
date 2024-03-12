@@ -1,4 +1,4 @@
-import { createMemo, JSX } from "solid-js";
+import { createMemo, JSX, splitProps } from "solid-js";
 import { tv, type VariantProps } from "tailwind-variants";
 
 import { Icon } from "~/components/ui/icon";
@@ -15,15 +15,17 @@ export interface FormFieldErrorProps
     VariantProps<typeof formFieldErrorVariants>,
     VariantSlotsClassProps<typeof formFieldErrorVariants> {}
 
-export function FormFieldError(props: FormFieldErrorProps) {
+export function FormFieldError(originalProps: FormFieldErrorProps) {
+  const [{ children }, props] = splitProps(originalProps, ["children"]);
+
   const classes = createMemo(() => formFieldErrorVariants());
 
   return (
-    <p class={classes().root({ ...props, class: props.rootClass })} {...props}>
+    <p {...props} class={classes().root({ ...props, class: props.rootClass })}>
       <Icon.dangerTriangle
         class={classes().icon({ ...props, class: props.iconClass })}
       />
-      <span>{props.children}</span>
+      <span>{children}</span>
     </p>
   );
 }

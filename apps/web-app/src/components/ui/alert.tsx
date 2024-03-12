@@ -1,4 +1,4 @@
-import { JSX, ParentProps, Show, createMemo } from "solid-js";
+import { JSX, ParentProps, Show, createMemo, splitProps } from "solid-js";
 import { VariantProps, tv } from "tailwind-variants";
 
 import { Icon } from "~/components/ui/icon";
@@ -28,17 +28,18 @@ export interface AlertProps
   icon?: "danger" | SVGIcon | false;
 }
 
-export function Alert(props: AlertProps) {
-  const classes = createMemo(() =>
-    alertVariants({ ...props, class: props.class })
-  );
+export function Alert(originalProps: AlertProps) {
+  const [{ icon, children }, props] = splitProps(originalProps, [
+    "icon",
+    "children",
+  ]);
 
-  const icon = createMemo(() => getIcon(props.icon ?? "danger"));
+  const IconElement = createMemo(() => getIcon(icon ?? "danger"));
 
   return (
-    <div {...props} class={classes()}>
-      <Show when={icon()}>{icon() as JSX.Element}</Show>
-      <div>{props.children}</div>
+    <div {...originalProps} class={alertVariants(props)}>
+      <Show when={IconElement()}>{IconElement() as JSX.Element}</Show>
+      <div>{children}</div>
     </div>
   );
 }

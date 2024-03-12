@@ -1,4 +1,4 @@
-import { createMemo, JSX } from "solid-js";
+import { JSX, splitProps } from "solid-js";
 import { tv, type VariantProps } from "tailwind-variants";
 
 export const buttonVariants = tv({
@@ -51,8 +51,12 @@ export interface ButtonProps
   extends JSX.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {}
 
-export function Button(props: ButtonProps) {
-  const classes = createMemo(() => buttonVariants(props));
+export function Button(originalProps: ButtonProps) {
+  const [{ children }, props] = splitProps(originalProps, ["children"]);
 
-  return <button {...props} class={classes()} />;
+  return (
+    <button {...props} class={buttonVariants(props)}>
+      {children}
+    </button>
+  );
 }
