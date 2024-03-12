@@ -1,15 +1,5 @@
-import { For } from "solid-js";
+import { RecordFeed } from "~/components/record-feed";
 
 export default function ActorActivity() {
-  return (
-    <div>
-      <For each={new Array(50)}>
-        {() => (
-          <div>
-            activity - activity - activity - activity - activity - activity -{" "}
-          </div>
-        )}
-      </For>
-    </div>
-  );
+  return <RecordFeed recordList={new Array(10)} />;
 }
