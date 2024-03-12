@@ -75,8 +75,6 @@ export default defineConfig({
     [
       /^p(x|y)?-layout$/,
       ([, dir], { theme }) => {
-        console.log(dir);
-
         if (dir === "x") {
           return {
             "padding-left": theme.spacing.xs,
@@ -91,6 +89,19 @@ export default defineConfig({
         }
 
         return { padding: theme.spacing.xs };
+      },
+    ],
+    [
+      /^gap(-[xy])?-layout$/,
+      ([, dir], { theme }) => {
+        if (dir === "-x") {
+          return { "column-gap": theme.spacing.xs };
+        }
+        if (dir === "-y") {
+          return { "row-gap": theme.spacing.xs };
+        }
+
+        return { gap: theme.spacing.xs };
       },
     ],
   ],
