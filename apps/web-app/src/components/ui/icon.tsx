@@ -1,18 +1,22 @@
+import HeroiconsCake from "~icons/heroicons/cake";
+import HeroiconsPlus from "~icons/heroicons/plus";
 import HeroiconsXMark20Solid from "~icons/heroicons/x-mark-20-solid";
 import LogoSolid from "~icons/local/logo-solid";
+import QuillSignature from "~icons/quill/signature";
 import SolarAltArrowDownOutline from "~icons/solar/alt-arrow-down-outline";
 import SolarAltArrowLeftOutline from "~icons/solar/alt-arrow-left-outline";
 import SolarAltArrowRightOutline from "~icons/solar/alt-arrow-right-outline";
-import SolarArrowUpOutline from "~icons/solar/arrow-up-outline";
 import SolarArrowLeftOutline from "~icons/solar/arrow-left-outline";
+import SolarArrowUpOutline from "~icons/solar/arrow-up-outline";
 import SolarBagHeartBold from "~icons/solar/bag-heart-bold";
 import SolarBagHeartOutline from "~icons/solar/bag-heart-outline";
 import SolarBellBold from "~icons/solar/bell-bold";
 import SolarBellOutline from "~icons/solar/bell-outline";
 import SolarBookmarkBold from "~icons/solar/bookmark-bold";
 import SolarBookmarkOutline from "~icons/solar/bookmark-outline";
-import SolarChatRoundBold from "~icons/solar/chat-round-bold";
-import SolarChatRoundOutline from "~icons/solar/chat-round-outline";
+import SolarCalendarOutline from "~icons/solar/calendar-outline";
+import SolarChatLineOutline from "~icons/solar/chat-line-outline";
+import SolarChatSquareArrowOutline from "~icons/solar/chat-square-arrow-outline";
 import SolarCompassBold from "~icons/solar/compass-bold";
 import SolarCompassOutline from "~icons/solar/compass-outline";
 import SolarDangerTriangleBold from "~icons/solar/danger-triangle-bold";
@@ -28,9 +32,11 @@ import SolarHeartBold from "~icons/solar/heart-bold";
 import SolarHeartOutline from "~icons/solar/heart-outline";
 import SolarHomeSmileBold from "~icons/solar/home-smile-bold";
 import SolarHomeSmileOutline from "~icons/solar/home-smile-outline";
+import SolarLinkMinimalistic2Outline from "~icons/solar/link-minimalistic-2-outline";
 import SolarLoginBold from "~icons/solar/login-bold";
 import SolarLoginOutline from "~icons/solar/login-outline";
 import SolarLogoutOutline from "~icons/solar/logout-outline";
+import SolarMapPointOutline from "~icons/solar/map-point-outline";
 import SolarMenuDotsBold from "~icons/solar/menu-dots-bold";
 import SolarMenuDotsOutline from "~icons/solar/menu-dots-outline";
 import SolarMutedBold from "~icons/solar/muted-bold";
@@ -42,11 +48,11 @@ import SolarPlayBold from "~icons/solar/play-bold";
 import SolarPostsCarouselVerticalOutline from "~icons/solar/posts-carousel-vertical-outline";
 import SolarQuitFullScreenOutline from "~icons/solar/quit-full-screen-outline";
 import SolarQuitPipOutline from "~icons/solar/quit-pip-outline";
-import SolarRepeatOutline from "~icons/solar/repeat-outline";
 import SolarSettingsBold from "~icons/solar/settings-bold";
 import SolarSettingsOutline from "~icons/solar/settings-outline";
 import SolarSquareShareLineOutline from "~icons/solar/square-share-line-outline";
 import SolarTrafficLineDuotone from "~icons/solar/traffic-line-duotone";
+import SolarTrashBinTrashOutline from "~icons/solar/trash-bin-trash-outline";
 import SolarUserBold from "~icons/solar/user-bold";
 import SolarUserOutline from "~icons/solar/user-outline";
 import SolarUserPlusBold from "~icons/solar/user-plus-bold";
@@ -54,13 +60,6 @@ import SolarUserPlusOutline from "~icons/solar/user-plus-outline";
 import SolarVolumeBold from "~icons/solar/volume-bold";
 import SolarVolumeLoudBold from "~icons/solar/volume-loud-bold";
 import SolarVolumeSmallBold from "~icons/solar/volume-small-bold";
-import SolarMapPointOutline from "~icons/solar/map-point-outline";
-import SolarLinkMinimalistic2Outline from "~icons/solar/link-minimalistic-2-outline";
-import SolarCalendarOutline from "~icons/solar/calendar-outline";
-import HeroiconsCake from "~icons/heroicons/cake";
-import HeroiconsPlus from "~icons/heroicons/plus";
-import SolarTrashBinTrashOutline from "~icons/solar/trash-bin-trash-outline";
-import QuillSignature from "~icons/quill/signature";
 
 export const Icon = {
   logo: {
@@ -137,11 +136,13 @@ export const Icon = {
     outline: SolarEyeOutline,
     solid: SolarEyeBold,
   },
-  repeat: SolarRepeatOutline,
   chat: {
-    round: {
-      outline: SolarChatRoundOutline,
-      solid: SolarChatRoundBold,
+    square: {
+      outline: SolarChatLineOutline,
+
+      arrow: {
+        outline: SolarChatSquareArrowOutline,
+      },
     },
   },
   bookmark: {
