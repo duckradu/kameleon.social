@@ -1,4 +1,5 @@
-import { A } from "@solidjs/router";
+import { A, useNavigate } from "@solidjs/router";
+import { mergeProps } from "solid-js";
 
 import { Avatar } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
@@ -6,13 +7,52 @@ import { Icon } from "~/components/ui/icon";
 
 import { paths } from "~/lib/constants/paths";
 
-export function Record() {
+export type RecordProps = {
+  config?: {
+    navigateOnClick?: boolean;
+    navigateOnAuxClick?: boolean;
+  };
+};
+
+export function Record(originalProps: RecordProps) {
+  const props = mergeProps(
+    { config: { navigateOnClick: true, navigateOnAuxClick: true } },
+    originalProps
+  );
+
+  const navigate = useNavigate();
+
   return (
-    <article class="relative flex flex-col gap-3 p-4 border border-border rounded-xl">
+    <article
+      classList={{
+        "relative flex flex-col gap-3 p-4 border border-border rounded-xl":
+          true,
+        "cursor-pointer":
+          props.config.navigateOnClick || props.config.navigateOnAuxClick,
+      }}
+      onClick={
+        props.config.navigateOnClick
+          ? () => {
+              navigate(paths.actor("kameleon").record("test"));
+            }
+          : undefined
+      }
+      onAuxClick={
+        props.config.navigateOnAuxClick
+          ? () => {
+              window.open(
+                paths.actor("kameleon").record("random-record"),
+                "_blank"
+              );
+            }
+          : undefined
+      }
+    >
       <header class="flex justify-between items-center">
         <A
-          href={paths.actor("").profile}
+          href={paths.actor("kameleon").profile}
           class="inline-flex items-center gap-3"
+          onClick={(e) => e.stopPropagation()}
         >
           <Avatar fallback="K" rootClass="border border-background" />
 
