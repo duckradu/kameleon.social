@@ -12,6 +12,8 @@ export type RecordProps = {
     navigateOnClick?: boolean;
     navigateOnAuxClick?: boolean;
   };
+
+  class?: string;
 };
 
 export function Record(originalProps: RecordProps) {
@@ -29,6 +31,7 @@ export function Record(originalProps: RecordProps) {
           true,
         "cursor-pointer":
           props.config.navigateOnClick || props.config.navigateOnAuxClick,
+        [props.class!]: Boolean(props.class),
       }}
       onClick={
         props.config.navigateOnClick

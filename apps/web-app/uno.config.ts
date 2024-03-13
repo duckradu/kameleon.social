@@ -4,6 +4,7 @@ import {
   presetWebFonts,
   transformerDirectives,
   transformerVariantGroup,
+  toEscapedSelector as e,
 } from "unocss";
 
 export default defineConfig({
@@ -89,6 +90,32 @@ export default defineConfig({
         }
 
         return { padding: theme.spacing.xs };
+      },
+    ],
+    [
+      /^space-(x|y)-layout/,
+      ([, dir], { rawSelector, theme }) => {
+        const selector = e(rawSelector);
+
+        if (dir === "x") {
+          return `
+            ${selector} > :not([hidden], .no-space-layout) ~ :not([hidden], .no-space-layout) {
+              margin-left: ${theme.spacing.xs};
+              margin-right: ${theme.spacing.xs};
+            }
+          `;
+        }
+
+        if (dir === "y") {
+          return `
+            ${selector} > :not([hidden], .no-space-layout) ~ :not([hidden], .no-space-layout) {
+              margin-top: ${theme.spacing.xs};
+              margin-bottom: ${theme.spacing.xs};
+            }
+          `;
+        }
+
+        return "";
       },
     ],
     [

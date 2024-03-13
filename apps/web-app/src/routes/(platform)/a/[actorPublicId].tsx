@@ -29,7 +29,7 @@ export default function ActorLayout(props: RouteSectionProps) {
   const actor = createAsync(() => findOneByPID(params.actorPublicId));
 
   return (
-    <div>
+    <div class="space-y-layout">
       {/* <div class="w-screen h-screen absolute w-full left-0 right-0 -z-1 bg-foreground/10" /> */}
 
       <header class="space-y-2">

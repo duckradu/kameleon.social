@@ -14,7 +14,7 @@ export default function PlatformLayout(props: RouteSectionProps) {
 
       {/* Alternate between w-2xl and w-full */}
       <div class="w-2xl">
-        <main class="w-full max-w-2xl min-h-screen mx-auto [&>*:first-child:not(.no-layout-space)]:space-y-4">
+        <main class="w-full max-w-2xl min-h-screen mx-auto">
           {props.children}
         </main>
       </div>

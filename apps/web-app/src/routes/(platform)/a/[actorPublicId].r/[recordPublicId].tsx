@@ -25,10 +25,12 @@ export default function Record() {
   });
 
   return (
-    <div class="relative no-layout-space">
+    <div class="relative space-y-layout">
       <div
         classList={{
-          "sticky-header py-layout z-10 border-b border-transparent": true,
+          "sticky-header py-layout z-10 border-b": true,
+
+          "border-transparent": noScrollY(),
           "border-border": !noScrollY(),
         }}
       >
@@ -44,23 +46,20 @@ export default function Record() {
         </Button>
       </div>
 
-      <div class="space-y-3">
-        <RecordComponent
-          config={{ navigateOnClick: false, navigateOnAuxClick: false }}
-        />
+      <RecordComponent
+        config={{ navigateOnClick: false, navigateOnAuxClick: false }}
+        class="!mt-0"
+      />
 
-        <div>
-          <header class="flex justify-between items-center">
-            <h2 class="text-2xl font-bold">Replies</h2>
-            <Button>
-              <Icon.signature.outline class="text-lg -ml-1" />
-              Reply
-            </Button>
-          </header>
-
-          <RecordFeed recordList={new Array(10)} />
-        </div>
+      <div class="flex justify-between items-center no-space-layout -my-1">
+        <h2 class="text-2xl font-bold">Replies</h2>
+        <Button>
+          <Icon.signature.outline class="text-lg -ml-1" />
+          Reply
+        </Button>
       </div>
+
+      <RecordFeed recordList={new Array(10)} />
     </div>
   );
 }

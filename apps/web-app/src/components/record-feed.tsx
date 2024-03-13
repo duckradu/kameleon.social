@@ -12,7 +12,7 @@ export function RecordFeed(props: RecordFeedProps) {
   return (
     <div
       classList={{
-        "grid gap-layout py-layout": true,
+        "grid gap-layout": true,
         [props.class!]: Boolean(props.class),
       }}
     >
