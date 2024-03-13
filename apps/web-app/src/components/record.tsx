@@ -25,7 +25,7 @@ export function Record(originalProps: RecordProps) {
   return (
     <article
       classList={{
-        "relative flex flex-col gap-3 p-4 border border-border rounded-xl":
+        "relative flex flex-col gap-3 p-4 border border-border rounded-xl hover:border-muted-foreground/50":
           true,
         "cursor-pointer":
           props.config.navigateOnClick || props.config.navigateOnAuxClick,
