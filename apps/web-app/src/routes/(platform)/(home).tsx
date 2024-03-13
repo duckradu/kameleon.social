@@ -1,7 +1,9 @@
+import { RecordFeed } from "~/components/record-feed";
+
 export default function Home() {
   return (
-    <div>
-      <h1>Home</h1>
+    <div class="no-layout-space">
+      <RecordFeed recordList={new Array(10)} />
     </div>
   );
 }

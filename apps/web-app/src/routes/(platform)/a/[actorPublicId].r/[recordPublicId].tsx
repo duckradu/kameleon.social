@@ -20,7 +20,9 @@ export default function Record() {
       </div>
 
       <div class="space-y-3">
-        <RecordComponent />
+        <RecordComponent
+          config={{ navigateOnClick: false, navigateOnAuxClick: false }}
+        />
 
         <div>
           <header class="flex justify-between items-center">
