@@ -67,7 +67,7 @@ export function Avatar(originalProps: AvatarProps) {
         {...api().fallbackProps}
         class={classes().fallback({ class: componentProps.fallbackClass })}
       >
-        {componentProps.fallback}
+        {componentProps.fallback}{" "}
       </span>
 
       <Show when={componentProps.displayImage}>
