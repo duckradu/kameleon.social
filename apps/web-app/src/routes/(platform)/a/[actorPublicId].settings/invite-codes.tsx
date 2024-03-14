@@ -1,8 +1,9 @@
 import { A, RouteDefinition, createAsyncStore } from "@solidjs/router";
 import { format } from "date-fns/format";
-import { For, createMemo } from "solid-js";
+import { For, Show, createMemo } from "solid-js";
 
 import { SettingsSection } from "~/components/settings-section";
+import { Avatar } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 
@@ -10,11 +11,13 @@ import {
   createInviteCode,
   deleteInviteCode,
   getInviteCodes,
+  toggleInviteCodeIsEnabled,
 } from "~/server/modules/invite-codes/actions";
-
-import { dynamicWord } from "~/lib/utils/common";
-
 import { MAX_INVITE_CODES_PER_ACTOR } from "~/server/modules/invite-codes/constants";
+
+import { paths } from "~/lib/constants/paths";
+import { getShortName } from "~/lib/utils/actors";
+import { dynamicWord } from "~/lib/utils/common";
 
 export const route = {
   load: () => getInviteCodes(),
@@ -30,7 +33,6 @@ export default function SettingsInviteCodes() {
     () => MAX_INVITE_CODES_PER_ACTOR - (inviteCodes()?.data?.length || 0)
   );
 
-  // TODO: Replace hardcoded strings
   return (
     <div class="py-layout">
       <SettingsSection
@@ -65,7 +67,7 @@ export default function SettingsInviteCodes() {
           <For each={inviteCodes()?.data}>
             {(inviteCode) => (
               <li>
-                <div class="bg-gradient-to-tr from-brand to-green rounded-md p-1">
+                <div class="bg-gradient-to-tr from-brand to-green rounded-md p-1 hover:space-y-1 group">
                   <div class="bg-background rounded-sm flex divide-x divide-dashed divide-muted-foreground relative">
                     <A
                       href={inviteCode.signUpWithInviteCodeURL}
@@ -78,7 +80,7 @@ export default function SettingsInviteCodes() {
                       />
                     </A>
 
-                    <ul class="p-2 [&>li>p]-(uppercase text-muted-foreground text-xs font-medium) [&>li>strong]:font-medium">
+                    <ul class="p-2 space-y-.5 [&>li>p]-(uppercase text-muted-foreground text-xs font-medium) [&>li>strong]:font-medium">
                       <li>
                         <p>Invite code</p>
                         <strong>{inviteCode.code}</strong>
@@ -92,16 +94,30 @@ export default function SettingsInviteCodes() {
                           )}
                         </strong>
                       </li>
-                      <li>
-                        <p>Used by (0/{inviteCode.availableUses})</p>
-                        <strong>2 ppl</strong>
-                      </li>
+                      <Show when={inviteCode.usedBy.length}>
+                        <li>
+                          <p>
+                            Used {inviteCode.usedBy.length}/
+                            {inviteCode.availableUses}
+                          </p>
+                          <div class="flex -space-x-3">
+                            <For each={inviteCode.usedBy}>
+                              {(actor) => (
+                                <A href={paths.actor(actor.pid).profile}>
+                                  <Avatar
+                                    fallback={getShortName(actor.name || "")}
+                                    rootClass="border border-background"
+                                  />
+                                </A>
+                              )}
+                            </For>
+                          </div>
+                        </li>
+                      </Show>
                     </ul>
-                    <form
-                      action={deleteInviteCode}
-                      method="post"
-                      class="absolute bottom-0 right-0 !border-0"
-                    >
+                  </div>
+                  <div class="flex justify-end gap-1 h-0 overflow-hidden group-hover:h-auto">
+                    <form action={toggleInviteCodeIsEnabled} method="post">
                       <input
                         name="inviteCode"
                         type="hidden"
@@ -111,7 +127,23 @@ export default function SettingsInviteCodes() {
                         type="submit"
                         size="sm"
                         shape="squircle"
-                        variant="ghost"
+                        variant="secondary"
+                        class="rounded-full"
+                      >
+                        <Icon.forbidden.circle.outline class="text-base" />
+                      </Button>
+                    </form>
+                    <form action={deleteInviteCode} method="post">
+                      <input
+                        name="inviteCode"
+                        type="hidden"
+                        value={inviteCode.code}
+                      />
+                      <Button
+                        type="submit"
+                        size="sm"
+                        shape="squircle"
+                        variant="secondary"
                         class="rounded-full"
                       >
                         <Icon.trashBin.outline class="text-base" />
