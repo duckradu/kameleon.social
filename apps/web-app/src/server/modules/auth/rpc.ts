@@ -104,13 +104,19 @@ export async function signUp$(formData: FormData) {
 
   let err,
     newActor: (typeof actors.$inferSelect)[] | undefined,
-    matchingInviteCodes: (typeof inviteCodes.$inferSelect)[] | undefined;
+    matchingInviteCodes:
+      | {
+          invite_codes: typeof inviteCodes.$inferSelect;
+          actors: typeof actors.$inferSelect | null;
+        }[]
+      | undefined;
 
   if (!isFirstActor) {
     [err, matchingInviteCodes] = await to(
       db
         .select()
         .from(inviteCodes)
+        .leftJoin(actors, eq(inviteCodes.code, actors.usedInviteCode))
         .where(eq(inviteCodes.code, inviteCode as string))
     );
 
@@ -118,21 +124,45 @@ export async function signUp$(formData: FormData) {
       return rpcErrorResponse(err);
     }
 
-    if (matchingInviteCodes!.length !== 1) {
-      return rpcErrorResponse({
-        message: "Invite code invalid",
-      });
-    }
+    const aggregatedOnInviteCode = matchingInviteCodes!.reduce<
+      Record<
+        string,
+        {
+          invite_code: typeof inviteCodes.$inferSelect;
+          actors: (typeof actors.$inferSelect)[];
+        }
+      >
+    >((acc, row) => {
+      const invite_code = row.invite_codes;
+      const actor = row.actors;
 
-    if (matchingInviteCodes![0].availableUses === 0) {
-      return rpcErrorResponse({
-        message: "The invite code can't be used anymore",
-      });
-    }
+      if (!acc[invite_code.code]) {
+        acc[invite_code.code] = { invite_code, actors: [] };
+      }
 
-    if (isBefore(new Date(matchingInviteCodes![0].expiresAt), new Date())) {
+      if (actor) {
+        acc[invite_code.code].actors.push(actor);
+      }
+
+      return acc;
+    }, {});
+
+    const inviteCodeWithActors = Object.values(aggregatedOnInviteCode)[0];
+
+    if (
+      isBefore(new Date(inviteCodeWithActors.invite_code.expiresAt), new Date())
+    ) {
       return rpcErrorResponse({
         message: "The invite code has expired",
+      });
+    }
+
+    if (
+      inviteCodeWithActors.invite_code.availableUses <=
+      inviteCodeWithActors.actors.length
+    ) {
+      return rpcErrorResponse({
+        message: "The invite code can't be used anymore",
       });
     }
   }
@@ -155,17 +185,6 @@ export async function signUp$(formData: FormData) {
 
   if (newActor!.length !== 1) {
     return rpcErrorResponse({ message: "Internal server error" });
-  }
-
-  [err] = await db
-    .update(inviteCodes)
-    .set({
-      availableUses: (matchingInviteCodes?.[0]?.availableUses || 1) - 1,
-    })
-    .where(eq(inviteCodes.code, inviteCode as string));
-
-  if (err) {
-    return rpcErrorResponse(err);
   }
 
   const session = await getSession();
