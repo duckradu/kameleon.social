@@ -9,18 +9,17 @@ import { object, safeParseAsync, string } from "valibot";
 
 import { db } from "~/server/db";
 import { inviteCodes } from "~/server/db/schemas/invite-codes";
-
+import { actors } from "~/server/db/schemas/actors";
 import { getSessionActor$ } from "~/server/modules/auth/rpc";
+import { MAX_INVITE_CODES_PER_ACTOR } from "~/server/modules/invite-codes/constants";
 
-import { paths } from "~/lib/constants/paths";
 import { getBaseUrl, to } from "~/lib/utils/common";
 import {
   rpcErrorResponse,
   rpcSuccessResponse,
   rpcValidationErrorResponse,
 } from "~/lib/utils/rpc";
-
-import { MAX_INVITE_CODES_PER_ACTOR } from "~/server/modules/invite-codes/constants";
+import { paths } from "~/lib/constants/paths";
 
 export async function getInviteCodes$() {
   const sessionActor = await getSessionActor$();
@@ -33,6 +32,7 @@ export async function getInviteCodes$() {
     db
       .select()
       .from(inviteCodes)
+      .leftJoin(actors, eq(inviteCodes.code, actors.usedInviteCode))
       .where(eq(inviteCodes.issuerId, sessionActor.data.id))
       .orderBy(desc(inviteCodes.createdAt))
   );
@@ -41,22 +41,47 @@ export async function getInviteCodes$() {
     return rpcErrorResponse(err);
   }
 
-  const inviteCodesWithQRCodeDataURL = matchingInviteCodes.map(
-    async (inviteCode) => {
-      const signUpWithInviteCodeURL = `${getBaseUrl()}${
-        paths.signUp
-      }?inviteCode=${inviteCode.code}`;
+  const aggregatedOnInviteCode = matchingInviteCodes!.reduce<
+    Record<
+      string,
+      {
+        invite_code: typeof inviteCodes.$inferSelect;
+        actors: (typeof actors.$inferSelect)[];
+      }
+    >
+  >((acc, row) => {
+    const invite_code = row.invite_codes;
+    const actor = row.actors;
 
-      return {
-        ...inviteCode,
-
-        signUpWithInviteCodeURL,
-        qrCodeDataURL: await QRCode.toDataURL(signUpWithInviteCodeURL, {
-          margin: 1,
-        }),
-      };
+    if (!acc[invite_code.code]) {
+      acc[invite_code.code] = { invite_code, actors: [] };
     }
-  );
+
+    if (actor) {
+      acc[invite_code.code].actors.push(actor);
+    }
+
+    return acc;
+  }, {});
+
+  const inviteCodesWithQRCodeDataURL = Object.values(
+    aggregatedOnInviteCode
+  ).map(async ({ invite_code, actors }) => {
+    const signUpWithInviteCodeURL = `${getBaseUrl()}${
+      paths.signUp
+    }?inviteCode=${invite_code.code}`;
+
+    return {
+      ...invite_code,
+
+      signUpWithInviteCodeURL,
+      qrCodeDataURL: await QRCode.toDataURL(signUpWithInviteCodeURL, {
+        margin: 1,
+      }),
+
+      usedBy: actors,
+    };
+  });
 
   const successResponse = await Promise.all(inviteCodesWithQRCodeDataURL);
 
@@ -106,7 +131,6 @@ export async function createInviteCode$() {
   return rpcSuccessResponse(newInviteCode[0]);
 }
 
-// TODO: Check if invite code has been used
 export async function deleteInviteCode$(formData: FormData) {
   const sessionActor = await getSessionActor$();
 
@@ -125,7 +149,67 @@ export async function deleteInviteCode$(formData: FormData) {
     return rpcValidationErrorResponse(parsed.issues);
   }
 
-  const [err, deletedInviteCode] = await to(
+  let err,
+    matchingInviteCodes:
+      | {
+          invite_codes: typeof inviteCodes.$inferSelect;
+          actors: typeof actors.$inferSelect | null;
+        }[]
+      | undefined,
+    deletedInviteCode: (typeof inviteCodes.$inferSelect)[] | undefined;
+
+  [err, matchingInviteCodes] = await to(
+    db
+      .select()
+      .from(inviteCodes)
+      // TODO: Create util for the join
+      .leftJoin(actors, eq(inviteCodes.code, actors.usedInviteCode))
+      .where(
+        and(
+          eq(inviteCodes.code, parsed.output.inviteCode),
+          eq(inviteCodes.issuerId, sessionActor.data.id)
+        )
+      )
+  );
+
+  if (err) {
+    return rpcErrorResponse(err);
+  }
+
+  // TODO: Create util for the agregator
+  const aggregatedOnInviteCode = matchingInviteCodes!.reduce<
+    Record<
+      string,
+      {
+        invite_code: typeof inviteCodes.$inferSelect;
+        actors: (typeof actors.$inferSelect)[];
+      }
+    >
+  >((acc, row) => {
+    const invite_code = row.invite_codes;
+    const actor = row.actors;
+
+    if (!acc[invite_code.code]) {
+      acc[invite_code.code] = { invite_code, actors: [] };
+    }
+
+    if (actor) {
+      acc[invite_code.code].actors.push(actor);
+    }
+
+    return acc;
+  }, {});
+
+  const [inviteCodeWithActors] = Object.values(aggregatedOnInviteCode);
+
+  // TODO: Needs to check if the actors are active, but will do the job for now
+  if (inviteCodeWithActors.actors.length) {
+    return rpcErrorResponse({
+      message: "Invite cannot be deleted after it was used by someone",
+    });
+  }
+
+  [err, deletedInviteCode] = await to(
     db
       .delete(inviteCodes)
       .where(
@@ -141,5 +225,5 @@ export async function deleteInviteCode$(formData: FormData) {
     return rpcErrorResponse(err);
   }
 
-  return rpcSuccessResponse(deletedInviteCode[0]);
+  return rpcSuccessResponse(deletedInviteCode![0]);
 }
