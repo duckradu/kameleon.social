@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
+  boolean,
   integer,
   pgTable,
   serial,
@@ -16,7 +17,9 @@ export const inviteCodes = pgTable("invite_codes", {
 
   issuerId: serial("issuer_id").notNull(),
 
-  availableUses: integer("available_uses").notNull(),
+  availableUses: integer("available_uses").notNull().default(5),
+
+  isEnabled: boolean("is_enabled").notNull().default(true),
 
   expiresAt: timestamp("expires_at", { mode: "string" }).notNull(),
 

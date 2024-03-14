@@ -148,6 +148,12 @@ export async function signUp$(formData: FormData) {
 
     const inviteCodeWithActors = Object.values(aggregatedOnInviteCode)[0];
 
+    if (!inviteCodeWithActors.invite_code.isEnabled) {
+      return rpcErrorResponse({
+        message: "The invite code was disabled by the issuer",
+      });
+    }
+
     if (
       isBefore(new Date(inviteCodeWithActors.invite_code.expiresAt), new Date())
     ) {

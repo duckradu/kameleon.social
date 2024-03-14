@@ -3,7 +3,7 @@
 import { redirect } from "@solidjs/router";
 import { addWeeks } from "date-fns";
 import { decode } from "decode-formdata";
-import { and, count, desc, eq } from "drizzle-orm";
+import { and, count, desc, eq, sql } from "drizzle-orm";
 import QRCode from "qrcode";
 import { object, safeParseAsync, string } from "valibot";
 
@@ -115,8 +115,6 @@ export async function createInviteCode$() {
       .values({
         issuerId: sessionActor.data.id,
 
-        availableUses: 5, // TODO: Move to some sort of app config
-
         expiresAt: addWeeks(now, 1).toISOString(), // TODO: Move to some sort of app config
 
         createdAt: now.toISOString(),
@@ -205,7 +203,8 @@ export async function deleteInviteCode$(formData: FormData) {
   // TODO: Needs to check if the actors are active, but will do the job for now
   if (inviteCodeWithActors.actors.length) {
     return rpcErrorResponse({
-      message: "Invite cannot be deleted after it was used by someone",
+      message:
+        "The invite code can't be deleted after it was used, but it can be disabled",
     });
   }
 
@@ -226,4 +225,45 @@ export async function deleteInviteCode$(formData: FormData) {
   }
 
   return rpcSuccessResponse(deletedInviteCode![0]);
+}
+
+// TODO: Don't update inv code that's been used 5/5
+export async function toggleInviteCodeIsEnabled$(formData: FormData) {
+  const sessionActor = await getSessionActor$();
+
+  if (!sessionActor.success) {
+    throw redirect(paths.signIn);
+  }
+
+  const parsed = await safeParseAsync(
+    object({
+      inviteCode: string(),
+    }),
+    decode(formData)
+  );
+
+  if (!parsed.success) {
+    return rpcValidationErrorResponse(parsed.issues);
+  }
+
+  const [err, updatedInviteCodes] = await to(
+    db
+      .update(inviteCodes)
+      .set({
+        isEnabled: sql` NOT is_enabled`,
+      })
+      .where(
+        and(
+          eq(inviteCodes.code, parsed.output.inviteCode),
+          eq(inviteCodes.issuerId, sessionActor.data.id)
+        )
+      )
+      .returning()
+  );
+
+  if (err) {
+    return rpcErrorResponse(err);
+  }
+
+  return rpcSuccessResponse(updatedInviteCodes[0]);
 }
