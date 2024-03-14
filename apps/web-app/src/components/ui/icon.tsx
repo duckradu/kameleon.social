@@ -25,6 +25,7 @@ import SolarEyeOutline from "~icons/solar/eye-outline";
 import SolarFileTextBold from "~icons/solar/file-text-bold";
 import SolarFileTextOutline from "~icons/solar/file-text-outline";
 import SolarFilterOutline from "~icons/solar/filter-outline";
+import SolarForbiddenCircleOutline from "~icons/solar/forbidden-circle-outline";
 import SolarFullScreenOutline from "~icons/solar/full-screen-outline";
 import SolarGalleryFavouriteBold from "~icons/solar/gallery-favourite-bold";
 import SolarGalleryFavouriteOutline from "~icons/solar/gallery-favourite-outline";
@@ -176,6 +177,11 @@ export const Icon = {
   plus: HeroiconsPlus,
   trashBin: {
     outline: SolarTrashBinTrashOutline,
+  },
+  forbidden: {
+    circle: {
+      outline: SolarForbiddenCircleOutline,
+    },
   },
 
   signature: {
