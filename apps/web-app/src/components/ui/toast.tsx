@@ -19,10 +19,10 @@ export const toastVariants = tv({
   variants: {
     variant: {
       default: {
-        root: "bg-background/70 backdrop-blur-xl text-foreground border-border hover:border-muted-foreground/50",
+        root: "bg-background/10 backdrop-blur-xl text-foreground border-border hover:border-muted-foreground/50",
       },
       destructive: {
-        root: "bg-destructive/90 backdrop-blur-xl text-destructive-foreground border-destructive/20 hover:bg-destructive",
+        root: "bg-destructive backdrop-blur-xl text-destructive-foreground border-destructive/20",
       },
     },
   },
