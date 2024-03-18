@@ -58,7 +58,7 @@ export function Toast(props: ToastProps) {
       </div>
       <Button
         size="sm"
-        variant="ghost"
+        variant={api().type === "error" ? "destructive" : "ghost"}
         onClick={api().dismiss}
         class="text-base rounded-sm absolute top-1 right-1 transition-opacity opacity-0 focus:opacity-100 group-hover:opacity-100"
         iconOnly
