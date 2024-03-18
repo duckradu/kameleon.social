@@ -31,6 +31,9 @@ importers:
       '@zag-js/solid':
         specifier: ^0.38.1
         version: 0.38.1(solid-js@1.8.15)
+      '@zag-js/toast':
+        specifier: ^0.38.1
+        version: 0.38.1
       argon2:
         specifier: ^0.40.1
         version: 0.40.1
@@ -2095,6 +2098,17 @@ packages:
     resolution: {integrity: sha512-FNcYOIlH21rBdiZCaFsaCRDtbmr5WBNEXiqfS8dFWx/x1MxNZ9iyDnBLRGy7OQnTGsyLdpCdHTtGjX65EkKGAw==}
     dependencies:
       '@zag-js/dom-query': 0.38.1
+    dev: false
+
+  /@zag-js/toast@0.38.1:
+    resolution: {integrity: sha512-4jUGMVrcx1kbn4tJymcRqq2Kf1ABJ/BsNm5OGEsoG1KksQGY3SCN73eGL5CXkKyuvn3EsaEZdmvHHEbABVVPrg==}
+    dependencies:
+      '@zag-js/anatomy': 0.38.1
+      '@zag-js/core': 0.38.1
+      '@zag-js/dom-event': 0.38.1
+      '@zag-js/dom-query': 0.38.1
+      '@zag-js/types': 0.38.1
+      '@zag-js/utils': 0.38.1
     dev: false
 
   /@zag-js/types@0.38.1:

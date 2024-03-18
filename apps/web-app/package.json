@@ -23,6 +23,7 @@
     "@zag-js/avatar": "^0.38.1",
     "@zag-js/menu": "^0.38.1",
     "@zag-js/solid": "^0.38.1",
+    "@zag-js/toast": "^0.38.1",
     "argon2": "^0.40.1",
     "date-fns": "^3.3.1",
     "decode-formdata": "^0.6.0",
