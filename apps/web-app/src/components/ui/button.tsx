@@ -19,6 +19,7 @@ export const buttonVariants = tv({
       squircle: true,
     },
     size: {
+      xs: "h-8 px-1.6",
       sm: "h-10 gap-1.5 px-3",
       md: "h-12 gap-2",
       lg: "h-14 gap-3 rounded-lg",
