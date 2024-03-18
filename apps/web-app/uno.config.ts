@@ -6,6 +6,7 @@ import {
   transformerVariantGroup,
   toEscapedSelector as e,
 } from "unocss";
+import presetAnimations from "unocss-preset-animations";
 
 export default defineConfig({
   theme: {
@@ -74,6 +75,7 @@ export default defineConfig({
         // logo: "East Sea Dokdo",
       },
     }),
+    presetAnimations(),
   ],
   transformers: [transformerVariantGroup(), transformerDirectives()],
   rules: [
