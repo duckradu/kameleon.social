@@ -38,6 +38,7 @@ export function ToastProvider(props: ParentProps) {
       placement: "bottom-end",
 
       duration: 7000,
+      removeDelay: 150, // TODO: Get this into a const
 
       pauseOnInteraction: true,
       pauseOnPageIdle: true,
@@ -50,19 +51,18 @@ export function ToastProvider(props: ParentProps) {
     toast.group.connect(state, send, normalizeProps)
   );
 
+  const placements = createMemo(
+    () => Object.keys(api().toastsByPlacement) as toast.Placement[]
+  );
+
   return (
     <ToastContext.Provider value={api}>
-      <For each={Object.entries(api().toastsByPlacement)}>
-        {([placement, toasts]) => (
-          <div
-            style={{
-              gap: "var(--toast-gutter)",
-            }}
-            {...api().getGroupProps({
-              placement: placement as toast.Placement,
-            })}
-          >
-            <For each={toasts}>{(toast) => <Toast actor={toast} />}</For>
+      <For each={placements()}>
+        {(placement) => (
+          <div {...api().getGroupProps({ placement })}>
+            <For each={api().toastsByPlacement[placement]}>
+              {(toast) => <Toast actor={toast} />}
+            </For>
           </div>
         )}
       </For>
