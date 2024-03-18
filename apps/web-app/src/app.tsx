@@ -10,6 +10,7 @@ import "@unocss/reset/tailwind-compat.css";
 import "virtual:uno.css";
 
 import { SessionProvider } from "~/components/context/session";
+import { ToastProvider } from "~/components/context/toast";
 import { KameleonTitle } from "~/components/kameleon-title";
 
 import "~/styles/root.css";
@@ -21,7 +22,9 @@ export default function App() {
         <MetaProvider>
           <KameleonTitle />
           <Suspense>
-            <SessionProvider>{props.children}</SessionProvider>
+            <SessionProvider>
+              <ToastProvider>{props.children}</ToastProvider>
+            </SessionProvider>
           </Suspense>
         </MetaProvider>
       )}
