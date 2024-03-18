@@ -37,7 +37,12 @@ export function ToastProvider(props: ParentProps) {
       },
       placement: "bottom-end",
 
-      duration: 100000,
+      duration: 7000,
+
+      pauseOnInteraction: true,
+      pauseOnPageIdle: true,
+
+      max: 5,
     })
   );
 

@@ -8,22 +8,18 @@ import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 
 export const toastVariants = tv({
-  slots: {
-    root: [
-      "relative pointer-events-auto overflow-hidden group",
-      "border rounded-md",
-      "flex items-center justify-between gap-2",
-      "w-388px p-4 pr-6",
-    ],
-  },
+  base: [
+    "relative pointer-events-auto overflow-hidden group",
+    "border rounded-md",
+    "flex items-center justify-between gap-2",
+    "w-388px p-4 pr-6",
+  ],
   variants: {
     variant: {
-      default: {
-        root: "bg-background/10 backdrop-blur-xl text-foreground border-border hover:border-muted-foreground/50",
-      },
-      destructive: {
-        root: "bg-destructive backdrop-blur-xl text-destructive-foreground border-destructive/20",
-      },
+      default:
+        "bg-background/10 backdrop-blur-xl text-foreground border-border hover:border-muted-foreground/50",
+      destructive:
+        "bg-destructive backdrop-blur-xl text-destructive-foreground border-destructive/20",
     },
   },
   defaultVariants: {
@@ -50,7 +46,7 @@ export function Toast(props: ToastProps) {
   }
 
   return (
-    <div class={classes().root()}>
+    <div class={classes()}>
       <div class="grid gap-1">
         <h3 {...api().titleProps} class="text-sm font-semibold">
           {api().title}
