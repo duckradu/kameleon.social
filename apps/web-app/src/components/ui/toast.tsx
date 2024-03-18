@@ -13,6 +13,7 @@ export const toastVariants = tv({
     "border rounded-md",
     "flex items-center justify-between gap-2",
     "w-388px p-4 pr-6",
+    "data-[state=open]-(animate-in slide-in-bottom fade-in) data-[state=closed]-(animate-out slide-out-bottom fade-out)",
   ],
   variants: {
     variant: {
@@ -46,7 +47,7 @@ export function Toast(props: ToastProps) {
   }
 
   return (
-    <div class={classes()}>
+    <div {...api().rootProps} class={classes()}>
       <div class="grid gap-1">
         <h3 {...api().titleProps} class="text-sm font-semibold">
           {api().title}
