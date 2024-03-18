@@ -19,10 +19,10 @@ export const buttonVariants = tv({
       squircle: true,
     },
     size: {
-      xs: "h-8 px-1.6",
-      sm: "h-10 gap-1.5 px-3",
-      md: "h-12 gap-2",
-      lg: "h-14 gap-3 rounded-lg",
+      sm: "h-8 px-1.6",
+      default: "h-10 gap-1.5 px-3",
+      lg: "h-12 gap-2",
+      xl: "h-14 gap-3 rounded-lg",
     },
   },
   compoundVariants: [
@@ -33,7 +33,7 @@ export const buttonVariants = tv({
     },
     {
       shape: "squircle",
-      size: "md",
+      size: "default",
       class: "w-12 p-0",
     },
     {
@@ -44,7 +44,7 @@ export const buttonVariants = tv({
   ],
   defaultVariants: {
     variant: "primary",
-    size: "md",
+    size: "default",
   },
 });
 

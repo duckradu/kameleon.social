@@ -35,7 +35,6 @@ export default function Record() {
         }}
       >
         <Button
-          size="sm"
           variant="secondary"
           onClick={() => {
             history.back();
@@ -53,7 +52,7 @@ export default function Record() {
 
       <div class="flex justify-between items-center no-space-layout -my-1">
         <h2 class="text-2xl font-bold">Replies</h2>
-        <Button>
+        <Button size="lg">
           <Icon.signature.outline class="text-lg -ml-1" />
           Reply
         </Button>

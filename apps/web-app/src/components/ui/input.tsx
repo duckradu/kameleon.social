@@ -13,13 +13,13 @@ export const inputVariants = tv({
   ],
   variants: {
     size: {
-      sm: "h-10",
-      md: "h-12",
-      lg: "h-14 rounded-lg",
+      default: "h-10",
+      lg: "h-12",
+      xl: "h-14 rounded-lg",
     },
   },
   defaultVariants: {
-    size: "md",
+    size: "default",
   },
 });
 

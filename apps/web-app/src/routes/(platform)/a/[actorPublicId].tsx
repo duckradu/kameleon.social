@@ -58,7 +58,7 @@ export default function ActorLayout(props: RouteSectionProps) {
             </div>
 
             <div class="flex justify-end pt-2">
-              <Button size="sm">Follow</Button>
+              <Button>Follow</Button>
             </div>
           </div>
         </div>

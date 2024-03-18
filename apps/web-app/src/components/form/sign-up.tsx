@@ -28,7 +28,7 @@ export function SignUpForm(props: SignUpFormProps) {
       {/* TODO: Flag to turn off invites? */}
       <div class="grid gap-1">
         <Input
-          size="lg"
+          size="xl"
           name="inviteCode"
           type="text"
           placeholder="Invite code"
@@ -42,7 +42,7 @@ export function SignUpForm(props: SignUpFormProps) {
       </div>
 
       <div class="grid gap-1">
-        <Input size="lg" name="email" type="email" placeholder="Email" />
+        <Input size="xl" name="email" type="email" placeholder="Email" />
         <Show when={submission.result?.validationErrors?.email}>
           <FormFieldError>
             {submission.result!.validationErrors!.email}
@@ -52,7 +52,7 @@ export function SignUpForm(props: SignUpFormProps) {
 
       <div class="grid gap-1">
         <Input
-          size="lg"
+          size="xl"
           name="password"
           type="password"
           placeholder="Password"
@@ -64,7 +64,7 @@ export function SignUpForm(props: SignUpFormProps) {
         </Show>
       </div>
 
-      <Button size="lg" type="submit" disabled={submission.pending}>
+      <Button size="xl" type="submit" disabled={submission.pending}>
         {submission.pending ? (
           <Icon.spinner class="w-6 h-6 animate-spin" />
         ) : (

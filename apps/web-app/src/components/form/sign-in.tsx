@@ -25,7 +25,7 @@ export function SignInForm(props: SignInFormProps) {
       </Show>
 
       <div class="grid gap-1">
-        <Input size="lg" name="email" type="email" placeholder="Email" />
+        <Input size="xl" name="email" type="email" placeholder="Email" />
         <Show when={submission.result?.validationErrors?.email}>
           <FormFieldError>
             {submission.result!.validationErrors!.email}
@@ -35,7 +35,7 @@ export function SignInForm(props: SignInFormProps) {
 
       <div class="grid gap-1">
         <Input
-          size="lg"
+          size="xl"
           name="password"
           type="password"
           placeholder="Password"
@@ -47,7 +47,7 @@ export function SignInForm(props: SignInFormProps) {
         </Show>
       </div>
 
-      <Button size="lg" type="submit" disabled={submission.pending}>
+      <Button size="xl" type="submit" disabled={submission.pending}>
         {submission.pending ? (
           <Icon.spinner class="w-6 h-6 animate-spin" />
         ) : (
