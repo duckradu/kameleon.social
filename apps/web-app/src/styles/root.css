@@ -5,12 +5,15 @@
   --muted: 0 0% 92%;
   --muted-foreground: 0 0% 50%;
 
+  /* TODO: Use for <Record />? */
+  /* --card: */
+  /* --card-foreground: */
+
   --popover: var(--muted);
   --popover-foreground: var(--foreground);
 
   --primary: var(--foreground);
   --primary-foreground: var(--background);
-
   --secondary: var(--muted);
   --secondary-foreground: var(--muted-foreground);
 
@@ -20,11 +23,13 @@
   --accent: var(--brand);
   --accent-foreground: var(--brand-foreground);
 
-  --border: var(--muted);
-  --ring: var(--brand);
+  --destructive: 0 98% 44%;
+  --destructive-foreground: 210 40% 98%;
 
+  --border: var(--muted);
   --input: var(--muted);
-  --input-foreground: var(--muted-foreground);
+
+  --ring: var(--brand);
 
   --radius: 0.75rem;
 }
@@ -37,6 +42,8 @@
     --muted: 0 0% 8%;
 
     --brand-foreground: var(--foreground);
+
+    --destructive: 0 98% 34%;
   }
 }
 
