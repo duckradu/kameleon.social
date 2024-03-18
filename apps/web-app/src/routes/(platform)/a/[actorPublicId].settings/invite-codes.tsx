@@ -70,9 +70,9 @@ export default function SettingsInviteCodes() {
                     <Button
                       type="submit"
                       size="sm"
-                      shape="squircle"
                       variant="ghost"
                       class="rounded-full"
+                      iconOnly
                     >
                       <Icon.plus class="text-base" />
                     </Button>
@@ -152,9 +152,9 @@ export default function SettingsInviteCodes() {
                         <Button
                           type="submit"
                           size="sm"
-                          shape="squircle"
                           variant="secondary"
                           class="rounded-full"
+                          iconOnly
                         >
                           <Icon.forbidden.circle.outline class="text-base" />
                         </Button>
@@ -168,9 +168,9 @@ export default function SettingsInviteCodes() {
                         <Button
                           type="submit"
                           size="sm"
-                          shape="squircle"
                           variant="secondary"
                           class="rounded-full"
+                          iconOnly
                         >
                           <Icon.trashBin.outline class="text-base" />
                         </Button>

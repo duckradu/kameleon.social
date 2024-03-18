@@ -68,9 +68,9 @@ export function Record(originalProps: RecordProps) {
         <div>
           <Button
             size="sm"
-            shape="squircle"
             variant="ghost"
             class="rounded-full border border-background"
+            iconOnly
           >
             <Icon.menuDots.solid />
           </Button>

@@ -11,12 +11,13 @@ export const buttonVariants = tv({
   ],
   variants: {
     variant: {
-      primary: "bg-primary text-primary-foreground hover:bg-primary/90",
+      default: "bg-primary text-primary-foreground hover:bg-primary/90",
       secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/90",
+
       ghost: "bg-transparent text-secondary-foreground hover:bg-secondary",
-    },
-    shape: {
-      squircle: true,
+
+      destructive:
+        "bg-destructive text-destructive-foreground hover:bg-destructive/90",
     },
     size: {
       sm: "h-8 px-1.6",
@@ -24,26 +25,29 @@ export const buttonVariants = tv({
       lg: "h-12 gap-2",
       xl: "h-14 gap-3 rounded-lg",
     },
+    iconOnly: {
+      true: "",
+    },
   },
   compoundVariants: [
     {
-      shape: "squircle",
       size: "sm",
+      iconOnly: true,
+      class: "w-8 p-0",
+    },
+    {
+      size: "default",
+      iconOnly: true,
       class: "w-10 p-0",
     },
     {
-      shape: "squircle",
-      size: "default",
-      class: "w-12 p-0",
-    },
-    {
-      shape: "squircle",
       size: "lg",
-      class: "w-14 p-0",
+      iconOnly: true,
+      class: "w-12 p-0",
     },
   ],
   defaultVariants: {
-    variant: "primary",
+    variant: "default",
     size: "default",
   },
 });
