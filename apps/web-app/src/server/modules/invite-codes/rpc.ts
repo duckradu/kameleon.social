@@ -204,7 +204,7 @@ export async function deleteInviteCode$(formData: FormData) {
   if (inviteCodeWithActors.actors.length) {
     return rpcErrorResponse({
       message:
-        "The invite code can't be deleted after it was used, but it can be disabled",
+        "An invite code can't be deleted after it's been used. Please disable it instead if you don't want the invite code to be used anymore.",
     });
   }
 
