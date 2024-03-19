@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "author": "radu.dascalu@pm.me",
   "scripts": {
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "npx only-allow pnpm",
+    "build:web-app": "pnpm --filter web-app build-and-migrate",
+    "start:web-app": "pnpm --filter web-app start"
   },
   "engines": {
     "node": ">=20"
