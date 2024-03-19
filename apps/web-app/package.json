@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
-    "postbuild": "pnpm db:migrate",
+    "postbuild": "npm run db:migrate",
     "start": "vinxi start",
     "db:check": "drizzle-kit check:pg --config=src/server/db/config.ts",
     "db:generate": "drizzle-kit generate:pg --config=src/server/db/config.ts",
