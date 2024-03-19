@@ -9,9 +9,9 @@
     "start": "vinxi start",
     "db:check": "drizzle-kit check:pg --config=src/server/db/config.ts",
     "db:generate": "drizzle-kit generate:pg --config=src/server/db/config.ts",
-    "db:migrate": "tsx ./src/server/db/migrate.ts",
+    "db:migrate": "node --import tsx --env-file .env ./src/server/db/migrate.ts",
     "db:push": "drizzle-kit push:pg --config=src/server/db/config.ts",
-    "db:seed": "pnpm run ./src/server/db/seed.ts",
+    "db:seed": "node --import tsx --env-file .env tsx ./src/server/db/seed.ts",
     "db:drop": "drizzle-kit drop --config=src/server/db/config.ts",
     "db:studio": "drizzle-kit studio --config=src/server/db/config.ts"
   },
@@ -47,6 +47,7 @@
     "@unocss/transformer-variant-group": "^0.58.5",
     "drizzle-kit": "^0.20.14",
     "pg": "^8.11.3",
+    "tsx": "^4.7.1",
     "unocss": "^0.58.5",
     "unocss-preset-animations": "^1.0.1",
     "unplugin-icons": "^0.18.5"
