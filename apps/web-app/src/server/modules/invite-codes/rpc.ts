@@ -3,23 +3,23 @@
 import { redirect } from "@solidjs/router";
 import { addWeeks } from "date-fns";
 import { decode } from "decode-formdata";
-import { and, count, desc, eq, sql } from "drizzle-orm";
+import { and, count, desc, eq, not } from "drizzle-orm";
 import QRCode from "qrcode";
 import { object, safeParseAsync, string } from "valibot";
 
 import { db } from "~/server/db";
-import { inviteCodes } from "~/server/db/schemas/invite-codes";
 import { actors } from "~/server/db/schemas/actors";
+import { inviteCodes } from "~/server/db/schemas/invite-codes";
 import { getSessionActor$ } from "~/server/modules/auth/rpc";
 import { MAX_INVITE_CODES_PER_ACTOR } from "~/server/modules/invite-codes/constants";
 
+import { paths } from "~/lib/constants/paths";
 import { getBaseUrl, to } from "~/lib/utils/common";
 import {
   rpcErrorResponse,
   rpcSuccessResponse,
   rpcValidationErrorResponse,
 } from "~/lib/utils/rpc";
-import { paths } from "~/lib/constants/paths";
 
 export async function getInviteCodes$() {
   const sessionActor = await getSessionActor$();
@@ -249,9 +249,7 @@ export async function toggleInviteCodeIsEnabled$(formData: FormData) {
   const [err, updatedInviteCodes] = await to(
     db
       .update(inviteCodes)
-      .set({
-        isEnabled: sql` NOT is_enabled`,
-      })
+      .set({ isEnabled: not(inviteCodes.isEnabled) })
       .where(
         and(
           eq(inviteCodes.code, parsed.output.inviteCode),
