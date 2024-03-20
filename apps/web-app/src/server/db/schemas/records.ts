@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
+  index,
   integer,
   jsonb,
   pgTable,
@@ -31,10 +32,12 @@ export const records = pgTable(
     updatedAt: timestamp("updated_at", { mode: "string" }),
   },
   (table) => ({
-    unqOnAuthorAndPid: unique("unq_on_author_and_pid").on(
-      table.authorId,
-      table.pid
+    indexRecordsOnAuthorId: index("index_records_on_author_id").on(
+      table.authorId
     ),
+    uniqueRecordsOnAuthorAndPid: unique(
+      "unique_records_on_author_id_and_pid"
+    ).on(table.authorId, table.pid),
   })
 );
 
@@ -54,16 +57,30 @@ export const recordsRelations = relations(records, ({ one, many }) => ({
   versions: many(recordVersions),
 }));
 
-export const recordVersions = pgTable("record_versions", {
-  id: serial("id").primaryKey(),
+export const recordVersions = pgTable(
+  "record_versions",
+  {
+    id: serial("id").primaryKey(),
+    // ? pid ?
 
-  authorId: integer("author_id").notNull(),
-  recordId: integer("recordId").notNull(),
+    authorId: integer("author_id").notNull(),
+    recordId: integer("recordId").notNull(),
 
-  content: jsonb("content"),
+    content: jsonb("content"),
 
-  createdAt: timestamp("created_at", { mode: "string" }).notNull().defaultNow(),
-});
+    createdAt: timestamp("created_at", { mode: "string" })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    indexRecordVersionsOnAuthorId: index(
+      "index_record_versions_on_author_id"
+    ).on(table.authorId),
+    indexRecordVersionsOnRecordId: index(
+      "index_record_versions_on_record_id"
+    ).on(table.recordId),
+  })
+);
 
 export const recordVersionsRelations = relations(recordVersions, ({ one }) => ({
   author: one(actors, {
