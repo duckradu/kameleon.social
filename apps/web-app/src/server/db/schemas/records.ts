@@ -1,12 +1,11 @@
 import { relations } from "drizzle-orm";
 import {
-  index,
   integer,
   jsonb,
   pgTable,
-  primaryKey,
   serial,
   timestamp,
+  unique,
   varchar,
 } from "drizzle-orm/pg-core";
 
@@ -32,7 +31,10 @@ export const records = pgTable(
     updatedAt: timestamp("updated_at", { mode: "string" }),
   },
   (table) => ({
-    // pkOnAuthorAndPid: primaryKey({ columns: [table.authorId, table.pid] }),
+    unqOnAuthorAndPid: unique("unq_on_author_and_pid").on(
+      table.authorId,
+      table.pid
+    ),
   })
 );
 
