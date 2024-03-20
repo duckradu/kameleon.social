@@ -78,7 +78,7 @@ export default function ActorLayout(props: RouteSectionProps) {
               <A
                 href={actor()!.externalUrl!}
                 target="_blank"
-                class="text-brand hover:underline underline-offset-3"
+                class="text-brand underline underline-offset-3 hover:no-underline"
               >
                 {stripURL(actor()!.externalUrl!)}
               </A>
