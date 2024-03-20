@@ -22,7 +22,6 @@ export const records = pgTable(
 
     authorId: integer("author_id").notNull(),
     parentRecordId: integer("parent_post_id"),
-    latestVersionId: integer("latest_version_id").notNull(),
 
     // Views, Repost counts (maybe add on versions?) + tables
 
@@ -49,10 +48,6 @@ export const recordsRelations = relations(records, ({ one, many }) => ({
   parentRecord: one(records, {
     fields: [records.parentRecordId],
     references: [records.id],
-  }),
-  latestVersion: one(recordVersions, {
-    fields: [records.latestVersionId],
-    references: [recordVersions.id],
   }),
   versions: many(recordVersions),
 }));
