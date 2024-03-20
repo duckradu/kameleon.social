@@ -54,13 +54,13 @@ export function Record(originalProps: RecordProps) {
       <header class="flex justify-between items-center">
         <A
           href={paths.actor("kameleon").profile}
-          class="inline-flex items-center gap-3"
+          class="inline-flex items-center gap-3 group"
           onClick={(e) => e.stopPropagation()}
         >
           <Avatar fallback="K" rootClass="border border-background" />
 
           <div class="flex flex-col">
-            <span class="font-semibold">KAMELEON</span>
+            <span class="font-semibold group-hover:underline">KAMELEON</span>
             <span class="text-sm text-muted-foreground">30 min ago</span>
           </div>
         </A>
