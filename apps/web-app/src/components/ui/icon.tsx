@@ -17,6 +17,8 @@ import SolarBookmarkOutline from "~icons/solar/bookmark-outline";
 import SolarCalendarOutline from "~icons/solar/calendar-outline";
 import SolarChatLineOutline from "~icons/solar/chat-line-outline";
 import SolarChatSquareArrowOutline from "~icons/solar/chat-square-arrow-outline";
+import SolarCloudBold from "~icons/solar/cloud-bold";
+import SolarCloudOutline from "~icons/solar/cloud-outline";
 import SolarCompassBold from "~icons/solar/compass-bold";
 import SolarCompassOutline from "~icons/solar/compass-outline";
 import SolarDangerTriangleBold from "~icons/solar/danger-triangle-bold";
@@ -121,6 +123,10 @@ export const Icon = {
   gear: {
     outline: SolarSettingsOutline,
     solid: SolarSettingsBold,
+  },
+  cloud: {
+    outline: SolarCloudOutline,
+    solid: SolarCloudBold,
   },
   heart: {
     outline: SolarHeartOutline,

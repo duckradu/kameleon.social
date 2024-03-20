@@ -47,6 +47,14 @@ const useActorNavigationItems = (): IconNavigationItem<{
     //   },
     // },
     {
+      displayText: "Storage",
+      href: paths.actor(actor()!.pid).storage,
+      icon: {
+        active: Icon.cloud.solid,
+        inactive: Icon.cloud.outline,
+      },
+    },
+    {
       displayText: "Settings",
       href: paths.actor(actor()!.pid).settings.root,
       icon: {
