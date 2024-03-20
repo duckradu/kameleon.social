@@ -19,8 +19,10 @@ export const records = pgTable(
     pid: varchar("pid").notNull().$defaultFn(nanoid), // TODO: Get a nicer gen
 
     authorId: integer("author_id").notNull(),
-
+    parentRecordId: integer("parent_post_id"),
     latestVersionId: integer("latest_version_id").notNull(),
+
+    // Views, Repost counts (maybe add on versions?) + tables
 
     createdAt: timestamp("created_at", { mode: "string" })
       .notNull()
@@ -33,11 +35,16 @@ export const records = pgTable(
 );
 
 export const recordsRelations = relations(records, ({ one, many }) => ({
-  versions: many(recordVersions),
+  // TODO: Link to actor
+  parentRecord: one(records, {
+    fields: [records.parentRecordId],
+    references: [records.id],
+  }),
   latestVersion: one(recordVersions, {
     fields: [records.latestVersionId],
     references: [recordVersions.id],
   }),
+  versions: many(recordVersions),
 }));
 
 export const recordVersions = pgTable("record_versions", {
@@ -52,11 +59,17 @@ export const recordVersions = pgTable("record_versions", {
 });
 
 export const recordVersionsRelations = relations(recordVersions, ({ one }) => ({
+  // TODO: Link to actor
   record: one(records, {
     fields: [recordVersions.recordId],
     references: [records.id],
   }),
 }));
+
+// TODO:
+// 1 - Record Version reactions table
+// 2 - Record reactions table - aggr from versions
+// 3 - Reposts
 
 // export const recordBlockJSON = pgTable("record_block_json", {});
 
