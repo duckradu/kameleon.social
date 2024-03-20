@@ -1,15 +1,16 @@
 "use server";
 
-import { object, safeParseAsync, unknown } from "valibot";
 import { decode } from "decode-formdata";
+import { object, safeParseAsync, string } from "valibot";
 
-import { getSessionActor$ } from "../auth/rpc";
-
-import { rpcErrorResponse, rpcValidationErrorResponse } from "~/lib/utils/rpc";
 import { db } from "~/server/db";
-import { records } from "~/server/db/schemas/records";
+import { recordVersions, records } from "~/server/db/schemas/records";
+import { getSessionActor$ } from "~/server/modules/auth/rpc";
 
-export async function createRecord(formData: FormData) {
+import { to } from "~/lib/utils/common";
+import { rpcErrorResponse, rpcValidationErrorResponse } from "~/lib/utils/rpc";
+
+export async function createRecord$(formData: FormData) {
   const sessionActor = await getSessionActor$();
 
   if (!sessionActor?.success) {
@@ -21,19 +22,50 @@ export async function createRecord(formData: FormData) {
   const parsed = await safeParseAsync(
     object({
       // parentRecordId:
-      recordContent: object({}, unknown()),
+      recordContent: string(),
     }),
     decode(formData)
   );
-
-  console.log(parsed);
 
   if (!parsed.success) {
     return rpcValidationErrorResponse(parsed.issues);
   }
 
-  const f = await db.insert(records).values({
-    authorId: 2,
-    latestVersionId: 2,
+  // TODO: Don't do this. Add valibot custom validator
+  const [err, recordContentJSON] = await to(
+    new Promise((resolve, reject) => {
+      try {
+        resolve(JSON.parse(parsed.output.recordContent));
+      } catch (e) {
+        reject(e);
+      }
+    })
+  );
+
+  if (err) {
+    return rpcErrorResponse(err);
+  }
+
+  const result = await db.transaction(async (tx) => {
+    const [newRecord] = await tx
+      .insert(records)
+      .values({
+        authorId: sessionActor.data.id,
+      })
+      .returning();
+
+    const [newRecordVersion] = await tx
+      .insert(recordVersions)
+      .values({
+        authorId: sessionActor.data.id,
+        recordId: newRecord.id,
+
+        content: recordContentJSON,
+      })
+      .returning();
+
+    return [newRecord, newRecordVersion];
   });
+
+  console.log(result);
 }

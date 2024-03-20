@@ -4,6 +4,8 @@ import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 import { TextEditor } from "~/components/composer/text-editor";
 
+import { createRecord } from "~/server/modules/records/actions";
+
 const PLACEHOLDER_MESSAGES = [
   "Share your thoughts...",
   "Start a conversation...",
@@ -26,14 +28,14 @@ export function Composer() {
 
   return (
     <form
-      action={undefined}
+      action={createRecord}
       method="post"
       class="flex flex-col gap-3 p-4 border border-border rounded-xl hover:border-muted-foreground/50 focus-within:border-muted-foreground/50"
     >
       <input
         name="recordContent"
         type="hidden"
-        value={editorJSON()?.toString()}
+        value={JSON.stringify(editorJSON())}
       />
 
       <TextEditor
@@ -41,7 +43,7 @@ export function Composer() {
         onUpdate={({ editor }) => {
           const json = editor.getJSON();
 
-          console.log(json);
+          setEditorJSON(json);
         }}
         class="min-h-6 ![&>div]-(ring-none outline-transparent)"
       />
