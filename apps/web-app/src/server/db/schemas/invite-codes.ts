@@ -15,7 +15,7 @@ import { nanoid } from "~/lib/utils/common";
 export const inviteCodes = pgTable("invite_codes", {
   code: varchar("code").primaryKey().$defaultFn(nanoid),
 
-  issuerId: serial("issuer_id").notNull(),
+  issuerId: integer("issuer_id").notNull(),
 
   availableUses: integer("available_uses").notNull().default(5),
 
