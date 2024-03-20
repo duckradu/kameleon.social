@@ -32,7 +32,7 @@ export default function SignIn() {
 
       <SignInForm redirectTo={searchParams.redirectTo || "/"} />
 
-      <div class="flex justify-between text-sm text-brand">
+      <div class="flex justify-between text-sm text-brand [&>a:hover]-(underline underline-offset-3)">
         <A href={paths.signUp}>Create an account</A>
         <A href="/recover-access">Forgot your password?</A>
       </div>

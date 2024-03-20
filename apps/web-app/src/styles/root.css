@@ -80,12 +80,3 @@ body {
 * {
   @apply border-border;
 }
-
-/* Figure out this... */
-a {
-  @apply underline underline-offset-4;
-
-  &:hover {
-    @apply no-underline;
-  }
-}
