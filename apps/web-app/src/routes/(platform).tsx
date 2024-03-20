@@ -1,9 +1,15 @@
 import { RouteSectionProps } from "@solidjs/router";
+import { Show } from "solid-js";
 
+import { useSession } from "~/components/context/session";
 import { PlatformFooter } from "~/components/platform-footer";
 import { PlatformSidebar } from "~/components/platform-sidebar";
+import { Button } from "~/components/ui/button";
+import { Icon } from "~/components/ui/icon";
 
 export default function PlatformLayout(props: RouteSectionProps) {
+  const { actor } = useSession();
+
   return (
     <div class="flex [&>:first-child]:ml-auto [&>:last-child]:mr-auto [&>aside]:px-layout [&>div>main]:px-layoutx">
       <aside class="relative w-64 shrink-0 z-10">
@@ -21,8 +27,17 @@ export default function PlatformLayout(props: RouteSectionProps) {
 
       <aside class="relative w-74 shrink-0 z-10">
         <div class="sticky top-0 w-full h-screen">
-          <div class="py-layout">
-            <PlatformFooter />
+          <div class="flex flex-col h-screen py-layout">
+            <div class="flex grow-1">
+              <PlatformFooter />
+            </div>
+
+            <Show when={actor()}>
+              <Button size="xl" type="submit" class="self-end">
+                <Icon.signature.outline class="text-xl -mx-1" />
+                Post
+              </Button>
+            </Show>
           </div>
         </div>
       </aside>
