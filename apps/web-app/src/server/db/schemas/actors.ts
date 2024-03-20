@@ -10,6 +10,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { inviteCodes } from "~/server/db/schemas/invite-codes";
+import { recordVersions, records } from "~/server/db/schemas/records";
 
 import { nanoid } from "~/lib/utils/common";
 
@@ -62,4 +63,7 @@ export const actorsRelations = relations(actors, ({ one, many }) => ({
   issuedInviteCodes: many(inviteCodes, {
     relationName: "issued_invite_code",
   }),
+
+  records: many(records),
+  recordVersions: many(recordVersions),
 }));

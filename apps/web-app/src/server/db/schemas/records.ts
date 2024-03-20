@@ -10,6 +10,8 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
+import { actors } from "~/server/db/schemas/actors";
+
 import { nanoid } from "~/lib/utils/common";
 
 export const records = pgTable(
@@ -30,12 +32,15 @@ export const records = pgTable(
     updatedAt: timestamp("updated_at", { mode: "string" }),
   },
   (table) => ({
-    pkOnAuthorAndPid: primaryKey({ columns: [table.authorId, table.pid] }),
+    // pkOnAuthorAndPid: primaryKey({ columns: [table.authorId, table.pid] }),
   })
 );
 
 export const recordsRelations = relations(records, ({ one, many }) => ({
-  // TODO: Link to actor
+  author: one(actors, {
+    fields: [records.authorId],
+    references: [actors.id],
+  }),
   parentRecord: one(records, {
     fields: [records.parentRecordId],
     references: [records.id],
@@ -59,7 +64,10 @@ export const recordVersions = pgTable("record_versions", {
 });
 
 export const recordVersionsRelations = relations(recordVersions, ({ one }) => ({
-  // TODO: Link to actor
+  author: one(actors, {
+    fields: [recordVersions.authorId],
+    references: [actors.id],
+  }),
   record: one(records, {
     fields: [recordVersions.recordId],
     references: [records.id],
