@@ -72,7 +72,7 @@ body {
 
   *:focus-visible {
     /* Get rid of !important; */
-    @apply outline-none ring-2 ring-ring;
+    @apply outline-none outline-transparent ring-2 ring-ring;
   }
 }
 
@@ -87,5 +87,14 @@ a {
 
   &:hover {
     @apply no-underline;
+  }
+}
+
+#text-editor {
+  & p.is-editor-empty:first-child::before {
+    @apply text-muted-foreground text-xl;
+    @apply content-[attr(data-placeholder)];
+    @apply float-left h-0;
+    @apply pointer-events-none;
   }
 }
