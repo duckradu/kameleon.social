@@ -6,7 +6,7 @@ import {
   useParams,
 } from "@solidjs/router";
 import { format } from "date-fns/format";
-import { Show } from "solid-js";
+import { Show, Suspense } from "solid-js";
 
 import { Avatar } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
@@ -108,8 +108,15 @@ export default function ActorLayout(props: RouteSectionProps) {
           <A href={paths.actor(actor()?.pid || "").connections}>Connections</A>
         </div>
 
-        {/* TODO: Figure out why <Suspense /> doesn't work here */}
-        {props.children}
+        <Suspense
+          fallback={
+            <div class="py-8 h-full">
+              <Icon.spinner class="text-2xl animate-spin mx-auto" />
+            </div>
+          }
+        >
+          {props.children}
+        </Suspense>
       </div>
     </div>
   );
