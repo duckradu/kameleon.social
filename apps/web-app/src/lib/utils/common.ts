@@ -62,3 +62,7 @@ export function dynamicWord(
 
   return word.plural;
 }
+
+export function sample<T extends any>(list: T[]): T {
+  return list[Math.floor(Math.random() * list.length)];
+}
