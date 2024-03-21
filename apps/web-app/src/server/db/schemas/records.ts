@@ -1,3 +1,4 @@
+import { JSONContent } from "@tiptap/core";
 import { relations } from "drizzle-orm";
 import {
   index,
@@ -61,7 +62,7 @@ export const recordVersions = pgTable(
     authorId: integer("author_id").notNull(),
     recordId: integer("record_id").notNull(),
 
-    content: jsonb("content"),
+    content: jsonb("content").notNull().$type<JSONContent>(),
 
     createdAt: timestamp("created_at", { mode: "string" })
       .notNull()
