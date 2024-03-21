@@ -1,5 +1,7 @@
+import { useParams } from "@solidjs/router";
 import { Show } from "solid-js";
 
+import { useSession } from "~/components/context/session";
 import { ProfilePageEmptyMessage } from "~/components/profile-page-empty-message";
 import { Button } from "~/components/ui/button";
 
@@ -25,16 +27,54 @@ const NO_DATA_MESSAGES = {
   ],
 };
 
+const NO_DATA_MESSAGES_VISITOR = {
+  title: (actorPublicId: string) => [
+    `No moments from @${actorPublicId} just yet.`,
+    `Currently, @${actorPublicId} hasn't added any moments.`,
+    `The moments section for @${actorPublicId} is empty.`,
+    `Zero moments from @${actorPublicId} right now.`,
+    `Still waiting for @${actorPublicId}'s first moment.`,
+    `The moments feed from @${actorPublicId} is currently empty.`,
+    `Nothing to see in the moments section for @${actorPublicId} yet.`,
+    `Awaiting @${actorPublicId}'s first moments.`,
+  ],
+  description: [
+    "Stay tuned for their first ones to appear here.",
+    "Keep an eye out for their updates!",
+    "Once they start sharing, you'll see them here.",
+    "We'll update this space when they share.",
+    "Once they post one, it'll be visible here.",
+    "We'll showcase their posts here once they share.",
+    "But when they start posting, you'll see them here!",
+    "Once they share, you'll find them here!",
+  ],
+};
+
 export default function ActorMoments() {
+  const params = useParams();
+  const { actor } = useSession();
+
+  const isSessionActor = params.actorPublicId === actor()?.pid;
+
   return (
     <Show
       when={false}
       fallback={
         <ProfilePageEmptyMessage
-          title={sample(NO_DATA_MESSAGES.title)}
-          description={sample(NO_DATA_MESSAGES.description)}
+          title={
+            isSessionActor
+              ? sample(NO_DATA_MESSAGES.title)
+              : sample(NO_DATA_MESSAGES_VISITOR.title(params.actorPublicId))
+          }
+          description={
+            isSessionActor
+              ? sample(NO_DATA_MESSAGES.description)
+              : sample(NO_DATA_MESSAGES_VISITOR.description)
+          }
         >
-          <Button size="lg">Post a Moment</Button>
+          <Show when={isSessionActor}>
+            <Button size="lg">Post a Moment</Button>
+          </Show>
         </ProfilePageEmptyMessage>
       }
     >

@@ -1,10 +1,11 @@
+import { useParams } from "@solidjs/router";
 import { Show } from "solid-js";
 
+import { useSession } from "~/components/context/session";
 import { ProfilePageEmptyMessage } from "~/components/profile-page-empty-message";
 
 import { sample } from "~/lib/utils/common";
 
-// TODO: DIFFERENT MESSAGES FOR VISITOR AND SAME SESSION
 const NO_DATA_MESSAGES = {
   title: [
     "Feels a little empty here",
@@ -24,16 +25,50 @@ const NO_DATA_MESSAGES = {
   ],
 };
 
+const NO_DATA_MESSAGES_VISITOR = {
+  title: (actorPublicId: string) => [
+    `@${actorPublicId}'s connections list is empty for now.`,
+    `Currently, there are no connections for @${actorPublicId}.`,
+    `Zero connections for @${actorPublicId} at the moment.`,
+    `No connections yet for @${actorPublicId}.`,
+    `@${actorPublicId} hasn't made any connections yet.`,
+    `Empty connections list for @${actorPublicId} right now.`,
+    `Awaiting @${actorPublicId}'s first connections.`,
+  ],
+  description: [
+    "When someone follows this account, they'll be displayed here.",
+    "Once someone follows, their profile will appear here.",
+    "New connections will populate this section.",
+    "New followers will populate this section.",
+    "Once someone follows, they'll show up here.",
+  ],
+};
+
 export default function ActorConnections() {
+  const params = useParams();
+  const { actor } = useSession();
+
+  const isSessionActor = params.actorPublicId === actor()?.pid;
+
   return (
     <Show
       when={false}
       fallback={
         <ProfilePageEmptyMessage
-          title={sample(NO_DATA_MESSAGES.title)}
-          description={sample(NO_DATA_MESSAGES.description)}
+          title={
+            isSessionActor
+              ? sample(NO_DATA_MESSAGES.title)
+              : sample(NO_DATA_MESSAGES_VISITOR.title(params.actorPublicId))
+          }
+          description={
+            isSessionActor
+              ? sample(NO_DATA_MESSAGES.description)
+              : sample(NO_DATA_MESSAGES_VISITOR.description)
+          }
         >
-          <div>Explore | Suggest who to follow</div>
+          <Show when={isSessionActor}>
+            <div>Explore | Suggest who to connect with</div>
+          </Show>
         </ProfilePageEmptyMessage>
       }
     >
