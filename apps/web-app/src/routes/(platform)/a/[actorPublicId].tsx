@@ -8,6 +8,7 @@ import {
 import { format } from "date-fns/format";
 import { Show, Suspense } from "solid-js";
 
+import { useSession } from "~/components/context/session";
 import { Avatar } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
@@ -25,6 +26,7 @@ export const route = {
 
 export default function ActorLayout(props: RouteSectionProps) {
   const params = useParams();
+  const { actor: sessionActor } = useSession();
 
   const actor = createAsync(() => findOneByPID(params.actorPublicId));
 
@@ -58,7 +60,9 @@ export default function ActorLayout(props: RouteSectionProps) {
             </div>
 
             <div class="flex justify-end pt-2">
-              <Button>Follow</Button>
+              <Show when={sessionActor() && sessionActor()!.id !== actor()?.id}>
+                <Button>Follow</Button>
+              </Show>
             </div>
           </div>
         </div>
