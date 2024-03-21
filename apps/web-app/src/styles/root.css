@@ -69,14 +69,12 @@ body {
 
 #app {
   @apply min-w-screen min-h-screen;
-
-  *:focus-visible {
-    /* Get rid of !important; */
-    @apply outline-none ring-2 ring-ring;
-  }
 }
 
-/* Sigh */
 * {
   @apply border-border;
+}
+
+*:focus-visible {
+  @apply !outline-none ring-2 ring-ring;
 }
