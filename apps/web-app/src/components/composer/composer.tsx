@@ -8,6 +8,8 @@ import { Icon } from "~/components/ui/icon";
 
 import { createRecord } from "~/server/modules/records/actions";
 
+import { sample } from "~/lib/utils/common";
+
 const PLACEHOLDER_MESSAGES = [
   "Share your thoughts...",
   "Start a conversation...",
@@ -33,7 +35,7 @@ export function Composer() {
   return (
     <div class="flex flex-col gap-3 p-4 border border-border rounded-xl hover:border-muted-foreground/50 focus-within:border-muted-foreground/50">
       <TextEditor
-        placeholder={PLACEHOLDER_MESSAGES[0]}
+        placeholder={sample(PLACEHOLDER_MESSAGES)}
         onUpdate={({ editor }) => {
           const json = editor.getJSON();
 
