@@ -1,17 +1,21 @@
 import { A, useNavigate } from "@solidjs/router";
 import { generateHTML } from "@tiptap/html";
 import { mergeProps } from "solid-js";
+import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 
 import { TEXT_EDITOR_EXTENSIONS } from "~/components/composer/text-editor";
 import { Avatar } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 
-import { recordVersions, records } from "~/server/db/schemas";
+import { actors, recordVersions, records } from "~/server/db/schemas";
+
+import { getShortName } from "~/lib/utils/actors";
 
 import { paths } from "~/lib/constants/paths";
 
 export type RecordProps = typeof records.$inferSelect & {
+  author: typeof actors.$inferSelect;
   latestVersion: typeof recordVersions.$inferSelect;
 } & {
   config?: {
@@ -42,7 +46,7 @@ export function Record(originalProps: RecordProps) {
       onClick={
         props.config.navigateOnClick
           ? () => {
-              navigate(paths.actor("kameleon").record("test"));
+              navigate(paths.actor(props.author.pid).record(props.pid));
             }
           : undefined
       }
@@ -50,7 +54,7 @@ export function Record(originalProps: RecordProps) {
         props.config.navigateOnAuxClick
           ? () => {
               window.open(
-                paths.actor("kameleon").record("random-record"),
+                paths.actor(props.author.pid).record(props.pid),
                 "_blank"
               );
             }
@@ -59,15 +63,25 @@ export function Record(originalProps: RecordProps) {
     >
       <header class="flex justify-between items-center">
         <A
-          href={paths.actor("kameleon").profile}
+          href={paths.actor(props.author.pid).profile}
           class="inline-flex items-center gap-3 group"
           onClick={(e) => e.stopPropagation()}
         >
-          <Avatar fallback="K" rootClass="border border-background" />
+          <Avatar
+            fallback={getShortName(props.author.name || "")}
+            rootClass="border border-background"
+          />
 
           <div class="flex flex-col">
-            <span class="font-semibold group-hover:underline">KAMELEON</span>
-            <span class="text-sm text-muted-foreground">30 min ago</span>
+            <span class="font-semibold group-hover:underline">
+              {props.author.name}
+            </span>
+            <span class="text-sm text-muted-foreground">
+              {formatDistanceToNow(new Date(props.createdAt), {
+                includeSeconds: true,
+              }).replace("about ", "")}{" "}
+              ago
+            </span>
           </div>
         </A>
 

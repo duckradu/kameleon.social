@@ -2,10 +2,11 @@ import { For } from "solid-js";
 
 import { Record } from "~/components/record";
 
-import { recordVersions, records } from "~/server/db/schemas";
+import { actors, recordVersions, records } from "~/server/db/schemas";
 
 export type RecordFeedProps = {
   recordList: (typeof records.$inferSelect & {
+    author: typeof actors.$inferSelect;
     latestVersion: typeof recordVersions.$inferSelect;
   })[];
 
