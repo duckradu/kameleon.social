@@ -1,13 +1,19 @@
 import { A, useNavigate } from "@solidjs/router";
+import { generateHTML } from "@tiptap/html";
 import { mergeProps } from "solid-js";
 
+import { TEXT_EDITOR_EXTENSIONS } from "~/components/composer/text-editor";
 import { Avatar } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 
+import { recordVersions, records } from "~/server/db/schemas";
+
 import { paths } from "~/lib/constants/paths";
 
-export type RecordProps = {
+export type RecordProps = typeof records.$inferSelect & {
+  latestVersion: typeof recordVersions.$inferSelect;
+} & {
   config?: {
     navigateOnClick?: boolean;
     navigateOnAuxClick?: boolean;
@@ -77,17 +83,14 @@ export function Record(originalProps: RecordProps) {
         </div>
       </header>
 
-      <div class="space-y-2">
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis
-          vehicula libero. Vestibulum convallis quam vitae ultrices interdum.
-        </p>
-        <p>
-          In porta, nunc sed egestas sagittis, nisi nibh ullamcorper elit, vitae
-          rutrum urna magna non tortor. Aliquam velit purus, pulvinar eget orci
-          eget, vulputate ultricies nisi.
-        </p>
-      </div>
+      <div
+        class="space-y-2"
+        innerHTML={
+          props.latestVersion
+            ? generateHTML(props.latestVersion.content, TEXT_EDITOR_EXTENSIONS)
+            : "DEAL WITH THIS"
+        }
+      />
 
       <footer class="flex justify-between text-lg [&>div]-(flex gap-4.7)">
         <div>
