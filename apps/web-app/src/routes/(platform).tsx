@@ -4,8 +4,11 @@ import { Show } from "solid-js";
 import { useSession } from "~/components/context/session";
 import { PlatformFooter } from "~/components/platform-footer";
 import { PlatformSidebar } from "~/components/platform-sidebar";
+import { tunnel } from "~/components/tunnel";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
+
+const secondaryColumnTunnel = tunnel();
 
 export default function PlatformLayout(props: RouteSectionProps) {
   const { actor } = useSession();
@@ -29,7 +32,7 @@ export default function PlatformLayout(props: RouteSectionProps) {
         <div class="sticky top-0 w-full h-screen">
           <div class="flex flex-col h-screen py-layout">
             <div class="flex grow-1">
-              <PlatformFooter />
+              <secondaryColumnTunnel.Out fallback={<PlatformFooter />} />
             </div>
 
             <Show when={actor()}>
