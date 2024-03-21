@@ -1,7 +1,7 @@
 import { RouteDefinition, createAsync, useParams } from "@solidjs/router";
 import { Show } from "solid-js";
 
-import { EmptyProfilePageMessage } from "~/components/empty-profile-page-message";
+import { ProfilePageEmptyMessage } from "~/components/profile-page-empty-message";
 import { RecordFeed } from "~/components/record-feed";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
@@ -46,7 +46,7 @@ export default function ActorActivity() {
     <Show
       when={records()?.data?.length}
       fallback={
-        <EmptyProfilePageMessage
+        <ProfilePageEmptyMessage
           title={sample(NO_DATA_MESSAGES.title)}
           description={sample(NO_DATA_MESSAGES.description)}
         >
@@ -54,7 +54,7 @@ export default function ActorActivity() {
             <Icon.signature.outline class="text-lg -ml-1" />
             Post
           </Button>
-        </EmptyProfilePageMessage>
+        </ProfilePageEmptyMessage>
       }
     >
       <RecordFeed

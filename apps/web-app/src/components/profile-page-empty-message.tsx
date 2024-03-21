@@ -1,11 +1,11 @@
 import { ParentProps } from "solid-js";
 
-export type EmptyProfilePageMessageProps = ParentProps<{
+export type ProfilePageEmptyMessageProps = ParentProps<{
   title: string;
   description: string;
 }>;
 
-export function EmptyProfilePageMessage(props: EmptyProfilePageMessageProps) {
+export function ProfilePageEmptyMessage(props: ProfilePageEmptyMessageProps) {
   return (
     <div class="space-y-4 py-8 text-center">
       <div class="space-y-2">

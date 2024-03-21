@@ -1,6 +1,6 @@
 import { Show } from "solid-js";
 
-import { EmptyProfilePageMessage } from "~/components/empty-profile-page-message";
+import { ProfilePageEmptyMessage } from "~/components/profile-page-empty-message";
 import { Button } from "~/components/ui/button";
 
 import { sample } from "~/lib/utils/common";
@@ -30,12 +30,12 @@ export default function ActorMoments() {
     <Show
       when={false}
       fallback={
-        <EmptyProfilePageMessage
+        <ProfilePageEmptyMessage
           title={sample(NO_DATA_MESSAGES.title)}
           description={sample(NO_DATA_MESSAGES.description)}
         >
           <Button size="lg">Post a Moment</Button>
-        </EmptyProfilePageMessage>
+        </ProfilePageEmptyMessage>
       }
     >
       Moments feed
