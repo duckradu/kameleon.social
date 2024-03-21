@@ -16,16 +16,20 @@ export type TextEditorProps = {
   class?: string;
 };
 
+export const TEXT_EDITOR_EXTENSIONS = [
+  Document,
+  Paragraph,
+  Text,
+  History,
+  Hardbreak,
+] satisfies Extensions;
+
 export function TextEditor(props: TextEditorProps) {
   let textEditorRef!: HTMLDivElement;
 
   const extensions = createMemo<Extensions>(() => [
-    Document,
-    Paragraph,
+    ...TEXT_EDITOR_EXTENSIONS,
     Placeholder.configure({ placeholder: props.placeholder }),
-    Text,
-    History,
-    Hardbreak,
   ]);
 
   createTiptapEditor(() => ({

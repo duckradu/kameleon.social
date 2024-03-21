@@ -108,6 +108,7 @@ export default function ActorLayout(props: RouteSectionProps) {
           <A href={paths.actor(actor()?.pid || "").connections}>Connections</A>
         </div>
 
+        {/* TODO: Figure out why <Suspense /> doesn't work here */}
         {props.children}
       </div>
     </div>

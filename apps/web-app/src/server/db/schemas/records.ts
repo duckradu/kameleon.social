@@ -21,7 +21,7 @@ export const records = pgTable(
     pid: varchar("pid").notNull().$defaultFn(nanoid), // TODO: Get a nicer gen
 
     authorId: integer("author_id").notNull(),
-    parentRecordId: integer("parent_post_id"),
+    parentRecordId: integer("parent_record_id"),
 
     // Views, Repost counts (maybe add on versions?) + tables
 
@@ -59,7 +59,7 @@ export const recordVersions = pgTable(
     // ? pid ?
 
     authorId: integer("author_id").notNull(),
-    recordId: integer("recordId").notNull(),
+    recordId: integer("record_id").notNull(),
 
     content: jsonb("content"),
 
