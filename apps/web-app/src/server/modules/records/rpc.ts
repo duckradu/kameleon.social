@@ -1,16 +1,46 @@
 "use server";
 
-import { decode } from "decode-formdata";
-import { object, safeParseAsync, string } from "valibot";
+import { JSONContent } from "@tiptap/core";
 
 import { db } from "~/server/db";
 import { recordVersions, records } from "~/server/db/schemas/records";
 import { getSessionActor$ } from "~/server/modules/auth/rpc";
+import { findOneByPID$ } from "~/server/modules/actors/rpc";
 
-import { to } from "~/lib/utils/common";
-import { rpcErrorResponse, rpcValidationErrorResponse } from "~/lib/utils/rpc";
+import { rpcErrorResponse, rpcSuccessResponse } from "~/lib/utils/rpc";
 
-export async function createRecord$(formData: FormData) {
+export async function getRecordListByAuthorPid$(actorPid: string) {
+  const matchingActor = await findOneByPID$(actorPid);
+
+  const result = await db.query.records.findMany({
+    where: (records, { eq }) => eq(records.authorId, matchingActor.id),
+    with: {
+      versions: {
+        orderBy: (recordVersions, { desc }) => [desc(recordVersions.createdAt)],
+        limit: 1,
+      },
+    },
+    orderBy: (records, { desc }) => [desc(records.createdAt)],
+  });
+
+  if (!result.length) {
+    return rpcSuccessResponse([]);
+  }
+
+  return rpcSuccessResponse(
+    result.reduce(
+      (acc, { versions, ...curr }) => [
+        ...acc,
+        { ...curr, latestVersion: versions[0] },
+      ],
+      [] as (typeof records.$inferSelect & {
+        latestVersion: typeof recordVersions.$inferSelect;
+      })[]
+    )
+  );
+}
+
+export async function createRecord$(content: JSONContent) {
   const sessionActor = await getSessionActor$();
 
   if (!sessionActor?.success) {
@@ -19,34 +49,7 @@ export async function createRecord$(formData: FormData) {
     });
   }
 
-  const parsed = await safeParseAsync(
-    object({
-      // parentRecordId:
-      recordContent: string(),
-    }),
-    decode(formData)
-  );
-
-  if (!parsed.success) {
-    return rpcValidationErrorResponse(parsed.issues);
-  }
-
-  // TODO: Don't do this. Add valibot custom validator
-  const [err, recordContentJSON] = await to(
-    new Promise((resolve, reject) => {
-      try {
-        resolve(JSON.parse(parsed.output.recordContent));
-      } catch (e) {
-        reject(e);
-      }
-    })
-  );
-
-  if (err) {
-    return rpcErrorResponse(err);
-  }
-
-  const result = await db.transaction(async (tx) => {
+  const [newRecord, newRecordVersion] = await db.transaction(async (tx) => {
     const [newRecord] = await tx
       .insert(records)
       .values({
@@ -60,12 +63,15 @@ export async function createRecord$(formData: FormData) {
         authorId: sessionActor.data.id,
         recordId: newRecord.id,
 
-        content: recordContentJSON,
+        content,
       })
       .returning();
 
     return [newRecord, newRecordVersion];
   });
 
-  console.log(result);
+  return {
+    ...newRecord,
+    latestVersion: newRecordVersion,
+  };
 }
