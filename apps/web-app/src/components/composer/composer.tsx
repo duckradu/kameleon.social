@@ -1,8 +1,10 @@
+import { useAction } from "@solidjs/router";
+import { JSONContent } from "@tiptap/core";
 import { createSignal } from "solid-js";
 
+import { TextEditor } from "~/components/composer/text-editor";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
-import { TextEditor } from "~/components/composer/text-editor";
 
 import { createRecord } from "~/server/modules/records/actions";
 
@@ -24,20 +26,12 @@ const PLACEHOLDER_MESSAGES = [
 ];
 
 export function Composer() {
-  const [editorJSON, setEditorJSON] = createSignal<object>();
+  const [editorJSON, setEditorJSON] = createSignal<JSONContent>();
+
+  const submitRecord = useAction(createRecord);
 
   return (
-    <form
-      action={createRecord}
-      method="post"
-      class="flex flex-col gap-3 p-4 border border-border rounded-xl hover:border-muted-foreground/50 focus-within:border-muted-foreground/50"
-    >
-      <input
-        name="recordContent"
-        type="hidden"
-        value={JSON.stringify(editorJSON())}
-      />
-
+    <div class="flex flex-col gap-3 p-4 border border-border rounded-xl hover:border-muted-foreground/50 focus-within:border-muted-foreground/50">
       <TextEditor
         placeholder={PLACEHOLDER_MESSAGES[0]}
         onUpdate={({ editor }) => {
@@ -48,10 +42,14 @@ export function Composer() {
         class="min-h-6 ![&>div]-(ring-none outline-transparent)"
       />
 
-      <Button size="lg" type="submit" class="self-end">
+      <Button
+        size="lg"
+        class="self-end"
+        onClick={() => submitRecord(editorJSON()!)}
+      >
         <Icon.signature.outline class="text-lg -ml-1" />
         Post
       </Button>
-    </form>
+    </div>
   );
 }
