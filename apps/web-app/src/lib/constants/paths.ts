@@ -12,6 +12,7 @@ export const paths = {
       moments: `${basePath}/moments`,
       connections: `${basePath}/connections`,
 
+      storage: `${basePath}/storage`,
       settings: {
         root: `${basePath}/settings`,
 

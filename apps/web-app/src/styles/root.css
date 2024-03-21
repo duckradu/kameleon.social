@@ -69,25 +69,14 @@ body {
 
 #app {
   @apply min-w-screen min-h-screen;
-
-  *:focus-visible {
-    /* Get rid of !important; */
-    @apply outline-none outline-transparent ring-2 ring-ring;
-  }
 }
 
-/* Sigh */
 * {
   @apply border-border;
 }
 
-/* Figure out this... */
-a {
-  @apply underline underline-offset-4;
-
-  &:hover {
-    @apply no-underline;
-  }
+*:focus-visible {
+  @apply !outline-none ring-2 ring-ring;
 }
 
 #text-editor {

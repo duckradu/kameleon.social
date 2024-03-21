@@ -33,7 +33,7 @@ export default function SignUp() {
         redirectTo={searchParams.redirectTo || "/"}
       />
 
-      <div class="text-center text-sm text-muted-foreground">
+      <div class="text-center text-sm text-muted-foreground [&>a:hover]-(underline underline-offset-3)">
         Already have an account?{" "}
         <A href={paths.signIn} class="text-brand">
           Sign in

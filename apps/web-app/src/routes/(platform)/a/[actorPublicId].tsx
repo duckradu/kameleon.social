@@ -50,7 +50,7 @@ export default function ActorLayout(props: RouteSectionProps) {
                 <h1 class="text-xl font-semibold">{actor()?.name}</h1>
                 <A
                   href={paths.actor(actor()?.pid || "").profile}
-                  class="text-muted-foreground text-sm hover:underline"
+                  class="text-muted-foreground text-sm hover:underline underline-offset-3"
                 >
                   @{actor()?.pid}
                 </A>
@@ -78,7 +78,7 @@ export default function ActorLayout(props: RouteSectionProps) {
               <A
                 href={actor()!.externalUrl!}
                 target="_blank"
-                class="text-brand hover:underline"
+                class="text-brand underline underline-offset-3 hover:no-underline"
               >
                 {stripURL(actor()!.externalUrl!)}
               </A>

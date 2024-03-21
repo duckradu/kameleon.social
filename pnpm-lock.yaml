@@ -52,6 +52,9 @@ importers:
       '@zag-js/avatar':
         specifier: ^0.39.0
         version: 0.39.0
+      '@zag-js/dialog':
+        specifier: ^0.39.0
+        version: 0.39.0
       '@zag-js/menu':
         specifier: ^0.39.0
         version: 0.39.0
@@ -2165,6 +2168,10 @@ packages:
     resolution: {integrity: sha512-3oDkGV1Y207wPZ3M5Cc+VP8W6TSF/Ih51ZwmrsW+bz+WeojobLY0CUhweqsInbIzzvp1eWBNcOAyg0Qn9xgo+A==}
     dev: false
 
+  /@zag-js/dom-query@0.39.0:
+    resolution: {integrity: sha512-3oDkGV1Y207wPZ3M5Cc+VP8W6TSF/Ih51ZwmrsW+bz+WeojobLY0CUhweqsInbIzzvp1eWBNcOAyg0Qn9xgo+A==}
+    dev: false
+
   /@zag-js/interact-outside@0.39.0:
     resolution: {integrity: sha512-eScNCfgYL6sWBtHJX2LDo9lLppdSyJnD9JjE+rMKp3/M1fWVvIgy19d8RxxC3/da/2giP4Ky1dad2U3wIQ5wHg==}
     dependencies:
@@ -2203,6 +2210,12 @@ packages:
 
   /@zag-js/rect-utils@0.39.0:
     resolution: {integrity: sha512-73xjaXJc+JJYMWOjLSFzwFXDBezs7AjH+X6YrO+STTa23JuVz3J43mlpK4CShpTbZyIiYhB+PkELoB0gE8Q6XA==}
+    dev: false
+
+  /@zag-js/remove-scroll@0.39.0:
+    resolution: {integrity: sha512-cu3qvdDmX6TFuZKT+oRDGZz8uJ8wwFnnqOw7lRZynt91wiqmzUdE+BIJWEzYWMvmyc8ejcIZwZfSPK+CRXDNAQ==}
+    dependencies:
+      '@zag-js/dom-query': 0.39.0
     dev: false
 
   /@zag-js/solid@0.39.0(solid-js@1.8.16):
@@ -3489,6 +3502,14 @@ packages:
     hasBin: true
     dev: false
 
+  /focus-trap@7.5.4:
+    resolution: {integrity: sha512-N7kHdlgsO/v+iD/dMoJKtsSqs5Dz/dXZVebRgJw23LDk+jMi/974zyiOYDziY2JPp8xivq9BmUGwIJMiuSBi7w==}
+    dependencies:
+      tabbable: 6.2.0
+    dev: false
+
+  /follow-redirects@1.15.5:
+    resolution: {integrity: sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==}
   /follow-redirects@1.15.6:
     resolution: {integrity: sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==}
     engines: {node: '>=4.0'}
@@ -5570,6 +5591,12 @@ packages:
     engines: {node: '>=18'}
     dev: false
 
+  /tabbable@6.2.0:
+    resolution: {integrity: sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==}
+    dev: false
+
+  /tailwind-merge@2.2.1:
+    resolution: {integrity: sha512-o+2GTLkthfa5YUt4JxPfzMIpQzZ3adD1vLVkvKE1Twl9UAhGsEbIZhHHZVRttyW177S8PDJI3bTQNaebyofK3Q==}
   /tailwind-merge@2.2.2:
     resolution: {integrity: sha512-tWANXsnmJzgw6mQ07nE3aCDkCK4QdT3ThPMCzawoYA2Pws7vSTCvz3Vrjg61jVUGfFZPJzxEP+NimbcW+EdaDw==}
     dependencies:
@@ -6187,6 +6214,10 @@ packages:
         optional: true
     dependencies:
       vite: 5.2.2
+    dev: false
+
+  /w3c-keyname@2.2.8:
+    resolution: {integrity: sha512-dpojBhNsCNN7T82Tm7k26A6G9ML3NkhDsnw9n/eoxSRlVBB4CEtIQ/KTCLI2Fwf3ataSXRhYFkQi3SlnFwPvPQ==}
     dev: false
 
   /w3c-keyname@2.2.8:

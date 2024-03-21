@@ -34,6 +34,7 @@
     "@zag-js/menu": "^0.39.0",
     "@zag-js/solid": "^0.39.0",
     "@zag-js/toast": "^0.39.0",
+    "@zag-js/dialog": "^0.39.0",
     "argon2": "^0.40.1",
     "date-fns": "^3.6.0",
     "decode-formdata": "^0.6.0",

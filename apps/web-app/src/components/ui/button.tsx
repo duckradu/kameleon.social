@@ -57,11 +57,11 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {}
 
 export function Button(originalProps: ButtonProps) {
-  const [{ children }, props] = splitProps(originalProps, ["children"]);
+  const [variantsProps, props] = splitProps(originalProps, [
+    "variant",
+    "size",
+    "class",
+  ]);
 
-  return (
-    <button {...props} class={buttonVariants(props)}>
-      {children}
-    </button>
-  );
+  return <button class={buttonVariants(variantsProps)} {...props} />;
 }
