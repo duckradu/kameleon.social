@@ -37,7 +37,7 @@ export function Record(originalProps: RecordProps) {
   return (
     <article
       classList={{
-        "relative flex flex-col gap-3 p-4 border border-border rounded-xl hover:border-muted-foreground/50":
+        "group/article relative flex flex-col gap-3 p-4 border border-border rounded-xl hover:border-muted-foreground/50":
           true,
         "cursor-pointer":
           props.config.navigateOnClick || props.config.navigateOnAuxClick,
@@ -64,7 +64,7 @@ export function Record(originalProps: RecordProps) {
       <header class="flex justify-between items-center">
         <A
           href={paths.actor(props.author.pid).profile}
-          class="inline-flex items-center gap-3 group"
+          class="group/actor inline-flex items-center gap-3"
           onClick={(e) => e.stopPropagation()}
         >
           <Avatar
@@ -72,11 +72,11 @@ export function Record(originalProps: RecordProps) {
             rootClass="border border-background"
           />
 
-          <div class="flex flex-col">
-            <span class="font-semibold group-hover:underline">
+          <div class="flex flex-col gap-1">
+            <span class="font-semibold group-hover/actor:underline leading-none">
               {props.author.name}
             </span>
-            <span class="text-sm text-muted-foreground">
+            <span class="text-sm text-muted-foreground leading-none">
               {formatDistanceToNow(new Date(props.createdAt), {
                 includeSeconds: true,
               }).replace("about ", "")}{" "}
@@ -106,7 +106,7 @@ export function Record(originalProps: RecordProps) {
         }
       />
 
-      <footer class="flex justify-between text-lg [&>div]-(flex gap-4.7)">
+      <footer class="flex justify-between text-lg text-muted-foreground group-hover/article:text-foreground [&>div]-(flex gap-4.7)">
         <div>
           <Icon.arrow.up />
           <Icon.arrow.up class="rotate-180" />
