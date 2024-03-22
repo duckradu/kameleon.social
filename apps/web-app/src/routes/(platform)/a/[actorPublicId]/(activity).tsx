@@ -127,7 +127,7 @@ export default function ActorActivity() {
           description={
             isSessionActor
               ? sample(NO_DATA_MESSAGES.description)
-              : "When they do"
+              : sample(NO_DATA_MESSAGES_VISITOR.description)
           }
         >
           <Show when={isSessionActor}>
