@@ -48,11 +48,9 @@ export function SignInForm(props: SignInFormProps) {
       </div>
 
       <Button size="xl" type="submit" disabled={submission.pending}>
-        {submission.pending ? (
+        <Show when={submission.pending} fallback="Sign in">
           <Icon.spinner class="w-6 h-6 animate-spin" />
-        ) : (
-          "Sign in"
-        )}
+        </Show>
       </Button>
     </form>
   );
