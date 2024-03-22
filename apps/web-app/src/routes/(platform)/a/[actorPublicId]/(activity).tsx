@@ -147,7 +147,7 @@ export default function ActorActivity() {
             latestVersion: typeof recordVersions.$inferSelect;
           })[]
         }
-        class="py-layout"
+        class="py-layout" // TODO: Don't forget about this
       />
     </Show>
   );

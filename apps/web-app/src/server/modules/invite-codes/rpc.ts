@@ -103,7 +103,7 @@ export async function createInviteCode$() {
 
   if (inviteCodesCount === MAX_INVITE_CODES_PER_ACTOR) {
     return rpcErrorResponse({
-      message: "You've reached the limit of invite codes",
+      message: "You've reached the limit of invite codes.",
     });
   }
 

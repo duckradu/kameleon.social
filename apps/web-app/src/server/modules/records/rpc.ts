@@ -4,7 +4,7 @@ import { db } from "~/server/db";
 import { recordVersions, records } from "~/server/db/schemas/records";
 import { getSessionActor$ } from "~/server/modules/auth/rpc";
 
-import { rpcErrorResponse } from "~/lib/utils/rpc";
+import { rpcErrorResponse, rpcSuccessResponse } from "~/lib/utils/rpc";
 
 export async function createRecord$({
   record,
@@ -16,8 +16,14 @@ export async function createRecord$({
   const sessionActor = await getSessionActor$();
 
   if (!sessionActor?.success) {
-    throw rpcErrorResponse({
+    return rpcErrorResponse({
       message: "You need to be authenticated to create a record.",
+    });
+  }
+
+  if (!recordVersion.content) {
+    return rpcErrorResponse({
+      message: "Records cannot be created without content.",
     });
   }
 
@@ -43,9 +49,8 @@ export async function createRecord$({
     return [newRecord, newRecordVersion];
   });
 
-  // TODO: RPCRESPOSE IT :D
-  return {
+  return rpcSuccessResponse({
     ...newRecord,
     latestVersion: newRecordVersion,
-  };
+  });
 }
