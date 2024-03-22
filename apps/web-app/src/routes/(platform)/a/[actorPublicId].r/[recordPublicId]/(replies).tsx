@@ -127,7 +127,10 @@ export default function RecordReplies() {
   return (
     <>
       <Show when={isComposingReply()}>
-        <Composer parentRecordId={routeData()!.data!.record.id} />
+        <Composer
+          parentRecordId={routeData()!.data!.record.id}
+          onSuccess={() => setIsComposingReply(false)}
+        />
       </Show>
 
       <div class="flex justify-between items-center no-space-layout -my-1">

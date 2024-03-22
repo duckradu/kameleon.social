@@ -47,7 +47,7 @@ export function ShowCreateNewRecordDialogButton(
       )}
       {...(dialogProps() as ShowCreateNewRecordDialogButtonProps["dialogProps"])}
     >
-      <Composer class="border-0" />
+      {({ close }) => <Composer onSuccess={() => close()} class="border-0" />}
     </Dialog>
   );
 }
