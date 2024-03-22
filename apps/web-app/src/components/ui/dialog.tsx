@@ -113,7 +113,7 @@ export function Dialog(originalProps: DialogProps) {
                 size="sm"
                 variant="ghost"
                 {...api().closeTriggerProps}
-                class="text-base absolute top-2 right-2"
+                class="text-base absolute top-2 right-2 z-50"
                 iconOnly
               >
                 <Icon.x />

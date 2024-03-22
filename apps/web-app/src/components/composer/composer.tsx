@@ -31,6 +31,8 @@ const PLACEHOLDER_MESSAGES = [
 
 export type ComposerProps = {
   parentRecordId?: (typeof records.$inferInsert)["parentRecordId"];
+
+  class?: string;
 };
 
 export function Composer(props: ComposerProps) {
@@ -48,7 +50,13 @@ export function Composer(props: ComposerProps) {
           type="error"
         />
       </Show>
-      <div class="flex flex-col gap-3 p-4 border border-border rounded-xl hover:border-muted-foreground/50 focus-within:border-muted-foreground/50">
+      <div
+        classList={{
+          "flex flex-col gap-3 p-4 border border-border rounded-xl hover:border-muted-foreground/50 focus-within:border-muted-foreground/50":
+            true,
+          [props.class!]: Boolean(props.class),
+        }}
+      >
         <TextEditor
           placeholder={sample(PLACEHOLDER_MESSAGES)}
           onUpdate={({ editor }) => {

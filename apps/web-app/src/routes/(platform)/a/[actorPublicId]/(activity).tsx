@@ -10,8 +10,7 @@ import { Show } from "solid-js";
 import { useSession } from "~/components/context/session";
 import { ProfilePageEmptyMessage } from "~/components/profile-page-empty-message";
 import { RecordFeed } from "~/components/record-feed";
-import { Button } from "~/components/ui/button";
-import { Icon } from "~/components/ui/icon";
+import { ShowCreateNewRecordDialogButton } from "~/components/show-create-new-record-dialog-button";
 
 import { db } from "~/server/db";
 import {
@@ -132,10 +131,7 @@ export default function ActorActivity() {
           }
         >
           <Show when={isSessionActor}>
-            <Button size="lg">
-              <Icon.signature.outline class="text-lg -ml-1" />
-              Post
-            </Button>
+            <ShowCreateNewRecordDialogButton />
           </Show>
         </ProfilePageEmptyMessage>
       }

@@ -4,9 +4,8 @@ import { Show } from "solid-js";
 import { useSession } from "~/components/context/session";
 import { PlatformFooter } from "~/components/platform-footer";
 import { PlatformSidebar } from "~/components/platform-sidebar";
+import { ShowCreateNewRecordDialogButton } from "~/components/show-create-new-record-dialog-button";
 import { tunnel } from "~/components/tunnel";
-import { Button } from "~/components/ui/button";
-import { Icon } from "~/components/ui/icon";
 
 const secondaryColumnTunnel = tunnel();
 
@@ -36,10 +35,12 @@ export default function PlatformLayout(props: RouteSectionProps) {
             </div>
 
             <Show when={actor()}>
-              <Button size="xl" type="submit" class="self-end">
-                <Icon.signature.outline class="text-xl -mx-1" />
-                Post
-              </Button>
+              <ShowCreateNewRecordDialogButton
+                buttonProps={{
+                  size: "xl",
+                  class: "self-end [&>svg]-(text-xl -mx-1)",
+                }}
+              />
             </Show>
           </div>
         </div>
