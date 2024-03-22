@@ -2,7 +2,6 @@ import * as dialog from "@zag-js/dialog";
 import { normalizeProps, useMachine } from "@zag-js/solid";
 import {
   JSX,
-  ParentProps,
   Show,
   createMemo,
   createUniqueId,
@@ -45,13 +44,18 @@ export interface DialogProps
       | "onEscapeKeyDown"
       | "closeOnEscapeKeyDown"
     >,
-    ParentProps,
     VariantSlotsClassProps<typeof dialogVariants>,
     VariantProps<typeof dialogVariants> {
   trigger: (triggerProps: dialog.Api["triggerProps"]) => JSX.Element;
 
   title?: JSX.Element;
   description?: JSX.Element;
+
+  children?: (dialogApi: {
+    isOpen: boolean;
+    open: () => void;
+    close: () => void;
+  }) => JSX.Element;
 
   footer?: JSX.Element;
 }
@@ -140,7 +144,11 @@ export function Dialog(originalProps: DialogProps) {
                 </div>
               </Show>
 
-              {dialogProps.children}
+              {dialogProps.children?.({
+                isOpen: api().isOpen,
+                open: api().open,
+                close: api().close,
+              })}
 
               <Show when={typeof dialogProps.footer !== "undefined"}>
                 <div class="flex flex-row justify-end gap-2">
