@@ -1,4 +1,10 @@
-import { createForm, getValue, setValue, valiForm } from "@modular-forms/solid";
+import {
+  createForm,
+  getValue,
+  reset,
+  setValue,
+  valiForm,
+} from "@modular-forms/solid";
 import { useAction, useSubmission } from "@solidjs/router";
 import { Extensions, JSONContent } from "@tiptap/core";
 import Document from "@tiptap/extension-document";
@@ -117,6 +123,8 @@ export function Composer(props: ComposerProps) {
       props.onSuccess?.(submission.result.data);
 
       editor()?.commands.clearContent(true);
+
+      reset(recordDetailsFormStore);
     }
   });
 
