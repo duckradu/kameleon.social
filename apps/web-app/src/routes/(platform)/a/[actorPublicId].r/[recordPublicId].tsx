@@ -107,12 +107,7 @@ export default function Record(props: RouteSectionProps) {
           "border-border": !noScrollY(),
         }}
       >
-        <Button
-          variant="secondary"
-          onClick={() => {
-            history.back();
-          }}
-        >
+        <Button variant="secondary" onClick={() => history.back()}>
           <Icon.arrow.left class="text-base" />
           Back
         </Button>

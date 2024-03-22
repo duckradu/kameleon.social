@@ -4,7 +4,9 @@ import { Show, createSignal, onCleanup, onMount } from "solid-js";
 
 import { TextEditor } from "~/components/composer/text-editor";
 import { Button } from "~/components/ui/button";
+import { FormFieldHelper } from "~/components/ui/form-field-helper";
 import { Icon } from "~/components/ui/icon";
+import { Input } from "~/components/ui/input";
 import { TriggerToast } from "~/components/ui/toast";
 
 import { records } from "~/server/db/schemas";
@@ -37,6 +39,7 @@ export type ComposerProps = {
 
 export function Composer(props: ComposerProps) {
   const [editorJSON, setEditorJSON] = createSignal<JSONContent>();
+  const [showSlugEdit, setShowSlugEdit] = createSignal(false);
 
   const submitRecord = useAction(createRecord);
   const submission = useSubmission(createRecord);
@@ -63,35 +66,64 @@ export function Composer(props: ComposerProps) {
           [props.class!]: Boolean(props.class),
         }}
       >
-        <TextEditor
-          placeholder={sample(PLACEHOLDER_MESSAGES)}
-          onUpdate={({ editor }) => {
-            const json = editor.getJSON();
+        <div class="space-y-4">
+          <TextEditor
+            placeholder={sample(PLACEHOLDER_MESSAGES)}
+            onUpdate={({ editor }) => {
+              const json = editor.getJSON();
 
-            setEditorJSON(json);
-          }}
-          class="min-h-6 ![&>div]-(ring-none outline-transparent)"
-        />
+              setEditorJSON(json);
+            }}
+            class="min-h-6 ![&>div]-(ring-none outline-transparent)"
+          />
 
-        <Button
-          size="lg"
-          class="self-end"
-          onClick={() =>
-            submitRecord({
-              record: {
-                parentRecordId: props.parentRecordId,
-              },
-              recordVersion: {
-                content: editorJSON()!,
-              },
-            })
-          }
-        >
-          <Icon.signature.outline class="text-lg -ml-1" />
-          <Show when={props.parentRecordId} fallback="Post">
-            Reply
+          <Show when={showSlugEdit()}>
+            <div class="flex flex-col py-4 border-y border-border">
+              <div class="grid gap-1">
+                <Input placeholder="URL" />
+                <FormFieldHelper>
+                  https://kameleon.social/a/kameleon/r/test
+                </FormFieldHelper>
+              </div>
+            </div>
           </Show>
-        </Button>
+        </div>
+
+        <div class="flex justify-between items-center gap-3">
+          <div class="-ml-2.5">
+            <Button
+              variant="ghost"
+              class={[
+                "rounded-full aspect-square",
+                showSlugEdit() && "text-foreground",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+              iconOnly
+              onClick={() => setShowSlugEdit((p) => !p)}
+            >
+              <Icon.link.outline />
+            </Button>
+          </div>
+
+          <Button
+            onClick={() =>
+              submitRecord({
+                record: {
+                  parentRecordId: props.parentRecordId,
+                },
+                recordVersion: {
+                  content: editorJSON()!,
+                },
+              })
+            }
+          >
+            <Icon.signature.outline class="text-lg -ml-1" />
+            <Show when={props.parentRecordId} fallback="Post">
+              Reply
+            </Show>
+          </Button>
+        </div>
       </div>
     </>
   );

@@ -36,6 +36,7 @@ import SolarHeartOutline from "~icons/solar/heart-outline";
 import SolarHomeSmileBold from "~icons/solar/home-smile-bold";
 import SolarHomeSmileOutline from "~icons/solar/home-smile-outline";
 import SolarLinkMinimalistic2Outline from "~icons/solar/link-minimalistic-2-outline";
+import SolarLinkOutline from "~icons/solar/link-outline";
 import SolarLoginBold from "~icons/solar/login-bold";
 import SolarLoginOutline from "~icons/solar/login-outline";
 import SolarLogoutOutline from "~icons/solar/logout-outline";
@@ -169,6 +170,8 @@ export const Icon = {
     },
   },
   link: {
+    outline: SolarLinkOutline,
+
     minimalistic: {
       outline: SolarLinkMinimalistic2Outline,
     },
