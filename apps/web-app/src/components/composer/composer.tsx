@@ -155,7 +155,7 @@ export function Composer(props: ComposerProps) {
                     <Show when={field.error}>
                       <FormFieldError>{field.error}</FormFieldError>
                     </Show>
-                    <FormFieldHelper>
+                    <FormFieldHelper class="break-all">
                       {`${getBaseUrl()}${paths
                         .actor(actor()!.pid)
                         .record(field.value || "")}`}
