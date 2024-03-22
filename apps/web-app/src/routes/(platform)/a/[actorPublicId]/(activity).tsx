@@ -1,4 +1,9 @@
-import { RouteDefinition, createAsync, useParams } from "@solidjs/router";
+import {
+  RouteDefinition,
+  cache,
+  createAsync,
+  useParams,
+} from "@solidjs/router";
 import { Show } from "solid-js";
 
 import { useSession } from "~/components/context/session";
@@ -7,14 +12,17 @@ import { RecordFeed } from "~/components/record-feed";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 
+import { db } from "~/server/db";
 import {
   actors,
   recordVersions,
+  records,
   records as recordsSchema,
 } from "~/server/db/schemas";
-import { getRecordListByAuthorPid } from "~/server/modules/records/actions";
+import { findOneByPID$ } from "~/server/modules/actors/rpc";
 
 import { sample } from "~/lib/utils/common";
+import { rpcSuccessResponse } from "~/lib/utils/rpc";
 
 const NO_DATA_MESSAGES = {
   title: [
@@ -55,8 +63,42 @@ const NO_DATA_MESSAGES_VISITOR = {
   ],
 };
 
+const getRouteData = cache(async (actorPublicId: string) => {
+  "use server";
+
+  const matchingActor = await findOneByPID$(actorPublicId);
+
+  const result = await db.query.records.findMany({
+    where: (records, { eq }) => eq(records.authorId, matchingActor.id),
+    with: {
+      author: true,
+      versions: {
+        orderBy: (recordVersions, { desc }) => [desc(recordVersions.createdAt)],
+        limit: 1,
+      },
+    },
+    orderBy: (records, { desc }) => [desc(records.createdAt)],
+  });
+
+  if (!result.length) {
+    return rpcSuccessResponse([]);
+  }
+
+  return rpcSuccessResponse(
+    result.reduce(
+      (acc, { versions, ...curr }) => [
+        ...acc,
+        { ...curr, latestVersion: versions[0] },
+      ],
+      [] as (typeof records.$inferSelect & {
+        latestVersion: typeof recordVersions.$inferSelect;
+      })[]
+    )
+  );
+}, "view-actor-activity");
+
 export const route = {
-  load: ({ params }) => getRecordListByAuthorPid(params.actorPublicId),
+  load: ({ params }) => getRouteData(params.actorPublicId),
 } satisfies RouteDefinition;
 
 export default function ActorActivity() {
@@ -65,9 +107,7 @@ export default function ActorActivity() {
 
   const isSessionActor = params.actorPublicId === actor()?.pid;
 
-  const records = createAsync(() =>
-    getRecordListByAuthorPid(params.actorPublicId)
-  );
+  const records = createAsync(() => getRouteData(params.actorPublicId));
 
   return (
     <Show
