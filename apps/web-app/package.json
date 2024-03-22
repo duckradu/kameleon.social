@@ -17,6 +17,7 @@
     "db:studio": "drizzle-kit studio --config=src/server/db/config.ts"
   },
   "dependencies": {
+    "@modular-forms/solid": "^0.20.0",
     "@solidjs/meta": "^0.29.3",
     "@solidjs/router": "^0.13.1",
     "@solidjs/start": "^0.7.7",
@@ -31,10 +32,10 @@
     "@tiptap/pm": "^2.2.4",
     "@unocss/reset": "^0.58.6",
     "@zag-js/avatar": "^0.39.0",
+    "@zag-js/dialog": "^0.39.0",
     "@zag-js/menu": "^0.39.0",
     "@zag-js/solid": "^0.39.0",
     "@zag-js/toast": "^0.39.0",
-    "@zag-js/dialog": "^0.39.0",
     "argon2": "^0.40.1",
     "date-fns": "^3.6.0",
     "decode-formdata": "^0.6.0",

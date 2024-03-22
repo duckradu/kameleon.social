@@ -1,18 +1,24 @@
+import { createForm, getValue, valiForm } from "@modular-forms/solid";
 import { useAction, useSubmission } from "@solidjs/router";
 import { JSONContent } from "@tiptap/core";
 import { Show, createSignal, onCleanup, onMount } from "solid-js";
+import { Input, maxLength, minLength, object, regex, string } from "valibot";
 
 import { TextEditor } from "~/components/composer/text-editor";
+import { useSession } from "~/components/context/session";
 import { Button } from "~/components/ui/button";
+import { FormFieldError } from "~/components/ui/form-field-error";
 import { FormFieldHelper } from "~/components/ui/form-field-helper";
 import { Icon } from "~/components/ui/icon";
-import { Input } from "~/components/ui/input";
+import { Input as InputComponent } from "~/components/ui/input";
 import { TriggerToast } from "~/components/ui/toast";
 
 import { records } from "~/server/db/schemas";
 import { createRecord } from "~/server/modules/records/actions";
 
-import { sample } from "~/lib/utils/common";
+import { getBaseUrl, nanoid, noop, sample } from "~/lib/utils/common";
+
+import { paths } from "~/lib/constants/paths";
 
 const PLACEHOLDER_MESSAGES = [
   "Share your thoughts...",
@@ -31,6 +37,14 @@ const PLACEHOLDER_MESSAGES = [
   "Say it loud...",
 ];
 
+const RecordDetailsSchema = object({
+  pid: string([
+    minLength(1, "Please enter a valid slug"),
+    maxLength(90, "The slug can't have more than 90 characters"),
+    regex(/^[A-z0-9]+(?:-[A-z0-9]+)*$/, "The slug is badly formatted"),
+  ]),
+});
+
 export type ComposerProps = {
   parentRecordId?: (typeof records.$inferInsert)["parentRecordId"];
 
@@ -38,7 +52,19 @@ export type ComposerProps = {
 };
 
 export function Composer(props: ComposerProps) {
+  const { actor } = useSession();
   const [editorJSON, setEditorJSON] = createSignal<JSONContent>();
+  const [recordDetailsFormStore, RecordDetails] = createForm<
+    Input<typeof RecordDetailsSchema>
+  >({
+    initialValues: {
+      pid: nanoid(),
+    },
+
+    validate: valiForm(RecordDetailsSchema),
+
+    validateOn: "input",
+  });
   const [showSlugEdit, setShowSlugEdit] = createSignal(false);
 
   const submitRecord = useAction(createRecord);
@@ -78,14 +104,26 @@ export function Composer(props: ComposerProps) {
           />
 
           <Show when={showSlugEdit()}>
-            <div class="flex flex-col py-4 border-y border-border">
-              <div class="grid gap-1">
-                <Input placeholder="URL" />
-                <FormFieldHelper>
-                  https://kameleon.social/a/kameleon/r/test
-                </FormFieldHelper>
-              </div>
-            </div>
+            <RecordDetails.Form
+              onSubmit={noop}
+              class="flex flex-col py-4 border-y border-border"
+            >
+              <RecordDetails.Field name="pid">
+                {(field, props) => (
+                  <div class="grid gap-1">
+                    <InputComponent value={field.value} {...props} />
+                    <Show when={field.error}>
+                      <FormFieldError>{field.error}</FormFieldError>
+                    </Show>
+                    <FormFieldHelper>
+                      {`${getBaseUrl()}${paths
+                        .actor(actor()!.pid)
+                        .record(field.value || "")}`}
+                    </FormFieldHelper>
+                  </div>
+                )}
+              </RecordDetails.Field>
+            </RecordDetails.Form>
           </Show>
         </div>
 
@@ -110,6 +148,7 @@ export function Composer(props: ComposerProps) {
             onClick={() =>
               submitRecord({
                 record: {
+                  pid: getValue(recordDetailsFormStore, "pid"),
                   parentRecordId: props.parentRecordId,
                 },
                 recordVersion: {

@@ -1,10 +1,6 @@
 import { customAlphabet } from "nanoid";
 
 export function getBaseUrl() {
-  if (typeof window !== "undefined") {
-    return "";
-  }
-
   if (process.env.NODE_ENV === "production") {
     return "https://kameleon.social"; // TODO: Replace with value from .env
   }
@@ -66,3 +62,5 @@ export function dynamicWord(
 export function sample<T extends any>(list: T[]): T {
   return list[Math.floor(Math.random() * list.length)];
 }
+
+export function noop(...args: any[]) {}

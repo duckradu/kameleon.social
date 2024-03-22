@@ -5,6 +5,7 @@ import { recordVersions, records } from "~/server/db/schemas/records";
 import { getSessionActor$ } from "~/server/modules/auth/rpc";
 
 import { rpcErrorResponse, rpcSuccessResponse } from "~/lib/utils/rpc";
+import { to } from "~/lib/utils/common";
 
 export async function createRecord$({
   record,
@@ -27,27 +28,37 @@ export async function createRecord$({
     });
   }
 
-  const [newRecord, newRecordVersion] = await db.transaction(async (tx) => {
-    const [newRecord] = await tx
-      .insert(records)
-      .values({
-        authorId: sessionActor.data.id,
-        parentRecordId: record?.parentRecordId,
-      })
-      .returning();
+  const [err, [newRecord, newRecordVersion] = []] = await to(
+    db.transaction(async (tx) => {
+      const [newRecord] = await tx
+        .insert(records)
+        .values({
+          pid: record?.pid,
+          authorId: sessionActor.data.id,
+          parentRecordId: record?.parentRecordId,
+        })
+        .returning();
 
-    const [newRecordVersion] = await tx
-      .insert(recordVersions)
-      .values({
-        authorId: sessionActor.data.id,
-        recordId: newRecord.id,
+      const [newRecordVersion] = await tx
+        .insert(recordVersions)
+        .values({
+          authorId: sessionActor.data.id,
+          recordId: newRecord.id,
 
-        content: recordVersion.content,
-      })
-      .returning();
+          content: recordVersion.content,
+        })
+        .returning();
 
-    return [newRecord, newRecordVersion];
-  });
+      return [newRecord, newRecordVersion];
+    })
+  );
+
+  if (err) {
+    return rpcErrorResponse({
+      // TODO: Format the error message and return it
+      message: "Internal server error",
+    });
+  }
 
   return rpcSuccessResponse({
     ...newRecord,
