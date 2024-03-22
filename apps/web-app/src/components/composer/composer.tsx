@@ -1,11 +1,12 @@
 import { useAction } from "@solidjs/router";
 import { JSONContent } from "@tiptap/core";
-import { createSignal } from "solid-js";
+import { createSignal, Show } from "solid-js";
 
 import { TextEditor } from "~/components/composer/text-editor";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 
+import { records } from "~/server/db/schemas";
 import { createRecord } from "~/server/modules/records/actions";
 
 import { sample } from "~/lib/utils/common";
@@ -27,7 +28,11 @@ const PLACEHOLDER_MESSAGES = [
   "Say it loud...",
 ];
 
-export function Composer() {
+export type ComposerProps = {
+  parentRecordId?: (typeof records.$inferInsert)["parentRecordId"];
+};
+
+export function Composer(props: ComposerProps) {
   const [editorJSON, setEditorJSON] = createSignal<JSONContent>();
 
   const submitRecord = useAction(createRecord);
@@ -47,10 +52,21 @@ export function Composer() {
       <Button
         size="lg"
         class="self-end"
-        onClick={() => submitRecord(editorJSON()!)}
+        onClick={() =>
+          submitRecord({
+            record: {
+              parentRecordId: props.parentRecordId,
+            },
+            recordVersion: {
+              content: editorJSON()!,
+            },
+          })
+        }
       >
         <Icon.signature.outline class="text-lg -ml-1" />
-        Post
+        <Show when={props.parentRecordId} fallback="Post">
+          Reply
+        </Show>
       </Button>
     </div>
   );

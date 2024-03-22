@@ -1,17 +1,18 @@
 "use server";
 
-import { JSONContent } from "@tiptap/core";
-
 import { db } from "~/server/db";
 import { recordVersions, records } from "~/server/db/schemas/records";
 import { getSessionActor$ } from "~/server/modules/auth/rpc";
 
 import { rpcErrorResponse } from "~/lib/utils/rpc";
 
-export async function createRecord$(
-  content: JSONContent,
-  parentRecordId?: (typeof records.$inferInsert)["parentRecordId"]
-) {
+export async function createRecord$({
+  record,
+  recordVersion,
+}: {
+  record?: Pick<typeof records.$inferInsert, "pid" | "parentRecordId">;
+  recordVersion: Pick<typeof recordVersions.$inferInsert, "content">;
+}) {
   const sessionActor = await getSessionActor$();
 
   if (!sessionActor?.success) {
@@ -25,7 +26,7 @@ export async function createRecord$(
       .insert(records)
       .values({
         authorId: sessionActor.data.id,
-        parentRecordId,
+        parentRecordId: record?.parentRecordId,
       })
       .returning();
 
@@ -35,7 +36,7 @@ export async function createRecord$(
         authorId: sessionActor.data.id,
         recordId: newRecord.id,
 
-        content,
+        content: recordVersion.content,
       })
       .returning();
 
