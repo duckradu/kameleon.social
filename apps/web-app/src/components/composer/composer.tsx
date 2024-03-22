@@ -1,6 +1,6 @@
 import { useAction, useSubmission } from "@solidjs/router";
 import { JSONContent } from "@tiptap/core";
-import { Show, createSignal } from "solid-js";
+import { Show, createSignal, onCleanup, onMount } from "solid-js";
 
 import { TextEditor } from "~/components/composer/text-editor";
 import { Button } from "~/components/ui/button";
@@ -40,6 +40,12 @@ export function Composer(props: ComposerProps) {
 
   const submitRecord = useAction(createRecord);
   const submission = useSubmission(createRecord);
+
+  onMount(() => {
+    onCleanup(() => {
+      submission.clear?.();
+    });
+  });
 
   return (
     <>

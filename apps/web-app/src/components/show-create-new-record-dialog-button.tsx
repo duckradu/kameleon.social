@@ -1,9 +1,9 @@
 import { createMemo, mergeProps } from "solid-js";
 
-import { Button, ButtonProps } from "~/components/ui/button";
-import { Icon } from "~/components/ui/icon";
-import { Dialog, DialogProps } from "~/components/ui/dialog";
 import { Composer } from "~/components/composer/composer";
+import { Button, ButtonProps } from "~/components/ui/button";
+import { Dialog, DialogProps } from "~/components/ui/dialog";
+import { Icon } from "~/components/ui/icon";
 
 export type ShowCreateNewRecordDialogButtonProps = {
   buttonProps?: Omit<ButtonProps, "onClick">;

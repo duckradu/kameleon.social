@@ -140,7 +140,7 @@ export function Dialog(originalProps: DialogProps) {
                 </div>
               </Show>
 
-              <Show when={dialogProps.children}>{dialogProps.children}</Show>
+              {dialogProps.children}
 
               <Show when={typeof dialogProps.footer !== "undefined"}>
                 <div class="flex flex-row justify-end gap-2">
