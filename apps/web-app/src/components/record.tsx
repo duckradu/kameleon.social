@@ -1,9 +1,9 @@
 import { A, useNavigate } from "@solidjs/router";
 import { generateHTML } from "@tiptap/html";
-import { mergeProps } from "solid-js";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
+import { mergeProps } from "solid-js";
 
-import { TEXT_EDITOR_EXTENSIONS } from "~/components/composer/text-editor";
+import { TEXT_EDITOR_EXTENSIONS } from "~/components/composer/composer";
 import { Avatar } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
