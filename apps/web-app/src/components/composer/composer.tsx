@@ -73,12 +73,12 @@ export type ComposerProps = {
 export function Composer(props: ComposerProps) {
   const { actor } = useSession();
 
-  let textEditorRef!: HTMLDivElement;
+  let editorRef!: HTMLDivElement;
 
   const [editorJSON, setEditorJSON] = createSignal<JSONContent>();
 
   const editor = createTiptapEditor(() => ({
-    element: textEditorRef,
+    element: editorRef,
     // content: props.content,
     extensions: [
       ...TEXT_EDITOR_EXTENSIONS,
@@ -138,7 +138,7 @@ export function Composer(props: ComposerProps) {
       >
         <div class="space-y-4">
           <div
-            ref={textEditorRef}
+            ref={editorRef}
             id="text-editor"
             class="min-h-6 ![&>div]-(ring-none outline-transparent)"
           />
