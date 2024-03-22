@@ -8,6 +8,7 @@ import {
 import { createEffect, createSignal, onCleanup, Show } from "solid-js";
 
 import { Composer } from "~/components/composer/composer";
+import { useSession } from "~/components/context/session";
 import { ProfilePageEmptyMessage } from "~/components/profile-page-empty-message";
 import { Record as RecordComponent } from "~/components/record";
 import { RecordFeed } from "~/components/record-feed";
@@ -117,6 +118,7 @@ export const route = {
 
 export default function Record() {
   const params = useParams();
+  const { actor } = useSession();
 
   const routeData = createAsync(() =>
     getRouteData(params.actorPublicId, params.recordPublicId)
@@ -175,8 +177,8 @@ export default function Record() {
       </Show>
 
       <div class="flex justify-between items-center no-space-layout -my-1">
-        <h2 class="text-2xl font-bold">Replies</h2>
-        <Show when={!isComposingReply()}>
+        <h2 class="text-2xl font-bold py-2">Replies</h2>
+        <Show when={actor() && !isComposingReply()}>
           <Button size="lg" onClick={() => setIsComposingReply(true)}>
             <Icon.signature.outline class="text-lg -ml-1" />
             Reply
