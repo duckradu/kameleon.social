@@ -2,6 +2,7 @@ import {
   RouteDefinition,
   cache,
   createAsync,
+  redirect,
   useParams,
 } from "@solidjs/router";
 import { Show } from "solid-js";
@@ -21,6 +22,7 @@ import {
 } from "~/server/db/schemas";
 import { findOneByPID$ } from "~/server/modules/actors/rpc";
 
+import { paths } from "~/lib/constants/paths";
 import { sample } from "~/lib/utils/common";
 import { rpcSuccessResponse } from "~/lib/utils/rpc";
 
@@ -67,6 +69,10 @@ const getRouteData = cache(async (actorPublicId: string) => {
   "use server";
 
   const matchingActor = await findOneByPID$(actorPublicId);
+
+  if (!matchingActor) {
+    throw redirect(paths.notFound);
+  }
 
   const result = await db.query.records.findMany({
     where: (records, { eq }) => eq(records.authorId, matchingActor.id),

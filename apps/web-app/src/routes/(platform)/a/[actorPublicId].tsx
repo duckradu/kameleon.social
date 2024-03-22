@@ -4,6 +4,7 @@ import {
   RouteSectionProps,
   cache,
   createAsync,
+  redirect,
   useParams,
 } from "@solidjs/router";
 import { format } from "date-fns/format";
@@ -18,10 +19,19 @@ import { findOneByPID$ } from "~/server/modules/actors/rpc";
 
 import { getShortName } from "~/lib/utils/actors";
 import { stripURL } from "~/lib/utils/common";
+import { rpcSuccessResponse } from "~/lib/utils/rpc";
 
 import { paths } from "~/lib/constants/paths";
 
-const routeData = cache(findOneByPID$, "view-actor");
+const routeData = cache(async (actorPublicId: string) => {
+  const matchingActor = await findOneByPID$(actorPublicId);
+
+  if (!matchingActor) {
+    throw redirect(paths.notFound);
+  }
+
+  return rpcSuccessResponse(matchingActor);
+}, "view-actor");
 
 export const route = {
   load: ({ params }) => routeData(params.actorPublicId),
@@ -47,31 +57,35 @@ export default function ActorLayout(props: RouteSectionProps) {
             <div class="flex flex-col items-center justify-center space-y-2">
               <Avatar
                 size="profile"
-                fallback={getShortName(actor()?.name || "")}
+                fallback={getShortName(actor()?.data?.name || "")}
                 rootClass="-mt-12 border-3 border-background"
               />
 
               <div class="text-center">
-                <h1 class="text-xl font-semibold">{actor()?.name}</h1>
+                <h1 class="text-xl font-semibold">{actor()?.data?.name}</h1>
                 <A
-                  href={paths.actor(actor()?.pid || "").profile}
+                  href={paths.actor(actor()?.data?.name || "").profile}
                   class="text-muted-foreground text-sm hover:underline underline-offset-3"
                 >
-                  @{actor()?.pid}
+                  @{actor()?.data?.pid}
                 </A>
               </div>
             </div>
 
             <div class="flex justify-end pt-2">
-              <Show when={sessionActor() && sessionActor()!.id !== actor()?.id}>
+              <Show
+                when={
+                  sessionActor() && sessionActor()!.id !== actor()?.data?.id
+                }
+              >
                 <Button>Follow</Button>
               </Show>
             </div>
           </div>
         </div>
 
-        <Show when={actor()?.note}>
-          <p class="text-center">{actor()!.note}</p>
+        <Show when={actor()?.data?.note}>
+          <p class="text-center">{actor()!.data?.note}</p>
         </Show>
 
         <div class="flex py-1 justify-evenly text-sm [&>span>svg]-(inline-flex mr-1)">
@@ -79,28 +93,28 @@ export default function ActorLayout(props: RouteSectionProps) {
             <Icon.map.pin.outline />
             London
           </span>
-          <Show when={actor()?.externalUrl}>
+          <Show when={actor()?.data?.externalUrl}>
             <span>
               <Icon.link.minimalistic.outline />
               <A
-                href={actor()!.externalUrl!}
+                href={actor()!.data?.externalUrl!}
                 target="_blank"
                 class="text-brand underline underline-offset-3 hover:no-underline"
               >
-                {stripURL(actor()!.externalUrl!)}
+                {stripURL(actor()!.data?.externalUrl!)}
               </A>
             </span>
           </Show>
-          <Show when={actor()?.createdAt}>
+          <Show when={actor()?.data?.createdAt}>
             <span>
               <Icon.calendar.outline />
-              Joined {format(new Date(actor()!.createdAt), "MMM yyyy")}
+              Joined {format(new Date(actor()!.data!.createdAt), "MMM yyyy")}
             </span>
           </Show>
-          <Show when={actor()?.createdAt}>
+          <Show when={actor()?.data?.createdAt}>
             <span>
               <Icon.cake.outline />
-              Cake day {format(new Date(actor()!.createdAt), "MMM yyyy")}
+              Cake day {format(new Date(actor()!.data!.createdAt), "MMM yyyy")}
             </span>
           </Show>
         </div>
@@ -108,11 +122,13 @@ export default function ActorLayout(props: RouteSectionProps) {
 
       <div class="relative">
         <div class="sticky-header flex z-10 [&>a]-(flex flex-1 items-center justify-center py-3 font-medium border-b border-brand) [&>a:hover]:bg-muted-foreground/10 [&>a:not(.active)]-(text-muted-foreground border-muted)">
-          <A href={paths.actor(actor()?.pid || "").profile} end>
+          <A href={paths.actor(actor()?.data?.pid || "").profile} end>
             Activity
           </A>
-          <A href={paths.actor(actor()?.pid || "").moments}>Moments</A>
-          <A href={paths.actor(actor()?.pid || "").connections}>Connections</A>
+          <A href={paths.actor(actor()?.data?.pid || "").moments}>Moments</A>
+          <A href={paths.actor(actor()?.data?.pid || "").connections}>
+            Connections
+          </A>
         </div>
 
         <Suspense

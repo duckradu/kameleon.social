@@ -46,8 +46,12 @@ const getRouteData = cache(
   async (actorPublicId: string, recordPublicId: string) => {
     "use server";
 
-    // TODO: Figure out how to deal with `const matchingActor = await findOneByPID$(actorPid);`
     const matchingActor = await findOneByPID$(actorPublicId);
+
+    if (!matchingActor) {
+      throw redirect(paths.notFound);
+    }
+
     const matchingRecord = await db.query.records.findFirst({
       where: (records, { and, eq }) =>
         and(
