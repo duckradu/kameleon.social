@@ -8,6 +8,13 @@
       "when": 1710839834003,
       "tag": "0000_panoramic_the_order",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1711103065571,
+      "tag": "0001_long_corsair",
+      "breakpoints": true
     }
   ]
 }
