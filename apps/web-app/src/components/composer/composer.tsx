@@ -1,4 +1,4 @@
-import { createForm, getValue, valiForm } from "@modular-forms/solid";
+import { createForm, getValue, setValue, valiForm } from "@modular-forms/solid";
 import { useAction, useSubmission } from "@solidjs/router";
 import { Extensions, JSONContent } from "@tiptap/core";
 import Document from "@tiptap/extension-document";
@@ -150,8 +150,23 @@ export function Composer(props: ComposerProps) {
             >
               <RecordDetails.Field name="pid">
                 {(field, fieldProps) => (
-                  <div class="grid gap-1">
-                    <InputComponent value={field.value} {...fieldProps} />
+                  <div class="grid gap-1 grow-1">
+                    <div class="flex gap-1">
+                      <InputComponent
+                        value={field.value}
+                        class="w-full"
+                        {...fieldProps}
+                      />
+                      <Button
+                        variant="secondary"
+                        onClick={() =>
+                          setValue(recordDetailsFormStore, "pid", nanoid())
+                        }
+                        iconOnly
+                      >
+                        <Icon.refresh.outline class="text-lg -mx-0.5" />
+                      </Button>
+                    </div>
                     <Show when={field.error}>
                       <FormFieldError>{field.error}</FormFieldError>
                     </Show>

@@ -52,6 +52,7 @@ import SolarPlayBold from "~icons/solar/play-bold";
 import SolarPostsCarouselVerticalOutline from "~icons/solar/posts-carousel-vertical-outline";
 import SolarQuitFullScreenOutline from "~icons/solar/quit-full-screen-outline";
 import SolarQuitPipOutline from "~icons/solar/quit-pip-outline";
+import SolarRefreshLinear from "~icons/solar/refresh-linear";
 import SolarSettingsBold from "~icons/solar/settings-bold";
 import SolarSettingsOutline from "~icons/solar/settings-outline";
 import SolarSquareShareLineOutline from "~icons/solar/square-share-line-outline";
@@ -66,6 +67,10 @@ import SolarVolumeLoudBold from "~icons/solar/volume-loud-bold";
 import SolarVolumeSmallBold from "~icons/solar/volume-small-bold";
 
 export const Icon = {
+  refresh: {
+    outline: SolarRefreshLinear,
+  },
+
   logo: {
     solid: LogoSolid,
   },
