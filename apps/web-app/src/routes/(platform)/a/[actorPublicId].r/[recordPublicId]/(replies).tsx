@@ -126,13 +126,6 @@ export default function RecordReplies() {
 
   return (
     <>
-      <Show when={isComposingReply()}>
-        <Composer
-          parentRecordId={routeData()!.data!.record.id}
-          onSuccess={() => setIsComposingReply(false)}
-        />
-      </Show>
-
       <div class="flex justify-between items-center no-space-layout -my-1">
         <h2 class="text-2xl font-bold py-2">Replies</h2>
         <Show when={actor() && !isComposingReply()}>
@@ -142,6 +135,13 @@ export default function RecordReplies() {
           </Button>
         </Show>
       </div>
+
+      <Show when={isComposingReply()}>
+        <Composer
+          parentRecordId={routeData()!.data!.record.id}
+          onSuccess={() => setIsComposingReply(false)}
+        />
+      </Show>
 
       <Suspense
         fallback={
