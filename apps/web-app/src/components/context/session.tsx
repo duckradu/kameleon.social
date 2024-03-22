@@ -1,4 +1,4 @@
-import { createAsync } from "@solidjs/router";
+import { cache, createAsync } from "@solidjs/router";
 import {
   Accessor,
   ParentProps,
@@ -10,7 +10,9 @@ import {
 
 import { actors } from "~/server/db/schemas/actors";
 
-import { getSessionActor } from "~/server/modules/auth/actions";
+import { getSessionActor$ } from "~/server/modules/auth/rpc";
+
+const routeData = cache(getSessionActor$, "session");
 
 export type ISessionContext = {
   actor: Accessor<typeof actors.$inferSelect | null>;
@@ -19,7 +21,7 @@ export type ISessionContext = {
 const SessionContext = createContext<ISessionContext>();
 
 export function SessionProvider(props: ParentProps) {
-  const sessionActor = createAsync(() => getSessionActor());
+  const sessionActor = createAsync(() => routeData());
 
   const [actor, setActor] = createSignal<typeof actors.$inferSelect | null>(
     sessionActor()?.data || null

@@ -2,6 +2,7 @@ import {
   A,
   RouteDefinition,
   RouteSectionProps,
+  cache,
   createAsync,
   useParams,
 } from "@solidjs/router";
@@ -13,22 +14,24 @@ import { Avatar } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 
-import { findOneByPID } from "~/server/modules/actors/actions";
+import { findOneByPID$ } from "~/server/modules/actors/rpc";
 
 import { getShortName } from "~/lib/utils/actors";
 import { stripURL } from "~/lib/utils/common";
 
 import { paths } from "~/lib/constants/paths";
 
+const routeData = cache(findOneByPID$, "view-actor");
+
 export const route = {
-  load: ({ params }) => findOneByPID(params.actorPublicId),
+  load: ({ params }) => routeData(params.actorPublicId),
 } satisfies RouteDefinition;
 
 export default function ActorLayout(props: RouteSectionProps) {
   const params = useParams();
   const { actor: sessionActor } = useSession();
 
-  const actor = createAsync(() => findOneByPID(params.actorPublicId));
+  const actor = createAsync(() => routeData(params.actorPublicId));
 
   return (
     <div class="space-y-layout">

@@ -1,6 +1,7 @@
 import {
   A,
   RouteDefinition,
+  cache,
   createAsyncStore,
   useSubmission,
 } from "@solidjs/router";
@@ -16,21 +17,23 @@ import { TriggerToast } from "~/components/ui/toast";
 import {
   createInviteCode,
   deleteInviteCode,
-  getInviteCodes,
   toggleInviteCodeIsEnabled,
 } from "~/server/modules/invite-codes/actions";
 import { MAX_INVITE_CODES_PER_ACTOR } from "~/server/modules/invite-codes/constants";
+import { getInviteCodes$ } from "~/server/modules/invite-codes/rpc";
 
 import { paths } from "~/lib/constants/paths";
 import { getShortName } from "~/lib/utils/actors";
 import { dynamicWord } from "~/lib/utils/common";
 
+const routeData = cache(getInviteCodes$, "view-invite-codes");
+
 export const route = {
-  load: () => getInviteCodes(),
+  load: () => routeData(),
 } satisfies RouteDefinition;
 
 export default function SettingsInviteCodes() {
-  const inviteCodes = createAsyncStore(() => getInviteCodes(), {
+  const inviteCodes = createAsyncStore(() => routeData(), {
     reconcile: {
       key: "code",
     },
