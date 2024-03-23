@@ -1,11 +1,14 @@
 "use server";
 
+import { PostgresError } from "postgres";
+
 import { db } from "~/server/db";
 import { recordVersions, records } from "~/server/db/schemas/records";
 import { getSessionActor$ } from "~/server/modules/auth/rpc";
 
-import { rpcErrorResponse, rpcSuccessResponse } from "~/lib/utils/rpc";
 import { to } from "~/lib/utils/common";
+import { getError } from "~/lib/utils/db";
+import { rpcErrorResponse, rpcSuccessResponse } from "~/lib/utils/rpc";
 
 export async function createRecord$({
   record,
@@ -55,8 +58,12 @@ export async function createRecord$({
 
   if (err) {
     return rpcErrorResponse({
-      // TODO: Format the error message and return it
-      message: "Internal server error",
+      // TODO: Figure out why `err instanceof PostgresError` crashes
+      message: getError(err as PostgresError, (fe) =>
+        fe.constraintName === "unique_records_on_author_id_and_pid"
+          ? "You're attempting to use a slug that you've already used. Please choose a different slug and proceed."
+          : fe.message
+      )!.message,
     });
   }
 
