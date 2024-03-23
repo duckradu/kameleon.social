@@ -88,7 +88,7 @@ export default function ActorLayout(props: RouteSectionProps) {
           <p class="text-center">{actor()!.data?.note}</p>
         </Show>
 
-        <div class="flex py-1 justify-evenly text-sm [&>span>svg]-(inline-flex mr-1)">
+        <div class="flex py-1 justify-evenly text-muted-foreground text-sm [&>span>svg]-(inline-flex mr-1)">
           <span>
             <Icon.map.pin.outline />
             London

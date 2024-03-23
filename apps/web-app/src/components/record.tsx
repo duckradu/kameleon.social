@@ -106,21 +106,32 @@ export function Record(originalProps: RecordProps) {
         }
       />
 
-      <footer class="flex justify-between text-lg text-muted-foreground group-hover/article:text-foreground [&>div]-(flex gap-4.7)">
+      <footer class="flex justify-between -m-2 text-lg text-muted-foreground [&>div>button]:group-hover/article:text-foreground [&>div>button]-(rounded-full px-0 aspect-square) [&>div>button>svg]-(text-lg) [&>div]-(flex gap-0.5)">
         <div>
-          <Icon.arrow.up />
-          <Icon.arrow.up class="rotate-180" />
-
-          <Icon.eye.outline />
+          <Button variant="ghost" iconOnly>
+            <Icon.arrow.up />
+          </Button>
+          <Button variant="ghost" iconOnly>
+            <Icon.arrow.up class="rotate-180" />
+          </Button>
+          <Button variant="ghost" iconOnly>
+            <Icon.eye.outline />
+          </Button>
         </div>
 
         <div>
-          <Icon.chat.square.outline />
-
-          <Icon.chat.square.arrow.outline class="text-xl -mt-2px" />
-
-          <Icon.share.outline />
-          <Icon.bookmark.outline />
+          <Button variant="ghost" iconOnly>
+            <Icon.chat.square.outline />
+          </Button>
+          <Button variant="ghost" iconOnly>
+            <Icon.chat.square.arrow.outline class="!text-xl -mt-2px" />
+          </Button>
+          <Button variant="ghost" iconOnly>
+            <Icon.share.outline />
+          </Button>
+          <Button variant="ghost" iconOnly>
+            <Icon.bookmark.outline />
+          </Button>
         </div>
       </footer>
     </article>
