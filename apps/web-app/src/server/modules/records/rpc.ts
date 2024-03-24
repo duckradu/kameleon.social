@@ -1,11 +1,13 @@
 "use server";
 
+import { SQL } from "drizzle-orm";
+
 import { db } from "~/server/db";
 import { recordVersions, records } from "~/server/db/schemas/records";
 import { getSessionActor$ } from "~/server/modules/auth/rpc";
 
-import { rpcErrorResponse, rpcSuccessResponse } from "~/lib/utils/rpc";
 import { to } from "~/lib/utils/common";
+import { rpcErrorResponse, rpcSuccessResponse } from "~/lib/utils/rpc";
 
 export async function createRecord$({
   record,
@@ -63,5 +65,28 @@ export async function createRecord$({
   return rpcSuccessResponse({
     ...newRecord,
     latestVersion: newRecordVersion,
+  });
+}
+
+export async function getRecordsPage$(
+  filterQuery: SQL,
+  cursor?: string,
+  pageSize = 10
+) {
+  return await db.query.records.findMany({
+    where: (_, op) =>
+      cursor?.length
+        ? op.and(op.lt(records.createdAt, cursor), filterQuery)
+        : filterQuery,
+    orderBy: (records, { desc }) => [desc(records.createdAt)],
+    limit: pageSize,
+
+    with: {
+      author: true,
+      versions: {
+        orderBy: (recordVersions, { desc }) => [desc(recordVersions.createdAt)],
+        limit: 1,
+      },
+    },
   });
 }

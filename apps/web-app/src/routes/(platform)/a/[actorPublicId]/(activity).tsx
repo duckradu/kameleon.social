@@ -1,35 +1,26 @@
-import {
-  RouteDefinition,
-  cache,
-  createAsync,
-  redirect,
-  useParams,
-} from "@solidjs/router";
+import { cache, redirect, useParams } from "@solidjs/router";
+import { eq } from "drizzle-orm";
 import { For, Show } from "solid-js";
-import { createInfiniteScroll } from "@solid-primitives/pagination";
 
 import { useSession } from "~/components/context/session";
 import { ProfilePageEmptyMessage } from "~/components/profile-page-empty-message";
-import { RecordFeed } from "~/components/record-feed";
-import { ShowCreateNewRecordDialogButton } from "~/components/show-create-new-record-dialog-button";
-
-import { db } from "~/server/db";
-import {
-  actors,
-  recordVersions,
-  records,
-  records as recordsSchema,
-} from "~/server/db/schemas";
-import { findOneByPID$ } from "~/server/modules/actors/rpc";
-
-import { paths } from "~/lib/constants/paths";
-import { sample } from "~/lib/utils/common";
-import { rpcSuccessResponse } from "~/lib/utils/rpc";
-import { Icon } from "~/components/ui/icon";
+import { Record } from "~/components/record";
 import {
   RecordFeedEmptyMessage,
   getDefaultActionList,
 } from "~/components/record-feed-empty-message";
+import { ShowCreateNewRecordDialogButton } from "~/components/show-create-new-record-dialog-button";
+import { Icon } from "~/components/ui/icon";
+
+import { actors, recordVersions, records } from "~/server/db/schemas";
+import { findOneByPID$ } from "~/server/modules/actors/rpc";
+import { getRecordsPage$ } from "~/server/modules/records/rpc";
+
+import { paths } from "~/lib/constants/paths";
+
+import { createInfiniteScroll } from "~/lib/primitives/create-infinite-scroll";
+import { sample } from "~/lib/utils/common";
+import { rpcSuccessResponse } from "~/lib/utils/rpc";
 
 const NO_DATA_MESSAGES = {
   title: [
@@ -70,7 +61,7 @@ const NO_DATA_MESSAGES_VISITOR = {
   ],
 };
 
-const getRouteData = cache(async (actorPublicId: string) => {
+const getRouteData = cache(async (actorPublicId: string, cursor?: string) => {
   "use server";
 
   const matchingActor = await findOneByPID$(actorPublicId);
@@ -79,17 +70,10 @@ const getRouteData = cache(async (actorPublicId: string) => {
     throw redirect(paths.notFound);
   }
 
-  const result = await db.query.records.findMany({
-    where: (records, { eq }) => eq(records.authorId, matchingActor.id),
-    with: {
-      author: true,
-      versions: {
-        orderBy: (recordVersions, { desc }) => [desc(recordVersions.createdAt)],
-        limit: 1,
-      },
-    },
-    orderBy: (records, { desc }) => [desc(records.createdAt)],
-  });
+  const result = await getRecordsPage$(
+    eq(records.authorId, matchingActor.id),
+    cursor
+  );
 
   if (!result.length) {
     return rpcSuccessResponse([]);
@@ -102,31 +86,12 @@ const getRouteData = cache(async (actorPublicId: string) => {
         { ...curr, latestVersion: versions[0] },
       ],
       [] as (typeof records.$inferSelect & {
+        author: typeof actors.$inferSelect;
         latestVersion: typeof recordVersions.$inferSelect;
       })[]
     )
   );
-}, "view-actor-activity");
-
-export const route = {
-  load: ({ params }) => getRouteData(params.actorPublicId),
-} satisfies RouteDefinition;
-
-const fetcher = async (page: number) =>
-  await new Promise<string[]>((resolve) =>
-    setTimeout(
-      () =>
-        resolve(
-          page === 3
-            ? []
-            : new Array(50).fill(0).map((_, i) => `${page} - ${i + page + 1}`)
-        ),
-      1000
-    )
-  );
-
-// TODO: Fix .space-layout
-// TODO: Make fetcher fetch records :D
+}, "actor-activity");
 
 export default function ActorActivity() {
   const params = useParams();
@@ -134,68 +99,72 @@ export default function ActorActivity() {
 
   const isSessionActor = params.actorPublicId === actor()?.pid;
 
-  const records = createAsync(() => getRouteData(params.actorPublicId));
+  const [infiniteRecords, infiniteScrollLoader, { cursor, end }] =
+    createInfiniteScroll(
+      async (cursor) => {
+        const response = await getRouteData(
+          params.actorPublicId,
+          cursor as string
+        );
 
-  const [pages, infiniteScrollLoader, { end }] = createInfiniteScroll(fetcher);
+        if (response.success) {
+          return response.data;
+        }
+
+        return [];
+      },
+      (infiniteRecords) => infiniteRecords().at(-1)?.createdAt || ""
+    );
 
   return (
     <>
-      <For each={pages()}>{(page) => <p>{page}</p>}</For>
       <Show
-        when={end()}
+        when={!(cursor() === "" && infiniteRecords().length === 0)}
         fallback={
-          <div
-            ref={
-              infiniteScrollLoader as unknown as (el: HTMLDivElement) => void
+          <ProfilePageEmptyMessage
+            title={
+              isSessionActor
+                ? sample(NO_DATA_MESSAGES.title)
+                : sample(NO_DATA_MESSAGES_VISITOR.title(params.actorPublicId))
             }
-            class="py-8 h-full"
+            description={
+              isSessionActor
+                ? sample(NO_DATA_MESSAGES.description)
+                : sample(NO_DATA_MESSAGES_VISITOR.description)
+            }
           >
-            <Icon.spinner class="text-2xl animate-spin mx-auto" />
-          </div>
+            <Show when={isSessionActor}>
+              <ShowCreateNewRecordDialogButton />
+            </Show>
+          </ProfilePageEmptyMessage>
         }
       >
-        <RecordFeedEmptyMessage
-          actionList={getDefaultActionList().map((actionItem) =>
-            actionItem.href === paths.explore.actors
-              ? {
-                  ...actionItem,
-                  href: paths.actor(params.actorPublicId).connections,
-                }
-              : actionItem
-          )}
-        />
+        <div class="grid gap-layout py-layout">
+          <For each={infiniteRecords()}>
+            {(record) => <Record {...record} />}
+          </For>
+        </div>
+
+        <Show
+          when={!end()}
+          fallback={
+            <RecordFeedEmptyMessage
+              actionList={getDefaultActionList().map((actionItem) =>
+                actionItem.href === paths.explore.actors
+                  ? {
+                      ...actionItem,
+                      href: paths.actor(params.actorPublicId).connections,
+                    }
+                  : actionItem
+              )}
+            />
+          }
+        >
+          <div ref={infiniteScrollLoader} class="py-8 h-full space-y-2">
+            <Icon.spinner class="text-2xl animate-spin mx-auto" />
+          </div>
+        </Show>
       </Show>
     </>
-    // <Show
-    //   when={records()?.data?.length}
-    //   fallback={
-    //     <ProfilePageEmptyMessage
-    //       title={
-    //         isSessionActor
-    //           ? sample(NO_DATA_MESSAGES.title)
-    //           : sample(NO_DATA_MESSAGES_VISITOR.title(params.actorPublicId))
-    //       }
-    //       description={
-    //         isSessionActor
-    //           ? sample(NO_DATA_MESSAGES.description)
-    //           : sample(NO_DATA_MESSAGES_VISITOR.description)
-    //       }
-    //     >
-    //       <Show when={isSessionActor}>
-    //         <ShowCreateNewRecordDialogButton />
-    //       </Show>
-    //     </ProfilePageEmptyMessage>
-    //   }
-    // >
-    //   <RecordFeed
-    //     recordList={
-    //       records()!.data! as (typeof recordsSchema.$inferSelect & {
-    //         author: typeof actors.$inferSelect;
-    //         latestVersion: typeof recordVersions.$inferSelect;
-    //       })[]
-    //     }
-    //     class="py-layout" // TODO: Don't forget about this
-    //   />
-    // </Show>
   );
 }
