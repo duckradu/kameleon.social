@@ -126,8 +126,8 @@ export default function RecordReplies() {
 
   return (
     <>
-      <div class="flex justify-between items-center no-space-layout -my-1">
-        <h2 class="text-2xl font-bold py-2">Replies</h2>
+      <div class="flex justify-between items-center h-12 n-space-y-1">
+        <h2 class="text-2xl font-bold">Replies</h2>
         <Show when={actor() && !isComposingReply()}>
           <Button size="lg" onClick={() => setIsComposingReply(true)}>
             <Icon.signature.outline class="text-lg -ml-1" />
