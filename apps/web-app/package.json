@@ -21,7 +21,7 @@
     "@solid-primitives/pagination": "^0.3.0",
     "@solidjs/meta": "^0.29.3",
     "@solidjs/router": "^0.13.1",
-    "@solidjs/start": "1.0.0-rc.0",
+    "@solidjs/start": "0.7.7",
     "@tiptap/core": "^2.2.4",
     "@tiptap/extension-document": "^2.2.4",
     "@tiptap/extension-hard-break": "^2.2.4",
