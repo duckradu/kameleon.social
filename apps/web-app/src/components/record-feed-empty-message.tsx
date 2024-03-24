@@ -31,7 +31,7 @@ export function RecordFeedEmptyMessage(
   );
 
   return (
-    <>
+    <div>
       {/* Please forgive :'( */}
       <div
         class="relative h-8 before-(content-[''] block w-full h-8 absolute top-0 left-0 bg-[linear-gradient(-45deg,hsl(var(--border))_16px,transparent_0),linear-gradient(45deg,hsl(var(--border))_16px,transparent_0)] bg-repeat-x bg-[length:32_32])
@@ -71,7 +71,7 @@ export function RecordFeedEmptyMessage(
           </For>
         </footer>
       </section>
-    </>
+    </div>
   );
 }
 
