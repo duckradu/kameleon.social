@@ -108,8 +108,8 @@ export default defineConfig({
             ${selector} > :not([hidden], .no-space-layout) ~ :not([hidden], .no-space-layout) {
               --un-space-x-reverse: 0;
 
-              margin-left: calc(${theme.spacing.xs} * calc(1 - var(--un-space-x-reverse)));
-              margin-right: calc(${theme.spacing.xs} * var(--un-space-x-reverse));
+              margin-left: calc(calc(${theme.spacing.xs} - var(--un-n-space-x, 0rem)) * calc(1 - var(--un-space-x-reverse)));
+              margin-right: calc(calc(${theme.spacing.xs} - var(--un-n-space-x, 0rem)) * var(--un-space-x-reverse));
             }
           `;
         }
@@ -119,13 +119,25 @@ export default defineConfig({
             ${selector} > :not([hidden], .no-space-layout) ~ :not([hidden], .no-space-layout) {
               --un-space-y-reverse: 0;
 
-              margin-top: calc(${theme.spacing.xs} * calc(1 - var(--un-space-y-reverse)));
-              margin-bottom: calc(${theme.spacing.xs} * var(--un-space-y-reverse));
+              margin-top: calc(calc(${theme.spacing.xs} - var(--un-n-space-y, 0rem)) * calc(1 - var(--un-space-y-reverse)));
+              margin-bottom: calc(calc(${theme.spacing.xs} - var(--un-n-space-y, 0rem)) * var(--un-space-y-reverse));
             }
           `;
         }
 
         return "";
+      },
+    ],
+    [
+      /^n-space-(x|y)-(\d+)$/,
+      ([, dir, d], { rawSelector }) => {
+        const selector = e(rawSelector);
+
+        return `
+          ${selector}, ${selector} ~ :not([hidden], .no-space-layout) {
+            --un-n-space-${dir}: ${(d as unknown as number) / 4}rem;
+          }
+        `;
       },
     ],
     [
