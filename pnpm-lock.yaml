@@ -13,9 +13,6 @@ importers:
       '@modular-forms/solid':
         specifier: ^0.20.0
         version: 0.20.0(solid-js@1.8.16)
-      '@solid-primitives/pagination':
-        specifier: ^0.3.0
-        version: 0.3.0(solid-js@1.8.16)
       '@solidjs/meta':
         specifier: ^0.29.3
         version: 0.29.3(solid-js@1.8.16)
@@ -1630,23 +1627,6 @@ packages:
   /@sindresorhus/merge-streams@2.3.0:
     resolution: {integrity: sha512-LtoMMhxAlorcGhmFYI+LhPgbPZCkgP6ra1YL604EeF6U98pLlQ3iWIGMdWSC+vWmPBWBNgmDBAhnAobLROJmwg==}
     engines: {node: '>=18'}
-    dev: false
-
-  /@solid-primitives/pagination@0.3.0(solid-js@1.8.16):
-    resolution: {integrity: sha512-B9R2tVAEwGyXGF/533b46d7fXHU//eHUOt4CxwESwV3RhtP0wYScrV882i2eHGQuryZfQH2jbubvjMQyQbTMgA==}
-    peerDependencies:
-      solid-js: ^1.6.12
-    dependencies:
-      '@solid-primitives/utils': 6.2.3(solid-js@1.8.16)
-      solid-js: 1.8.16
-    dev: false
-
-  /@solid-primitives/utils@6.2.3(solid-js@1.8.16):
-    resolution: {integrity: sha512-CqAwKb2T5Vi72+rhebSsqNZ9o67buYRdEJrIFzRXz3U59QqezuuxPsyzTSVCacwS5Pf109VRsgCJQoxKRoECZQ==}
-    peerDependencies:
-      solid-js: ^1.6.12
-    dependencies:
-      solid-js: 1.8.16
     dev: false
 
   /@solidjs/meta@0.29.3(solid-js@1.8.16):
