@@ -106,8 +106,10 @@ export default defineConfig({
         if (dir === "x") {
           return `
             ${selector} > :not([hidden], .no-space-layout) ~ :not([hidden], .no-space-layout) {
-              margin-left: ${theme.spacing.xs};
-              margin-right: ${theme.spacing.xs};
+              --un-space-x-reverse: 0;
+
+              margin-left: calc(${theme.spacing.xs} * calc(1 - var(--un-space-x-reverse)));
+              margin-right: calc(${theme.spacing.xs} * var(--un-space-x-reverse));
             }
           `;
         }
@@ -115,8 +117,10 @@ export default defineConfig({
         if (dir === "y") {
           return `
             ${selector} > :not([hidden], .no-space-layout) ~ :not([hidden], .no-space-layout) {
-              margin-top: ${theme.spacing.xs};
-              margin-bottom: ${theme.spacing.xs};
+              --un-space-y-reverse: 0;
+
+              margin-top: calc(${theme.spacing.xs} * calc(1 - var(--un-space-y-reverse)));
+              margin-bottom: calc(${theme.spacing.xs} * var(--un-space-y-reverse));
             }
           `;
         }
