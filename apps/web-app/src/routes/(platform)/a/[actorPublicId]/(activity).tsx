@@ -5,7 +5,8 @@ import {
   redirect,
   useParams,
 } from "@solidjs/router";
-import { Show } from "solid-js";
+import { For, Show } from "solid-js";
+import { createInfiniteScroll } from "@solid-primitives/pagination";
 
 import { useSession } from "~/components/context/session";
 import { ProfilePageEmptyMessage } from "~/components/profile-page-empty-message";
@@ -24,6 +25,11 @@ import { findOneByPID$ } from "~/server/modules/actors/rpc";
 import { paths } from "~/lib/constants/paths";
 import { sample } from "~/lib/utils/common";
 import { rpcSuccessResponse } from "~/lib/utils/rpc";
+import { Icon } from "~/components/ui/icon";
+import {
+  RecordFeedEmptyMessage,
+  getDefaultActionList,
+} from "~/components/record-feed-empty-message";
 
 const NO_DATA_MESSAGES = {
   title: [
@@ -106,6 +112,22 @@ export const route = {
   load: ({ params }) => getRouteData(params.actorPublicId),
 } satisfies RouteDefinition;
 
+const fetcher = async (page: number) =>
+  await new Promise<string[]>((resolve) =>
+    setTimeout(
+      () =>
+        resolve(
+          page === 3
+            ? []
+            : new Array(50).fill(0).map((_, i) => `${page} - ${i + page + 1}`)
+        ),
+      1000
+    )
+  );
+
+// TODO: Fix .space-layout
+// TODO: Make fetcher fetch records :D
+
 export default function ActorActivity() {
   const params = useParams();
   const { actor } = useSession();
@@ -114,37 +136,66 @@ export default function ActorActivity() {
 
   const records = createAsync(() => getRouteData(params.actorPublicId));
 
+  const [pages, infiniteScrollLoader, { end }] = createInfiniteScroll(fetcher);
+
   return (
-    <Show
-      when={records()?.data?.length}
-      fallback={
-        <ProfilePageEmptyMessage
-          title={
-            isSessionActor
-              ? sample(NO_DATA_MESSAGES.title)
-              : sample(NO_DATA_MESSAGES_VISITOR.title(params.actorPublicId))
-          }
-          description={
-            isSessionActor
-              ? sample(NO_DATA_MESSAGES.description)
-              : sample(NO_DATA_MESSAGES_VISITOR.description)
-          }
-        >
-          <Show when={isSessionActor}>
-            <ShowCreateNewRecordDialogButton />
-          </Show>
-        </ProfilePageEmptyMessage>
-      }
-    >
-      <RecordFeed
-        recordList={
-          records()!.data! as (typeof recordsSchema.$inferSelect & {
-            author: typeof actors.$inferSelect;
-            latestVersion: typeof recordVersions.$inferSelect;
-          })[]
+    <>
+      <For each={pages()}>{(page) => <p>{page}</p>}</For>
+      <Show
+        when={end()}
+        fallback={
+          <div
+            ref={
+              infiniteScrollLoader as unknown as (el: HTMLDivElement) => void
+            }
+            class="py-8 h-full"
+          >
+            <Icon.spinner class="text-2xl animate-spin mx-auto" />
+          </div>
         }
-        class="py-layout" // TODO: Don't forget about this
-      />
-    </Show>
+      >
+        <RecordFeedEmptyMessage
+          actionList={getDefaultActionList().map((actionItem) =>
+            actionItem.href === paths.explore.actors
+              ? {
+                  ...actionItem,
+                  href: paths.actor(params.actorPublicId).connections,
+                }
+              : actionItem
+          )}
+        />
+      </Show>
+    </>
+    // <Show
+    //   when={records()?.data?.length}
+    //   fallback={
+    //     <ProfilePageEmptyMessage
+    //       title={
+    //         isSessionActor
+    //           ? sample(NO_DATA_MESSAGES.title)
+    //           : sample(NO_DATA_MESSAGES_VISITOR.title(params.actorPublicId))
+    //       }
+    //       description={
+    //         isSessionActor
+    //           ? sample(NO_DATA_MESSAGES.description)
+    //           : sample(NO_DATA_MESSAGES_VISITOR.description)
+    //       }
+    //     >
+    //       <Show when={isSessionActor}>
+    //         <ShowCreateNewRecordDialogButton />
+    //       </Show>
+    //     </ProfilePageEmptyMessage>
+    //   }
+    // >
+    //   <RecordFeed
+    //     recordList={
+    //       records()!.data! as (typeof recordsSchema.$inferSelect & {
+    //         author: typeof actors.$inferSelect;
+    //         latestVersion: typeof recordVersions.$inferSelect;
+    //       })[]
+    //     }
+    //     class="py-layout" // TODO: Don't forget about this
+    //   />
+    // </Show>
   );
 }

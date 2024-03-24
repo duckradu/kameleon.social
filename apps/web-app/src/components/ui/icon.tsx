@@ -40,6 +40,7 @@ import SolarLinkOutline from "~icons/solar/link-outline";
 import SolarLoginBold from "~icons/solar/login-bold";
 import SolarLoginOutline from "~icons/solar/login-outline";
 import SolarLogoutOutline from "~icons/solar/logout-outline";
+import SolarMagniferOutline from "~icons/solar/magnifer-outline";
 import SolarMapPointOutline from "~icons/solar/map-point-outline";
 import SolarMenuDotsBold from "~icons/solar/menu-dots-bold";
 import SolarMenuDotsOutline from "~icons/solar/menu-dots-outline";
@@ -62,11 +63,18 @@ import SolarUserBold from "~icons/solar/user-bold";
 import SolarUserOutline from "~icons/solar/user-outline";
 import SolarUserPlusBold from "~icons/solar/user-plus-bold";
 import SolarUserPlusOutline from "~icons/solar/user-plus-outline";
+import SolarUsersGroupTwoRoundedOutline from "~icons/solar/users-group-two-rounded-outline";
 import SolarVolumeBold from "~icons/solar/volume-bold";
 import SolarVolumeLoudBold from "~icons/solar/volume-loud-bold";
 import SolarVolumeSmallBold from "~icons/solar/volume-small-bold";
 
 export const Icon = {
+  usersGroupTwo: {
+    outline: SolarUsersGroupTwoRoundedOutline,
+  },
+  magnifier: {
+    outline: SolarMagniferOutline,
+  },
   refresh: {
     outline: SolarRefreshLinear,
   },

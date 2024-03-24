@@ -22,4 +22,10 @@ export const paths = {
       record: (recordPublicId: string) => `${basePath}/r/${recordPublicId}`,
     };
   },
+
+  explore: {
+    root: "/explore",
+    search: "/explore/search",
+    actors: "/explore/actors",
+  },
 };
