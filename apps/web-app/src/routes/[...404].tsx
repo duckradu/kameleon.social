@@ -8,7 +8,7 @@ import { Icon } from "~/components/ui/icon";
 export default function NotFound() {
   return (
     <>
-      <KameleonTitle>404 - Page not found</KameleonTitle>
+      <KameleonTitle>Page not found</KameleonTitle>
       <HttpStatusCode code={404} />
 
       <CentralFocusLayout>

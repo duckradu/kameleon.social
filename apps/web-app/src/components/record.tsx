@@ -108,28 +108,28 @@ export function Record(originalProps: RecordProps) {
 
       <footer class="flex justify-between -m-2 text-lg text-muted-foreground [&>div>button]:group-hover/article:text-foreground [&>div>button]-(rounded-full px-0 aspect-square) [&>div>button>svg]-(text-lg) [&>div]-(flex gap-0.5)">
         <div>
-          <Button variant="ghost" iconOnly>
+          <Button variant="ghost" iconOnly onClick={(e) => e.stopPropagation()}>
             <Icon.arrow.up />
           </Button>
-          <Button variant="ghost" iconOnly>
+          <Button variant="ghost" iconOnly onClick={(e) => e.stopPropagation()}>
             <Icon.arrow.up class="rotate-180" />
           </Button>
-          <Button variant="ghost" iconOnly>
+          <Button variant="ghost" iconOnly onClick={(e) => e.stopPropagation()}>
             <Icon.eye.outline />
           </Button>
         </div>
 
         <div>
-          <Button variant="ghost" iconOnly>
+          <Button variant="ghost" iconOnly onClick={(e) => e.stopPropagation()}>
             <Icon.chat.square.outline />
           </Button>
-          <Button variant="ghost" iconOnly>
+          <Button variant="ghost" iconOnly onClick={(e) => e.stopPropagation()}>
             <Icon.chat.square.arrow.outline class="!text-xl -mt-2px" />
           </Button>
-          <Button variant="ghost" iconOnly>
+          <Button variant="ghost" iconOnly onClick={(e) => e.stopPropagation()}>
             <Icon.share.outline />
           </Button>
-          <Button variant="ghost" iconOnly>
+          <Button variant="ghost" iconOnly onClick={(e) => e.stopPropagation()}>
             <Icon.bookmark.outline />
           </Button>
         </div>

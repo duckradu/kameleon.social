@@ -106,8 +106,10 @@ export default defineConfig({
         if (dir === "x") {
           return `
             ${selector} > :not([hidden], .no-space-layout) ~ :not([hidden], .no-space-layout) {
-              margin-left: ${theme.spacing.xs};
-              margin-right: ${theme.spacing.xs};
+              --un-space-x-reverse: 0;
+
+              margin-left: calc(calc(${theme.spacing.xs} - var(--un-n-space-x, 0rem)) * calc(1 - var(--un-space-x-reverse)));
+              margin-right: calc(calc(${theme.spacing.xs} - var(--un-n-space-x, 0rem)) * var(--un-space-x-reverse));
             }
           `;
         }
@@ -115,13 +117,27 @@ export default defineConfig({
         if (dir === "y") {
           return `
             ${selector} > :not([hidden], .no-space-layout) ~ :not([hidden], .no-space-layout) {
-              margin-top: ${theme.spacing.xs};
-              margin-bottom: ${theme.spacing.xs};
+              --un-space-y-reverse: 0;
+
+              margin-top: calc(calc(${theme.spacing.xs} - var(--un-n-space-y, 0rem)) * calc(1 - var(--un-space-y-reverse)));
+              margin-bottom: calc(calc(${theme.spacing.xs} - var(--un-n-space-y, 0rem)) * var(--un-space-y-reverse));
             }
           `;
         }
 
         return "";
+      },
+    ],
+    [
+      /^n-space-(x|y)-(\d+)$/,
+      ([, dir, d], { rawSelector }) => {
+        const selector = e(rawSelector);
+
+        return `
+          ${selector}, ${selector} ~ :not([hidden], .no-space-layout) {
+            --un-n-space-${dir}: ${(d as unknown as number) / 4}rem;
+          }
+        `;
       },
     ],
     [

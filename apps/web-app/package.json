@@ -20,7 +20,7 @@
     "@modular-forms/solid": "^0.20.0",
     "@solidjs/meta": "^0.29.3",
     "@solidjs/router": "^0.13.1",
-    "@solidjs/start": "^0.7.7",
+    "@solidjs/start": "0.7.7",
     "@tiptap/core": "^2.2.4",
     "@tiptap/extension-document": "^2.2.4",
     "@tiptap/extension-hard-break": "^2.2.4",
@@ -42,7 +42,7 @@
     "drizzle-orm": "^0.30.4",
     "lodash.capitalize": "^4.2.1",
     "nanoid": "^5.0.6",
-    "postgres": "^3.4.3",
+    "postgres": "^3.4.4",
     "qrcode": "^1.5.3",
     "solid-js": "^1.8.16",
     "solid-tiptap": "^0.7.0",
@@ -54,8 +54,8 @@
     "node": ">=18"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.194",
     "@types/lodash.capitalize": "^4.2.9",
+    "@iconify/json": "^2.2.195",
     "@types/qrcode": "^1.5.5",
     "@unocss/preset-web-fonts": "^0.58.6",
     "@unocss/transformer-directives": "^0.58.6",
@@ -64,7 +64,7 @@
     "pg": "^8.11.3",
     "tsx": "^4.7.1",
     "unocss": "^0.58.6",
-    "unocss-preset-animations": "^1.0.1",
+    "unocss-preset-animations": "^1.0.2",
     "unplugin-icons": "^0.18.5"
   }
 }
