@@ -20,45 +20,53 @@ export const tryOnCleanup: typeof onCleanup = isDev
   ? (fn) => (getOwner() ? onCleanup(fn) : fn)
   : onCleanup;
 
-export function createInfiniteScroll<T, C extends number | string>(
-  fetcher: (cursor: C) => Promise<T[]>,
-  getNextCursorValue: (pages: Accessor<T[]>, cursorValue?: C) => C
+export function createInfiniteScroll<T, S>(
+  fetcher: (source: S) => Promise<T[]>,
+  getNextSourceValue: (pages?: Accessor<T[]>, currentSourceValue?: S) => S
 ): [
   pages: Accessor<T[]>,
   loader: (el: Element) => void,
   options: {
-    cursor: Accessor<C>;
-    setCursor: Setter<C>;
+    source: Accessor<S>;
+    setSource: Setter<S>;
     setPages: Setter<T[]>;
     end: Accessor<boolean>;
     setEnd: Setter<boolean>;
   }
 ] {
   const [pages, setPages] = createSignal<T[]>([]);
-  const [cursor, setCursor] = createSignal<C>(getNextCursorValue(pages));
+  const [source, setSource] = createSignal<S>(getNextSourceValue());
   const [end, setEnd] = createSignal(false);
 
   let add: (el: Element) => void = noop;
+
   if (!isServer) {
     const io = new IntersectionObserver((e) => {
       if (e.length > 0 && e[0]!.isIntersecting && !end() && !contents.loading) {
-        setCursor((p) => getNextCursorValue(pages, p));
+        setSource((p) => getNextSourceValue(pages, p));
       }
     });
+
     onCleanup(() => io.disconnect());
+
     add = (el: Element) => {
       io.observe(el);
       tryOnCleanup(() => io.unobserve(el));
     };
   }
 
-  const [contents] = createResource(cursor, fetcher);
+  const [contents] = createResource(source, fetcher);
 
   createComputed(() => {
     const content = contents.latest;
+
     if (!content) return;
+
     batch(() => {
-      if (content.length === 0) setEnd(true);
+      if (content.length === 0) {
+        setEnd(true);
+      }
+
       setPages((p) => [...p, ...content]);
     });
   });
@@ -67,8 +75,8 @@ export function createInfiniteScroll<T, C extends number | string>(
     pages,
     add,
     {
-      cursor: cursor,
-      setCursor: setCursor,
+      source: source,
+      setSource: setSource,
       setPages: setPages,
       end: end,
       setEnd: setEnd,
