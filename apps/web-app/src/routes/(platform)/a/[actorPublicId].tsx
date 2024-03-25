@@ -1,12 +1,4 @@
-import {
-  A,
-  RouteDefinition,
-  RouteSectionProps,
-  cache,
-  createAsync,
-  redirect,
-  useParams,
-} from "@solidjs/router";
+import { A, RouteSectionProps } from "@solidjs/router";
 import { format } from "date-fns/format";
 import { Show, Suspense } from "solid-js";
 
@@ -15,33 +7,15 @@ import { Avatar } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 
-import { findOneByPID$ } from "~/server/modules/actors/rpc";
-
 import { getShortName } from "~/lib/utils/actors";
 import { stripURL } from "~/lib/utils/common";
-import { rpcSuccessResponse } from "~/lib/utils/rpc";
 
 import { paths } from "~/lib/constants/paths";
-
-const routeData = cache(async (actorPublicId: string) => {
-  const matchingActor = await findOneByPID$(actorPublicId);
-
-  if (!matchingActor) {
-    throw redirect(paths.notFound);
-  }
-
-  return rpcSuccessResponse(matchingActor);
-}, "view-actor");
-
-export const route = {
-  load: ({ params }) => routeData(params.actorPublicId),
-} satisfies RouteDefinition;
+import { useActorRoute } from "~/components/context/actor-route";
 
 export default function ActorLayout(props: RouteSectionProps) {
-  const params = useParams();
   const { actor: sessionActor } = useSession();
-
-  const actor = createAsync(() => routeData(params.actorPublicId));
+  const { actor } = useActorRoute();
 
   return (
     <div class="space-y-layout">
