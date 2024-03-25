@@ -114,7 +114,11 @@ export default function ActorActivity() {
 
         return [];
       },
-      (infiniteRecords) => infiniteRecords?.().at(-1)?.createdAt || ""
+      {
+        initialSource: "",
+
+        getNextSource: ({ content }) => content().at(-1)?.createdAt || "",
+      }
     );
 
   return (

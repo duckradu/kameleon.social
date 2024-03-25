@@ -3,11 +3,10 @@ import {
   cache,
   createAsync,
   redirect,
-  useLocation,
   useParams,
 } from "@solidjs/router";
 import { eq } from "drizzle-orm";
-import { For, Show, createEffect, createSignal, onCleanup } from "solid-js";
+import { For, Show, createSignal } from "solid-js";
 
 import { Composer } from "~/components/composer/composer";
 import { useSession } from "~/components/context/session";
@@ -28,7 +27,6 @@ import { sample } from "~/lib/utils/common";
 import { rpcSuccessResponse } from "~/lib/utils/rpc";
 
 import { paths } from "~/lib/constants/paths";
-import { createRouteInfiniteScroll } from "~/lib/primitives/create-route-infinite-scroll";
 
 const NO_DATA_MESSAGES = {
   title: [
@@ -144,10 +142,7 @@ export default function RecordReplies() {
     getRecord(params.actorPublicId, params.recordPublicId)
   );
   const [infiniteReplies, infiniteScrollLoader, { source, end }] =
-    createRouteInfiniteScroll<
-      NonNullable<Awaited<ReturnType<typeof getRecordReplies>>["data"]>[number],
-      { actorPublicId: string; recordPublicId: string; cursor: string }
-    >(
+    createInfiniteScroll(
       async (source) => {
         const response = await getRecordReplies(
           source.actorPublicId,
@@ -161,12 +156,19 @@ export default function RecordReplies() {
 
         return [];
       },
-      (infiniteReplies, paramsArg) => ({
-        actorPublicId: paramsArg?.actorPublicId || "",
-        recordPublicId: paramsArg?.recordPublicId || "",
-        cursor: infiniteReplies?.()?.at(-1)?.createdAt || "",
-      }),
-      params
+      {
+        initialSource: {
+          actorPublicId: params.actorPublicId,
+          recordPublicId: params.recordPublicId,
+          cursor: "",
+        },
+
+        getNextSource: ({ content }) => ({
+          actorPublicId: params.actorPublicId,
+          recordPublicId: params.recordPublicId,
+          cursor: content().at(-1)?.createdAt || "",
+        }),
+      }
     );
 
   const [isComposingReply, setIsComposingReply] = createSignal(false);
@@ -191,7 +193,7 @@ export default function RecordReplies() {
       </Show>
 
       <Show
-        when={!(source()?.cursor === "" && infiniteReplies().length === 0)}
+        when={!(source().cursor === "" && infiniteReplies().length === 0)}
         fallback={
           // TODO: Different messages when author is viewing
           <ProfilePageEmptyMessage
