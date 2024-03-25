@@ -1,11 +1,4 @@
-import {
-  cache,
-  createAsync,
-  redirect,
-  RouteDefinition,
-  RouteSectionProps,
-  useParams,
-} from "@solidjs/router";
+import { RouteSectionProps } from "@solidjs/router";
 import {
   createEffect,
   createSignal,
@@ -14,71 +7,15 @@ import {
   Suspense,
 } from "solid-js";
 
+import {
+  RecordRouteProvider,
+  useRecordRoute,
+} from "~/components/context/record-route";
 import { Record as RecordComponent } from "~/components/record";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 
-import { db } from "~/server/db";
-import { findOneByPID$ } from "~/server/modules/actors/rpc";
-
-import { rpcSuccessResponse } from "~/lib/utils/rpc";
-
-import { paths } from "~/lib/constants/paths";
-
-const getRouteData = cache(
-  async (actorPublicId: string, recordPublicId: string) => {
-    "use server";
-
-    const matchingActor = await findOneByPID$(actorPublicId);
-
-    if (!matchingActor) {
-      throw redirect(paths.notFound);
-    }
-
-    const matchingRecord = await db.query.records.findFirst({
-      where: (records, { and, eq }) =>
-        and(
-          eq(records.authorId, matchingActor.id),
-          eq(records.pid, recordPublicId)
-        ),
-      with: {
-        author: true,
-        versions: {
-          orderBy: (recordVersions, { desc }) => [
-            desc(recordVersions.createdAt),
-          ],
-          limit: 1,
-        },
-        // TODO: Add parentRecord here
-      },
-    });
-
-    if (!matchingRecord) {
-      throw redirect(paths.notFound);
-    }
-
-    const { versions, ...record } = matchingRecord;
-
-    return rpcSuccessResponse({
-      ...record,
-      latestVersion: versions[0],
-    });
-  },
-  "record"
-);
-
-export const route = {
-  load: ({ params }) =>
-    getRouteData(params.actorPublicId, params.recordPublicId),
-} satisfies RouteDefinition;
-
 export default function Record(props: RouteSectionProps) {
-  const params = useParams();
-
-  const routeData = createAsync(() =>
-    getRouteData(params.actorPublicId, params.recordPublicId)
-  );
-
   const [noScrollY, setNoScrollY] = createSignal(true);
 
   createEffect(() => {
@@ -98,46 +35,55 @@ export default function Record(props: RouteSectionProps) {
   });
 
   return (
-    <div class="relative space-y-layout">
-      <div
-        classList={{
-          "sticky-header py-layout z-10 border-b": true,
+    <RecordRouteProvider>
+      <div class="relative space-y-layout">
+        <div
+          classList={{
+            "sticky-header py-layout z-10 border-b": true,
 
-          "border-transparent": noScrollY(),
-          "border-border": !noScrollY(),
-        }}
-      >
-        <Button variant="secondary" onClick={() => history.back()}>
-          <Icon.arrow.left class="text-base" />
-          Back
-        </Button>
+            "border-transparent": noScrollY(),
+            "border-border": !noScrollY(),
+          }}
+        >
+          <Button variant="secondary" onClick={() => history.back()}>
+            <Icon.arrow.left class="text-base" />
+            Back
+          </Button>
+        </div>
+
+        <ViewRouteRecord />
+
+        <Suspense
+          fallback={
+            <div class="py-8 h-full">
+              <Icon.spinner class="text-2xl animate-spin mx-auto" />
+            </div>
+          }
+        >
+          {props.children}
+        </Suspense>
       </div>
+    </RecordRouteProvider>
+  );
+}
 
-      <Suspense
-        fallback={
-          <div class="!mt-0 py-8 h-full border border-border rounded-xl">
-            <Icon.spinner class="text-2xl animate-spin mx-auto" />
-          </div>
-        }
-      >
-        <Show when={routeData()?.data}>
-          <RecordComponent
-            {...routeData()!.data!}
-            config={{ navigateOnClick: false, navigateOnAuxClick: false }}
-            class="!mt-0"
-          />
-        </Show>
-      </Suspense>
+function ViewRouteRecord() {
+  const { record } = useRecordRoute();
 
-      <Suspense
-        fallback={
-          <div class="py-8 h-full">
-            <Icon.spinner class="text-2xl animate-spin mx-auto" />
-          </div>
-        }
-      >
-        {props.children}
-      </Suspense>
-    </div>
+  return (
+    <Show
+      when={record()}
+      fallback={
+        <div class="!mt-0 py-8 h-full border border-border rounded-xl">
+          <Icon.spinner class="text-2xl animate-spin mx-auto" />
+        </div>
+      }
+    >
+      <RecordComponent
+        {...record()!.data!}
+        config={{ navigateOnClick: false, navigateOnAuxClick: false }}
+        class="!mt-0"
+      />
+    </Show>
   );
 }
