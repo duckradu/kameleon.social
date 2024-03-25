@@ -3,25 +3,32 @@ import {
   cache,
   createAsync,
   redirect,
+  useLocation,
   useParams,
 } from "@solidjs/router";
-import { Show, Suspense, createSignal } from "solid-js";
+import { eq } from "drizzle-orm";
+import { For, Show, createEffect, createSignal, onCleanup } from "solid-js";
 
 import { Composer } from "~/components/composer/composer";
 import { useSession } from "~/components/context/session";
 import { ProfilePageEmptyMessage } from "~/components/profile-page-empty-message";
-import { RecordFeed } from "~/components/record-feed";
+import { Record } from "~/components/record";
+import { RecordFeedEmptyMessage } from "~/components/record-feed-empty-message";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 
 import { db } from "~/server/db";
-import { actors, recordVersions, records } from "~/server/db/schemas";
+import { recordVersions, records } from "~/server/db/schemas";
 import { findOneByPID$ } from "~/server/modules/actors/rpc";
+import { getRecordsPage$ } from "~/server/modules/records/rpc";
+
+import { createInfiniteScroll } from "~/lib/primitives/create-infinite-scroll";
 
 import { sample } from "~/lib/utils/common";
 import { rpcSuccessResponse } from "~/lib/utils/rpc";
 
 import { paths } from "~/lib/constants/paths";
+import { createRouteInfiniteScroll } from "~/lib/primitives/create-route-infinite-scroll";
 
 const NO_DATA_MESSAGES = {
   title: [
@@ -42,7 +49,7 @@ const NO_DATA_MESSAGES = {
   ],
 };
 
-const getRouteData = cache(
+const getRecord = cache(
   async (actorPublicId: string, recordPublicId: string) => {
     "use server";
 
@@ -73,54 +80,94 @@ const getRouteData = cache(
       throw redirect(paths.notFound);
     }
 
-    const matchingReplies = await db.query.records.findMany({
-      where: (records, { eq }) => eq(records.parentRecordId, matchingRecord.id),
-      with: {
-        author: true,
-        versions: {
-          orderBy: (recordVersions, { desc }) => [
-            desc(recordVersions.createdAt),
-          ],
-          limit: 1,
-        },
-      },
-      orderBy: (records, { desc }) => [desc(records.createdAt)],
-    });
-
     const { versions, ...record } = matchingRecord;
 
     return rpcSuccessResponse({
-      record: {
-        ...record,
-        latestVersion: versions[0],
-      },
-      replies:
-        matchingReplies.reduce(
-          (acc, { versions, ...curr }) => [
-            ...acc,
-            { ...curr, latestVersion: versions[0] },
-          ],
-          [] as (typeof records.$inferSelect & {
-            latestVersion: typeof recordVersions.$inferSelect;
-          })[]
-        ) || [],
+      ...record,
+      latestVersion: versions[0],
     });
+  },
+  "record"
+);
+
+const getRecordReplies = cache(
+  async (actorPublicId: string, recordPublicId: string, cursor?: string) => {
+    "use server";
+
+    const matchingActor = await findOneByPID$(actorPublicId);
+
+    if (!matchingActor) {
+      return rpcSuccessResponse([]);
+    }
+
+    const matchingRecord = await db.query.records.findFirst({
+      where: (records, { and, eq }) =>
+        and(
+          eq(records.authorId, matchingActor.id),
+          eq(records.pid, recordPublicId)
+        ),
+    });
+
+    if (!matchingRecord) {
+      return rpcSuccessResponse([]);
+    }
+
+    const matchingReplies = await getRecordsPage$(
+      eq(records.parentRecordId, matchingRecord.id),
+      cursor
+    );
+
+    return rpcSuccessResponse(
+      matchingReplies.reduce(
+        (acc, { versions, ...curr }) => [
+          ...acc,
+          { ...curr, latestVersion: versions[0] },
+        ],
+        [] as (typeof records.$inferSelect & {
+          latestVersion: typeof recordVersions.$inferSelect;
+        })[]
+      ) || []
+    );
   },
   "record:replies"
 );
 
 export const route = {
-  load: ({ params }) =>
-    getRouteData(params.actorPublicId, params.recordPublicId),
+  load: ({ params }) => getRecord(params.actorPublicId, params.recordPublicId),
 } satisfies RouteDefinition;
 
 export default function RecordReplies() {
   const params = useParams();
   const { actor } = useSession();
 
-  const routeData = createAsync(() =>
-    getRouteData(params.actorPublicId, params.recordPublicId)
+  const record = createAsync(() =>
+    getRecord(params.actorPublicId, params.recordPublicId)
   );
+  const [infiniteReplies, infiniteScrollLoader, { source, end }] =
+    createRouteInfiniteScroll<
+      NonNullable<Awaited<ReturnType<typeof getRecordReplies>>["data"]>[number],
+      { actorPublicId: string; recordPublicId: string; cursor: string }
+    >(
+      async (source) => {
+        const response = await getRecordReplies(
+          source.actorPublicId,
+          source.recordPublicId,
+          source.cursor
+        );
+
+        if (response.success) {
+          return response.data;
+        }
+
+        return [];
+      },
+      (infiniteReplies, paramsArg) => ({
+        actorPublicId: paramsArg?.actorPublicId || "",
+        recordPublicId: paramsArg?.recordPublicId || "",
+        cursor: infiniteReplies?.()?.at(-1)?.createdAt || "",
+      }),
+      params
+    );
 
   const [isComposingReply, setIsComposingReply] = createSignal(false);
 
@@ -138,37 +185,33 @@ export default function RecordReplies() {
 
       <Show when={isComposingReply()}>
         <Composer
-          parentRecordId={routeData()!.data!.record.id}
+          parentRecordId={record()!.data!.id}
           onSuccess={() => setIsComposingReply(false)}
         />
       </Show>
 
-      <Suspense
+      <Show
+        when={!(source()?.cursor === "" && infiniteReplies().length === 0)}
         fallback={
-          <div class="py-8 h-full">
-            <Icon.spinner class="text-2xl animate-spin mx-auto" />
-          </div>
+          // TODO: Different messages when author is viewing
+          <ProfilePageEmptyMessage
+            title={sample(NO_DATA_MESSAGES.title)}
+            description={sample(NO_DATA_MESSAGES.description)}
+          />
         }
       >
-        <Show
-          when={routeData()?.data?.replies.length}
-          fallback={
-            <ProfilePageEmptyMessage
-              title={sample(NO_DATA_MESSAGES.title)}
-              description={sample(NO_DATA_MESSAGES.description)}
-            />
-          }
-        >
-          <RecordFeed
-            recordList={
-              routeData()!.data!.replies as (typeof records.$inferSelect & {
-                author: typeof actors.$inferSelect;
-                latestVersion: typeof recordVersions.$inferSelect;
-              })[]
-            }
-          />
+        <div class="grid gap-layout py-layout !!!!!!!!!!!!!!!!!">
+          <For each={infiniteReplies()}>
+            {(record) => <Record {...(record as any)} />}
+          </For>
+        </div>
+
+        <Show when={!end()} fallback={<RecordFeedEmptyMessage />}>
+          <div ref={infiniteScrollLoader} class="py-8 h-full">
+            <Icon.spinner class="text-2xl animate-spin mx-auto" />
+          </div>
         </Show>
-      </Suspense>
+      </Show>
     </>
   );
 }

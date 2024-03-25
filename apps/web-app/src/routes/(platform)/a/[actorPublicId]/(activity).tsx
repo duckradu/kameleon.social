@@ -16,11 +16,12 @@ import { actors, recordVersions, records } from "~/server/db/schemas";
 import { findOneByPID$ } from "~/server/modules/actors/rpc";
 import { getRecordsPage$ } from "~/server/modules/records/rpc";
 
-import { paths } from "~/lib/constants/paths";
-
 import { createInfiniteScroll } from "~/lib/primitives/create-infinite-scroll";
+
 import { sample } from "~/lib/utils/common";
 import { rpcSuccessResponse } from "~/lib/utils/rpc";
+
+import { paths } from "~/lib/constants/paths";
 
 const NO_DATA_MESSAGES = {
   title: [
@@ -99,12 +100,12 @@ export default function ActorActivity() {
 
   const isSessionActor = params.actorPublicId === actor()?.pid;
 
-  const [infiniteRecords, infiniteScrollLoader, { cursor, end }] =
+  const [infiniteRecords, infiniteScrollLoader, { source, end }] =
     createInfiniteScroll(
-      async (cursor) => {
+      async (source) => {
         const response = await getRouteData(
           params.actorPublicId,
-          cursor as string
+          source as string
         );
 
         if (response.success) {
@@ -113,13 +114,13 @@ export default function ActorActivity() {
 
         return [];
       },
-      (infiniteRecords) => infiniteRecords().at(-1)?.createdAt || ""
+      (infiniteRecords) => infiniteRecords?.().at(-1)?.createdAt || ""
     );
 
   return (
     <>
       <Show
-        when={!(cursor() === "" && infiniteRecords().length === 0)}
+        when={!(source() === "" && infiniteRecords().length === 0)}
         fallback={
           <ProfilePageEmptyMessage
             title={
@@ -160,7 +161,7 @@ export default function ActorActivity() {
             />
           }
         >
-          <div ref={infiniteScrollLoader} class="py-8 h-full space-y-2">
+          <div ref={infiniteScrollLoader} class="py-8 h-full">
             <Icon.spinner class="text-2xl animate-spin mx-auto" />
           </div>
         </Show>
