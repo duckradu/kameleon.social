@@ -2,6 +2,7 @@ import { A, RouteSectionProps } from "@solidjs/router";
 import { format } from "date-fns/format";
 import { Show, Suspense } from "solid-js";
 
+import { useActorRoute } from "~/components/context/actor-route";
 import { useSession } from "~/components/context/session";
 import { Avatar } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
@@ -11,7 +12,6 @@ import { getShortName } from "~/lib/utils/actors";
 import { stripURL } from "~/lib/utils/common";
 
 import { paths } from "~/lib/constants/paths";
-import { useActorRoute } from "~/components/context/actor-route";
 
 export default function ActorLayout(props: RouteSectionProps) {
   const { actor: sessionActor } = useSession();
@@ -31,35 +31,31 @@ export default function ActorLayout(props: RouteSectionProps) {
             <div class="flex flex-col items-center justify-center space-y-2">
               <Avatar
                 size="profile"
-                fallback={getShortName(actor()?.data?.name || "")}
+                fallback={getShortName(actor().name || "")}
                 rootClass="-mt-12 border-3 border-background"
               />
 
               <div class="text-center">
-                <h1 class="text-xl font-semibold">{actor()?.data?.name}</h1>
+                <h1 class="text-xl font-semibold">{actor().name}</h1>
                 <A
-                  href={paths.actor(actor()?.data?.name || "").profile}
+                  href={paths.actor(actor().name || "").profile}
                   class="text-muted-foreground text-sm hover:underline underline-offset-3"
                 >
-                  @{actor()?.data?.pid}
+                  @{actor().pid}
                 </A>
               </div>
             </div>
 
             <div class="flex justify-end pt-2">
-              <Show
-                when={
-                  sessionActor() && sessionActor()!.id !== actor()?.data?.id
-                }
-              >
+              <Show when={sessionActor() && sessionActor()!.id !== actor().id}>
                 <Button>Follow</Button>
               </Show>
             </div>
           </div>
         </div>
 
-        <Show when={actor()?.data?.note}>
-          <p class="text-center">{actor()!.data?.note}</p>
+        <Show when={actor().note}>
+          <p class="text-center">{actor().note}</p>
         </Show>
 
         <div class="flex py-1 justify-evenly text-muted-foreground text-sm [&>span>svg]-(inline-flex mr-1)">
@@ -67,28 +63,26 @@ export default function ActorLayout(props: RouteSectionProps) {
             <Icon.map.pin.outline />
             London
           </span>
-          <Show when={actor()?.data?.externalUrl}>
+          <Show when={actor().externalUrl}>
             <span>
               <Icon.link.minimalistic.outline />
               <A
-                href={actor()!.data?.externalUrl!}
+                href={actor().externalUrl!}
                 target="_blank"
                 class="text-brand underline underline-offset-3 hover:no-underline"
               >
-                {stripURL(actor()!.data?.externalUrl!)}
+                {stripURL(actor().externalUrl!)}
               </A>
             </span>
           </Show>
-          <Show when={actor()?.data?.createdAt}>
-            <span>
-              <Icon.calendar.outline />
-              Joined {format(new Date(actor()!.data!.createdAt), "MMM yyyy")}
-            </span>
-          </Show>
-          <Show when={actor()?.data?.createdAt}>
+          <span>
+            <Icon.calendar.outline />
+            Joined {format(new Date(actor().createdAt), "MMM yyyy")}
+          </span>
+          <Show when={actor().createdAt}>
             <span>
               <Icon.cake.outline />
-              Cake day {format(new Date(actor()!.data!.createdAt), "MMM yyyy")}
+              Cake day {format(new Date(actor().createdAt), "MMM yyyy")}
             </span>
           </Show>
         </div>
@@ -96,11 +90,11 @@ export default function ActorLayout(props: RouteSectionProps) {
 
       <div class="relative">
         {/* <div class="sticky-header flex z-10 [&>a]-(flex flex-1 items-center justify-center py-3 font-medium border-b border-brand) [&>a:hover]:bg-muted-foreground/10 [&>a:not(.active)]-(text-muted-foreground border-muted)">
-          <A href={paths.actor(actor()?.data?.pid || "").profile} end>
+          <A href={paths.actor(actor().pid || "").profile} end>
             Activity
           </A>
-          <A href={paths.actor(actor()?.data?.pid || "").moments}>Moments</A>
-          <A href={paths.actor(actor()?.data?.pid || "").connections}>
+          <A href={paths.actor(actor().pid || "").moments}>Moments</A>
+          <A href={paths.actor(actor().pid || "").connections}>
             Connections
           </A>
         </div> */}
