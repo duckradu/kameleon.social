@@ -1,38 +1,35 @@
-import { cache, createAsync, redirect, useParams } from "@solidjs/router";
-import { Accessor, ParentProps, createContext, useContext } from "solid-js";
+import {
+  Accessor,
+  ParentProps,
+  Show,
+  Suspense,
+  createContext,
+  useContext,
+} from "solid-js";
 
-import { findOneByPID$ } from "~/server/modules/actors/rpc";
-
-import { rpcSuccessResponse } from "~/lib/utils/rpc";
-
-import { paths } from "~/lib/constants/paths";
-
-const routeData = cache(async (actorPublicId: string) => {
-  "use server";
-
-  const matchingActor = await findOneByPID$(actorPublicId);
-
-  if (!matchingActor) {
-    throw redirect(paths.notFound);
-  }
-
-  return rpcSuccessResponse(matchingActor);
-}, "actor:route");
+import { RouteDataType } from "~/routes/(platform)/a";
 
 export type IActorRouteContext = {
-  actor: Accessor<Awaited<ReturnType<typeof routeData>> | undefined>;
+  // * Force the type as `NonNullable` as the props.children are wrapped
+  // * in <Suspense /> and <Show /> so nothing will be rendered unless
+  // * props.actorAccessor is available
+  actor: Accessor<NonNullable<Awaited<ReturnType<RouteDataType>>["data"]>>;
 };
 
 const ActorRouteContext = createContext<IActorRouteContext>();
 
-export function ActorRouteProvider(props: ParentProps) {
-  const params = useParams();
+export type ActorRouteProviderProps = ParentProps<{
+  actorAccessor: Accessor<Awaited<ReturnType<RouteDataType>> | undefined>;
+}>;
 
-  const actor = createAsync(() => routeData(params.actorPublicId));
-
+export function ActorRouteProvider(props: ActorRouteProviderProps) {
   return (
-    <ActorRouteContext.Provider value={{ actor }}>
-      {props.children}
+    <ActorRouteContext.Provider
+      value={{ actor: () => props.actorAccessor()?.data! }}
+    >
+      <Suspense>
+        <Show when={props.actorAccessor()?.data}>{props.children}</Show>
+      </Suspense>
     </ActorRouteContext.Provider>
   );
 }

@@ -1,75 +1,35 @@
-import { cache, createAsync, redirect, useParams } from "@solidjs/router";
-import { Accessor, ParentProps, createContext, useContext } from "solid-js";
+import {
+  Accessor,
+  ParentProps,
+  Show,
+  Suspense,
+  createContext,
+  useContext,
+} from "solid-js";
 
-import { useActorRoute } from "~/components/context/actor-route";
-
-import { actors, records } from "~/server/db/schemas";
-
-import { db } from "~/server/db";
-
-import { rpcSuccessResponse } from "~/lib/utils/rpc";
-
-import { paths } from "~/lib/constants/paths";
-
-const routeData = cache(
-  async (
-    actorId: (typeof actors.$inferInsert)["id"],
-    recordPublicId: (typeof records.$inferSelect)["pid"]
-  ) => {
-    "use server";
-
-    //? Not sure about this but it does the trick
-    if (!actorId) {
-      return undefined;
-    }
-
-    const matchingRecord = await db.query.records.findFirst({
-      where: (records, { and, eq }) =>
-        and(eq(records.authorId, actorId), eq(records.pid, recordPublicId)),
-      with: {
-        author: true,
-        versions: {
-          orderBy: (recordVersions, { desc }) => [
-            desc(recordVersions.createdAt),
-          ],
-          limit: 1,
-        },
-        // TODO: Add parentRecord here
-      },
-    });
-
-    if (!matchingRecord) {
-      throw redirect(paths.notFound);
-    }
-
-    const { versions, ...record } = matchingRecord;
-
-    return rpcSuccessResponse({
-      ...record,
-      latestVersion: versions[0],
-    });
-  },
-  "record:route"
-);
+import { RouteDataType } from "~/routes/(platform)/a/[actorPublicId].r/[recordPublicId]";
 
 export type IRecordRouteContext = {
-  record: Accessor<Awaited<ReturnType<typeof routeData>> | undefined>;
+  // * Force the type as `NonNullable` as the props.children are wrapped
+  // * in <Suspense /> and <Show /> so nothing will be rendered unless
+  // * props.recordAccessor is available
+  record: Accessor<NonNullable<Awaited<ReturnType<RouteDataType>>["data"]>>;
 };
 
 const RecordRouteContext = createContext<IRecordRouteContext>();
 
-export function RecordRouteProvider(props: ParentProps) {
-  const params = useParams();
+export type RecordRouterProviderProps = ParentProps<{
+  recordAccessor: Accessor<Awaited<ReturnType<RouteDataType>> | undefined>;
+}>;
 
-  const { actor } = useActorRoute();
-
-  const record = createAsync(() =>
-    routeData(actor()?.data?.id, params.recordPublicId)
-  );
-
+export function RecordRouteProvider(props: RecordRouterProviderProps) {
   return (
-    <RecordRouteContext.Provider value={{ record }}>
-      {props.children}
+    <RecordRouteContext.Provider
+      value={{ record: () => props.recordAccessor()?.data! }}
+    >
+      <Suspense>
+        <Show when={props.recordAccessor()?.data}>{props.children}</Show>
+      </Suspense>
     </RecordRouteContext.Provider>
   );
 }
