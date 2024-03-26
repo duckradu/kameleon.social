@@ -1,4 +1,4 @@
-import { Navigate, RouteSectionProps, useLocation } from "@solidjs/router";
+import { Navigate, useLocation } from "@solidjs/router";
 
 export default function Settings() {
   const location = useLocation();
