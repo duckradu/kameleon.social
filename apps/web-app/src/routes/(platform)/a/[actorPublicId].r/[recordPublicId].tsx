@@ -98,7 +98,14 @@ function RecordLayout(props: ParentProps) {
   });
 
   return (
-    <RecordRouteProvider recordAccessor={record}>
+    <RecordRouteProvider
+      recordAccessor={record}
+      fallback={
+        <div class="py-8">
+          <Icon.spinner class="text-2xl animate-spin mx-auto" />
+        </div>
+      }
+    >
       <div class="relative space-y-layout">
         <div
           classList={{
@@ -116,7 +123,7 @@ function RecordLayout(props: ParentProps) {
 
         <Suspense
           fallback={
-            <div class="py-8 h-full">
+            <div class="py-8">
               <Icon.spinner class="text-2xl animate-spin mx-auto" />
             </div>
           }

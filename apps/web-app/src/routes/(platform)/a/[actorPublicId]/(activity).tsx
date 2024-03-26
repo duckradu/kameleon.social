@@ -159,7 +159,7 @@ export default function ActorActivity() {
           />
         }
       >
-        <div ref={infiniteScrollLoader} class="py-8 h-full">
+        <div ref={infiniteScrollLoader} class="py-8">
           <Icon.spinner class="text-2xl animate-spin mx-auto" />
         </div>
       </Show>

@@ -8,6 +8,7 @@ import {
 import { ParentProps, Show } from "solid-js";
 
 import { ActorRouteProvider } from "~/components/context/actor-route";
+import { Icon } from "~/components/ui/icon";
 
 import { findOneByPID$ } from "~/server/modules/actors/rpc";
 
@@ -45,7 +46,14 @@ function ALayout(props: ParentProps) {
   const actor = createAsync(() => routeData(params.actorPublicId));
 
   return (
-    <ActorRouteProvider actorAccessor={actor}>
+    <ActorRouteProvider
+      actorAccessor={actor}
+      fallback={
+        <div class="py-8">
+          <Icon.spinner class="text-2xl animate-spin mx-auto" />
+        </div>
+      }
+    >
       {props.children}
     </ActorRouteProvider>
   );

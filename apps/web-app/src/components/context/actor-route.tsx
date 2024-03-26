@@ -1,5 +1,6 @@
 import {
   Accessor,
+  JSX,
   ParentProps,
   Show,
   Suspense,
@@ -20,6 +21,8 @@ const ActorRouteContext = createContext<IActorRouteContext>();
 
 export type ActorRouteProviderProps = ParentProps<{
   actorAccessor: Accessor<Awaited<ReturnType<RouteDataType>> | undefined>;
+
+  fallback?: JSX.Element;
 }>;
 
 export function ActorRouteProvider(props: ActorRouteProviderProps) {
@@ -27,7 +30,7 @@ export function ActorRouteProvider(props: ActorRouteProviderProps) {
     <ActorRouteContext.Provider
       value={{ actor: () => props.actorAccessor()?.data! }}
     >
-      <Suspense>
+      <Suspense fallback={props.fallback}>
         <Show when={props.actorAccessor()?.data}>{props.children}</Show>
       </Suspense>
     </ActorRouteContext.Provider>

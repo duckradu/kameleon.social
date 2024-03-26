@@ -1,5 +1,6 @@
 import {
   Accessor,
+  JSX,
   ParentProps,
   Show,
   Suspense,
@@ -20,6 +21,8 @@ const RecordRouteContext = createContext<IRecordRouteContext>();
 
 export type RecordRouterProviderProps = ParentProps<{
   recordAccessor: Accessor<Awaited<ReturnType<RouteDataType>> | undefined>;
+
+  fallback?: JSX.Element;
 }>;
 
 export function RecordRouteProvider(props: RecordRouterProviderProps) {
@@ -27,7 +30,7 @@ export function RecordRouteProvider(props: RecordRouterProviderProps) {
     <RecordRouteContext.Provider
       value={{ record: () => props.recordAccessor()?.data! }}
     >
-      <Suspense>
+      <Suspense fallback={props.fallback}>
         <Show when={props.recordAccessor()?.data}>{props.children}</Show>
       </Suspense>
     </RecordRouteContext.Provider>

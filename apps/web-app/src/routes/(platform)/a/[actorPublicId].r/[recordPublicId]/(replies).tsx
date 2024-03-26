@@ -92,7 +92,7 @@ export default function RecordReplies() {
       }
     );
 
-  const [isComposingReply, setIsComposingReply] = createSignal(true);
+  const [isComposingReply, setIsComposingReply] = createSignal(false);
 
   return (
     <>
@@ -136,7 +136,7 @@ export default function RecordReplies() {
         </div>
 
         <Show when={!end()} fallback={<RecordFeedEmptyMessage />}>
-          <div ref={infiniteScrollLoader} class="py-8 h-full">
+          <div ref={infiniteScrollLoader} class="py-8">
             <Icon.spinner class="text-2xl animate-spin mx-auto" />
           </div>
         </Show>
