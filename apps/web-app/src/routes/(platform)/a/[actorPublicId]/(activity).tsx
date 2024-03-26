@@ -18,6 +18,7 @@ import { getRecordsPage$ } from "~/server/modules/records/rpc";
 
 import { createInfiniteScroll } from "~/lib/primitives/create-infinite-scroll";
 
+import { isSameActor } from "~/lib/utils/actors";
 import { sample } from "~/lib/utils/common";
 import { rpcSuccessResponse } from "~/lib/utils/rpc";
 
@@ -92,8 +93,6 @@ export default function ActorActivity() {
   const { actor: sessionActor } = useSession();
   const { actor } = useActorRoute();
 
-  const isSessionActor = sessionActor() && sessionActor()!.id === actor().id;
-
   const [infiniteRecords, infiniteScrollLoader, { source, end }] =
     createInfiniteScroll(
       async (source) => {
@@ -117,18 +116,20 @@ export default function ActorActivity() {
       }
     );
 
+  const isSessionActor = () => isSameActor(sessionActor(), actor());
+
   return (
     <Show
       when={!(source().cursor === "" && infiniteRecords().length === 0)}
       fallback={
         <ProfilePageEmptyMessage
           title={
-            isSessionActor
+            isSessionActor()
               ? sample(NO_DATA_MESSAGES.title)
               : sample(NO_DATA_MESSAGES_VISITOR.title(actor().pid))
           }
           description={
-            isSessionActor
+            isSessionActor()
               ? sample(NO_DATA_MESSAGES.description)
               : sample(NO_DATA_MESSAGES_VISITOR.description)
           }

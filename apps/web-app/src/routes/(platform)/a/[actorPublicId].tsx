@@ -8,7 +8,7 @@ import { Avatar } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 
-import { getShortName } from "~/lib/utils/actors";
+import { getShortName, isSameActor } from "~/lib/utils/actors";
 import { stripURL } from "~/lib/utils/common";
 
 import { paths } from "~/lib/constants/paths";
@@ -16,6 +16,8 @@ import { paths } from "~/lib/constants/paths";
 export default function ActorLayout(props: RouteSectionProps) {
   const { actor: sessionActor } = useSession();
   const { actor } = useActorRoute();
+
+  const isSessionActor = () => isSameActor(sessionActor(), actor());
 
   return (
     <div class="space-y-layout">
@@ -47,7 +49,7 @@ export default function ActorLayout(props: RouteSectionProps) {
             </div>
 
             <div class="flex justify-end pt-2">
-              <Show when={sessionActor() && sessionActor()!.id !== actor().id}>
+              <Show when={sessionActor() && !isSessionActor()}>
                 <Button>Follow</Button>
               </Show>
             </div>

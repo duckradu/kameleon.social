@@ -1,10 +1,12 @@
 import { useParams } from "@solidjs/router";
 import { Show } from "solid-js";
+import { useActorRoute } from "~/components/context/actor-route";
 
 import { useSession } from "~/components/context/session";
 import { ProfilePageEmptyMessage } from "~/components/profile-page-empty-message";
 import { Button } from "~/components/ui/button";
 
+import { isSameActor } from "~/lib/utils/actors";
 import { sample } from "~/lib/utils/common";
 
 const NO_DATA_MESSAGES = {
@@ -52,9 +54,10 @@ const NO_DATA_MESSAGES_VISITOR = {
 
 export default function ActorMoments() {
   const params = useParams();
-  const { actor } = useSession();
+  const { actor: sessionActor } = useSession();
+  const { actor } = useActorRoute();
 
-  const isSessionActor = params.actorPublicId === actor()?.pid;
+  const isSessionActor = () => isSameActor(sessionActor(), actor());
 
   return (
     <Show
@@ -62,17 +65,17 @@ export default function ActorMoments() {
       fallback={
         <ProfilePageEmptyMessage
           title={
-            isSessionActor
+            isSessionActor()
               ? sample(NO_DATA_MESSAGES.title)
               : sample(NO_DATA_MESSAGES_VISITOR.title(params.actorPublicId))
           }
           description={
-            isSessionActor
+            isSessionActor()
               ? sample(NO_DATA_MESSAGES.description)
               : sample(NO_DATA_MESSAGES_VISITOR.description)
           }
         >
-          <Show when={isSessionActor}>
+          <Show when={isSessionActor()}>
             <Button size="lg">Post a Moment</Button>
           </Show>
         </ProfilePageEmptyMessage>
