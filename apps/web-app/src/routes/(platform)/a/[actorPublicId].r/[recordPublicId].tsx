@@ -16,12 +16,16 @@ import {
 
 import { useActorRoute } from "~/components/context/actor-route";
 import { RecordRouteProvider } from "~/components/context/record-route";
+import { Record } from "~/components/record";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
-import { paths } from "~/lib/constants/paths";
-import { rpcSuccessResponse } from "~/lib/utils/rpc";
+
 import { db } from "~/server/db";
 import { actors, records } from "~/server/db/schemas";
+
+import { rpcSuccessResponse } from "~/lib/utils/rpc";
+
+import { paths } from "~/lib/constants/paths";
 
 const routeData = cache(
   async (
@@ -64,21 +68,6 @@ export type RouteDataType = typeof routeData;
 export default function RecordLayoutWrapper(props: RouteSectionProps) {
   const params = useParams();
 
-  return (
-    <Show when={params.recordPublicId} keyed>
-      <RecordLayout>{props.children}</RecordLayout>
-    </Show>
-  );
-}
-
-function RecordLayout(props: ParentProps) {
-  const params = useParams();
-  const { actor } = useActorRoute();
-
-  const record = createAsync(() =>
-    routeData(actor().id, params.recordPublicId)
-  );
-
   const [noScrollY, setNoScrollY] = createSignal(true);
 
   createEffect(() => {
@@ -98,39 +87,61 @@ function RecordLayout(props: ParentProps) {
   });
 
   return (
+    <div class="relative space-y-layout">
+      <div
+        classList={{
+          "sticky-header py-layout z-10 border-b": true,
+
+          "border-transparent": noScrollY(),
+          "border-border": !noScrollY(),
+        }}
+      >
+        <Button variant="secondary" onClick={() => history.back()}>
+          <Icon.arrow.left class="text-base" />
+          Back
+        </Button>
+      </div>
+
+      <Show when={params.recordPublicId} keyed>
+        <RecordLayout>{props.children}</RecordLayout>
+      </Show>
+    </div>
+  );
+}
+
+function RecordLayout(props: ParentProps) {
+  const params = useParams();
+  const { actor } = useActorRoute();
+
+  const record = createAsync(() =>
+    routeData(actor().id, params.recordPublicId)
+  );
+
+  return (
     <RecordRouteProvider
       recordAccessor={record}
       fallback={
-        <div class="py-8">
+        <div class="py-8 border border-border rounded-xl !mt-0">
           <Icon.spinner class="text-2xl animate-spin mx-auto" />
         </div>
       }
     >
-      <div class="relative space-y-layout">
-        <div
-          classList={{
-            "sticky-header py-layout z-10 border-b": true,
+      {/* Can safely assume that record().data is available because the RecordRouteProvider wraps its children in <Suspense /> and <Show /> */}
+      <Record
+        {...record()!.data!}
+        config={{ navigateOnClick: false, navigateOnAuxClick: false }}
+        class="!mt-0"
+      />
 
-            "border-transparent": noScrollY(),
-            "border-border": !noScrollY(),
-          }}
-        >
-          <Button variant="secondary" onClick={() => history.back()}>
-            <Icon.arrow.left class="text-base" />
-            Back
-          </Button>
-        </div>
-
-        <Suspense
-          fallback={
-            <div class="py-8">
-              <Icon.spinner class="text-2xl animate-spin mx-auto" />
-            </div>
-          }
-        >
-          {props.children}
-        </Suspense>
-      </div>
+      <Suspense
+        fallback={
+          <div class="py-8">
+            <Icon.spinner class="text-2xl animate-spin mx-auto" />
+          </div>
+        }
+      >
+        {props.children}
+      </Suspense>
     </RecordRouteProvider>
   );
 }

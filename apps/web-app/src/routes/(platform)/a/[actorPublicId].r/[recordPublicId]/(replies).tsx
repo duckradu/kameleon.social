@@ -96,12 +96,6 @@ export default function RecordReplies() {
 
   return (
     <>
-      <Record
-        {...record()}
-        config={{ navigateOnClick: false, navigateOnAuxClick: false }}
-        class="!mt-0"
-      />
-
       <div class="flex justify-between items-center h-12 n-space-y-1">
         <h2 class="text-2xl font-bold">Replies</h2>
         <Show when={actor() && !isComposingReply()}>
