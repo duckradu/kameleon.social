@@ -1,7 +1,8 @@
-import { cache, redirect, useParams } from "@solidjs/router";
+import { cache } from "@solidjs/router";
 import { eq } from "drizzle-orm";
 import { For, Show } from "solid-js";
 
+import { useActorRoute } from "~/components/context/actor-route";
 import { useSession } from "~/components/context/session";
 import { ProfilePageEmptyMessage } from "~/components/profile-page-empty-message";
 import { Record } from "~/components/record";
@@ -13,7 +14,6 @@ import { ShowCreateNewRecordDialogButton } from "~/components/show-create-new-re
 import { Icon } from "~/components/ui/icon";
 
 import { actors, recordVersions, records } from "~/server/db/schemas";
-import { findOneByPID$ } from "~/server/modules/actors/rpc";
 import { getRecordsPage$ } from "~/server/modules/records/rpc";
 
 import { createInfiniteScroll } from "~/lib/primitives/create-infinite-scroll";
@@ -62,51 +62,42 @@ const NO_DATA_MESSAGES_VISITOR = {
   ],
 };
 
-const getRouteData = cache(async (actorPublicId: string, cursor?: string) => {
-  "use server";
+const routeData = cache(
+  async (actorId: (typeof actors.$inferSelect)["id"], cursor?: string) => {
+    "use server";
 
-  const matchingActor = await findOneByPID$(actorPublicId);
+    const result = await getRecordsPage$(eq(records.authorId, actorId), cursor);
 
-  if (!matchingActor) {
-    throw redirect(paths.notFound);
-  }
+    if (!result.length) {
+      return rpcSuccessResponse([]);
+    }
 
-  const result = await getRecordsPage$(
-    eq(records.authorId, matchingActor.id),
-    cursor
-  );
-
-  if (!result.length) {
-    return rpcSuccessResponse([]);
-  }
-
-  return rpcSuccessResponse(
-    result.reduce(
-      (acc, { versions, ...curr }) => [
-        ...acc,
-        { ...curr, latestVersion: versions[0] },
-      ],
-      [] as (typeof records.$inferSelect & {
-        author: typeof actors.$inferSelect;
-        latestVersion: typeof recordVersions.$inferSelect;
-      })[]
-    )
-  );
-}, "actor-activity");
+    return rpcSuccessResponse(
+      result.reduce(
+        (acc, { versions, ...curr }) => [
+          ...acc,
+          { ...curr, latestVersion: versions[0] },
+        ],
+        [] as (typeof records.$inferSelect & {
+          author: typeof actors.$inferSelect;
+          latestVersion: typeof recordVersions.$inferSelect;
+        })[]
+      )
+    );
+  },
+  "actor:activity"
+);
 
 export default function ActorActivity() {
-  const params = useParams();
-  const { actor } = useSession();
+  const { actor: sessionActor } = useSession();
+  const { actor } = useActorRoute();
 
-  const isSessionActor = params.actorPublicId === actor()?.pid;
+  const isSessionActor = sessionActor() && sessionActor()!.id === actor().id;
 
   const [infiniteRecords, infiniteScrollLoader, { source, end }] =
     createInfiniteScroll(
       async (source) => {
-        const response = await getRouteData(
-          params.actorPublicId,
-          source as string
-        );
+        const response = await routeData(source.actorId, source.cursor);
 
         if (response.success) {
           return response.data;
@@ -115,61 +106,62 @@ export default function ActorActivity() {
         return [];
       },
       {
-        initialSource: "",
-
-        getNextSource: ({ content }) => content().at(-1)?.createdAt || "",
+        initialSource: {
+          actorId: actor().id,
+          cursor: "",
+        },
+        getNextSource: ({ content }) => ({
+          actorId: actor().id,
+          cursor: content().at(-1)?.createdAt || "",
+        }),
       }
     );
 
   return (
-    <>
-      <Show
-        when={!(source() === "" && infiniteRecords().length === 0)}
-        fallback={
-          <ProfilePageEmptyMessage
-            title={
-              isSessionActor
-                ? sample(NO_DATA_MESSAGES.title)
-                : sample(NO_DATA_MESSAGES_VISITOR.title(params.actorPublicId))
-            }
-            description={
-              isSessionActor
-                ? sample(NO_DATA_MESSAGES.description)
-                : sample(NO_DATA_MESSAGES_VISITOR.description)
-            }
-          >
-            <Show when={isSessionActor}>
-              <ShowCreateNewRecordDialogButton />
-            </Show>
-          </ProfilePageEmptyMessage>
-        }
-      >
-        <div class="grid gap-layout py-layout">
-          <For each={infiniteRecords()}>
-            {(record) => <Record {...record} />}
-          </For>
-        </div>
-
-        <Show
-          when={!end()}
-          fallback={
-            <RecordFeedEmptyMessage
-              actionList={getDefaultActionList().map((actionItem) =>
-                actionItem.href === paths.explore.actors
-                  ? {
-                      ...actionItem,
-                      href: paths.actor(params.actorPublicId).connections,
-                    }
-                  : actionItem
-              )}
-            />
+    <Show
+      when={!(source().cursor === "" && infiniteRecords().length === 0)}
+      fallback={
+        <ProfilePageEmptyMessage
+          title={
+            isSessionActor
+              ? sample(NO_DATA_MESSAGES.title)
+              : sample(NO_DATA_MESSAGES_VISITOR.title(actor().pid))
+          }
+          description={
+            isSessionActor
+              ? sample(NO_DATA_MESSAGES.description)
+              : sample(NO_DATA_MESSAGES_VISITOR.description)
           }
         >
-          <div ref={infiniteScrollLoader} class="py-8 h-full">
-            <Icon.spinner class="text-2xl animate-spin mx-auto" />
-          </div>
-        </Show>
+          <Show when={isSessionActor}>
+            <ShowCreateNewRecordDialogButton />
+          </Show>
+        </ProfilePageEmptyMessage>
+      }
+    >
+      <div class="grid gap-layout">
+        <For each={infiniteRecords()}>{(record) => <Record {...record} />}</For>
+      </div>
+
+      <Show
+        when={!end()}
+        fallback={
+          <RecordFeedEmptyMessage
+            actionList={getDefaultActionList().map((actionItem) =>
+              actionItem.href === paths.explore.actors
+                ? {
+                    ...actionItem,
+                    href: paths.actor(actor().pid).connections,
+                  }
+                : actionItem
+            )}
+          />
+        }
+      >
+        <div ref={infiniteScrollLoader} class="py-8 h-full">
+          <Icon.spinner class="text-2xl animate-spin mx-auto" />
+        </div>
       </Show>
-    </>
+    </Show>
   );
 }

@@ -1,14 +1,9 @@
-import {
-  RouteDefinition,
-  cache,
-  createAsync,
-  redirect,
-  useParams,
-} from "@solidjs/router";
+import { cache } from "@solidjs/router";
 import { eq } from "drizzle-orm";
 import { For, Show, createSignal } from "solid-js";
 
 import { Composer } from "~/components/composer/composer";
+import { useRecordRoute } from "~/components/context/record-route";
 import { useSession } from "~/components/context/session";
 import { ProfilePageEmptyMessage } from "~/components/profile-page-empty-message";
 import { Record } from "~/components/record";
@@ -16,17 +11,13 @@ import { RecordFeedEmptyMessage } from "~/components/record-feed-empty-message";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 
-import { db } from "~/server/db";
 import { recordVersions, records } from "~/server/db/schemas";
-import { findOneByPID$ } from "~/server/modules/actors/rpc";
 import { getRecordsPage$ } from "~/server/modules/records/rpc";
 
 import { createInfiniteScroll } from "~/lib/primitives/create-infinite-scroll";
 
 import { sample } from "~/lib/utils/common";
 import { rpcSuccessResponse } from "~/lib/utils/rpc";
-
-import { paths } from "~/lib/constants/paths";
 
 const NO_DATA_MESSAGES = {
   title: [
@@ -47,71 +38,15 @@ const NO_DATA_MESSAGES = {
   ],
 };
 
-const getRecord = cache(
-  async (actorPublicId: string, recordPublicId: string) => {
+const routeData = cache(
+  async (
+    parentRecordId: (typeof records.$inferSelect)["id"],
+    cursor?: string
+  ) => {
     "use server";
-
-    const matchingActor = await findOneByPID$(actorPublicId);
-
-    if (!matchingActor) {
-      throw redirect(paths.notFound);
-    }
-
-    const matchingRecord = await db.query.records.findFirst({
-      where: (records, { and, eq }) =>
-        and(
-          eq(records.authorId, matchingActor.id),
-          eq(records.pid, recordPublicId)
-        ),
-      with: {
-        author: true,
-        versions: {
-          orderBy: (recordVersions, { desc }) => [
-            desc(recordVersions.createdAt),
-          ],
-          limit: 1,
-        },
-      },
-    });
-
-    if (!matchingRecord) {
-      throw redirect(paths.notFound);
-    }
-
-    const { versions, ...record } = matchingRecord;
-
-    return rpcSuccessResponse({
-      ...record,
-      latestVersion: versions[0],
-    });
-  },
-  "record"
-);
-
-const getRecordReplies = cache(
-  async (actorPublicId: string, recordPublicId: string, cursor?: string) => {
-    "use server";
-
-    const matchingActor = await findOneByPID$(actorPublicId);
-
-    if (!matchingActor) {
-      return rpcSuccessResponse([]);
-    }
-
-    const matchingRecord = await db.query.records.findFirst({
-      where: (records, { and, eq }) =>
-        and(
-          eq(records.authorId, matchingActor.id),
-          eq(records.pid, recordPublicId)
-        ),
-    });
-
-    if (!matchingRecord) {
-      return rpcSuccessResponse([]);
-    }
 
     const matchingReplies = await getRecordsPage$(
-      eq(records.parentRecordId, matchingRecord.id),
+      eq(records.parentRecordId, parentRecordId),
       cursor
     );
 
@@ -130,25 +65,14 @@ const getRecordReplies = cache(
   "record:replies"
 );
 
-export const route = {
-  load: ({ params }) => getRecord(params.actorPublicId, params.recordPublicId),
-} satisfies RouteDefinition;
-
 export default function RecordReplies() {
-  const params = useParams();
   const { actor } = useSession();
+  const { record } = useRecordRoute();
 
-  const record = createAsync(() =>
-    getRecord(params.actorPublicId, params.recordPublicId)
-  );
   const [infiniteReplies, infiniteScrollLoader, { source, end }] =
     createInfiniteScroll(
       async (source) => {
-        const response = await getRecordReplies(
-          source.actorPublicId,
-          source.recordPublicId,
-          source.cursor
-        );
+        const response = await routeData(source.recordId, source.cursor);
 
         if (response.success) {
           return response.data;
@@ -158,23 +82,26 @@ export default function RecordReplies() {
       },
       {
         initialSource: {
-          actorPublicId: params.actorPublicId,
-          recordPublicId: params.recordPublicId,
+          recordId: record().id,
           cursor: "",
         },
-
         getNextSource: ({ content }) => ({
-          actorPublicId: params.actorPublicId,
-          recordPublicId: params.recordPublicId,
+          recordId: record().id,
           cursor: content().at(-1)?.createdAt || "",
         }),
       }
     );
 
-  const [isComposingReply, setIsComposingReply] = createSignal(false);
+  const [isComposingReply, setIsComposingReply] = createSignal(true);
 
   return (
     <>
+      <Record
+        {...record()}
+        config={{ navigateOnClick: false, navigateOnAuxClick: false }}
+        class="!mt-0"
+      />
+
       <div class="flex justify-between items-center h-12 n-space-y-1">
         <h2 class="text-2xl font-bold">Replies</h2>
         <Show when={actor() && !isComposingReply()}>
@@ -187,7 +114,7 @@ export default function RecordReplies() {
 
       <Show when={isComposingReply()}>
         <Composer
-          parentRecordId={record()!.data!.id}
+          parentRecordId={record().id}
           onSuccess={() => setIsComposingReply(false)}
         />
       </Show>
@@ -202,7 +129,7 @@ export default function RecordReplies() {
           />
         }
       >
-        <div class="grid gap-layout py-layout !!!!!!!!!!!!!!!!!">
+        <div class="grid gap-layout">
           <For each={infiniteReplies()}>
             {(record) => <Record {...(record as any)} />}
           </For>

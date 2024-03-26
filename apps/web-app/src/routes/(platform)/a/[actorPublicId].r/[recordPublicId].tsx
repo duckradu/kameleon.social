@@ -1,21 +1,84 @@
-import { RouteSectionProps } from "@solidjs/router";
+import {
+  cache,
+  createAsync,
+  redirect,
+  RouteSectionProps,
+  useParams,
+} from "@solidjs/router";
 import {
   createEffect,
   createSignal,
   onCleanup,
+  ParentProps,
   Show,
   Suspense,
 } from "solid-js";
 
-import {
-  RecordRouteProvider,
-  useRecordRoute,
-} from "~/components/context/record-route";
-import { Record as RecordComponent } from "~/components/record";
+import { useActorRoute } from "~/components/context/actor-route";
+import { RecordRouteProvider } from "~/components/context/record-route";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
+import { paths } from "~/lib/constants/paths";
+import { rpcSuccessResponse } from "~/lib/utils/rpc";
+import { db } from "~/server/db";
+import { actors, records } from "~/server/db/schemas";
 
-export default function Record(props: RouteSectionProps) {
+const routeData = cache(
+  async (
+    actorId: NonNullable<(typeof actors.$inferInsert)["id"]>,
+    recordPublicId: (typeof records.$inferSelect)["pid"]
+  ) => {
+    "use server";
+
+    const matchingRecord = await db.query.records.findFirst({
+      where: (records, { and, eq }) =>
+        and(eq(records.authorId, actorId), eq(records.pid, recordPublicId)),
+      with: {
+        author: true,
+        versions: {
+          orderBy: (recordVersions, { desc }) => [
+            desc(recordVersions.createdAt),
+          ],
+          limit: 1,
+        },
+        // TODO: Add parentRecord here
+      },
+    });
+
+    if (!matchingRecord) {
+      throw redirect(paths.notFound);
+    }
+
+    const { versions, ...record } = matchingRecord;
+
+    return rpcSuccessResponse({
+      ...record,
+      latestVersion: versions[0],
+    });
+  },
+  "record:layout"
+);
+
+export type RouteDataType = typeof routeData;
+
+export default function RecordLayoutWrapper(props: RouteSectionProps) {
+  const params = useParams();
+
+  return (
+    <Show when={params.recordPublicId} keyed>
+      <RecordLayout>{props.children}</RecordLayout>
+    </Show>
+  );
+}
+
+function RecordLayout(props: ParentProps) {
+  const params = useParams();
+  const { actor } = useActorRoute();
+
+  const record = createAsync(() =>
+    routeData(actor().id, params.recordPublicId)
+  );
+
   const [noScrollY, setNoScrollY] = createSignal(true);
 
   createEffect(() => {
@@ -35,7 +98,7 @@ export default function Record(props: RouteSectionProps) {
   });
 
   return (
-    <RecordRouteProvider>
+    <RecordRouteProvider recordAccessor={record}>
       <div class="relative space-y-layout">
         <div
           classList={{
@@ -51,8 +114,6 @@ export default function Record(props: RouteSectionProps) {
           </Button>
         </div>
 
-        <ViewRouteRecord />
-
         <Suspense
           fallback={
             <div class="py-8 h-full">
@@ -64,26 +125,5 @@ export default function Record(props: RouteSectionProps) {
         </Suspense>
       </div>
     </RecordRouteProvider>
-  );
-}
-
-function ViewRouteRecord() {
-  const { record } = useRecordRoute();
-
-  return (
-    <Show
-      when={record()}
-      fallback={
-        <div class="!mt-0 py-8 h-full border border-border rounded-xl">
-          <Icon.spinner class="text-2xl animate-spin mx-auto" />
-        </div>
-      }
-    >
-      <RecordComponent
-        {...record()!.data!}
-        config={{ navigateOnClick: false, navigateOnAuxClick: false }}
-        class="!mt-0"
-      />
-    </Show>
   );
 }

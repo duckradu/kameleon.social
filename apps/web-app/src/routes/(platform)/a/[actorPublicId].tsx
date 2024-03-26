@@ -88,7 +88,7 @@ export default function ActorLayout(props: RouteSectionProps) {
         </div>
       </header>
 
-      <div class="relative">
+      <div class="relative space-y-layout">
         {/* <div class="sticky-header flex z-10 [&>a]-(flex flex-1 items-center justify-center py-3 font-medium border-b border-brand) [&>a:hover]:bg-muted-foreground/10 [&>a:not(.active)]-(text-muted-foreground border-muted)">
           <A href={paths.actor(actor().pid || "").profile} end>
             Activity

@@ -18,10 +18,6 @@ import { paths } from "~/lib/constants/paths";
 const routeData = cache(async (actorPublicId: string) => {
   "use server";
 
-  if (!actorPublicId) {
-    throw redirect(paths.notFound);
-  }
-
   const matchingActor = await findOneByPID$(actorPublicId);
 
   if (!matchingActor) {
