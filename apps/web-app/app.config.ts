@@ -11,7 +11,7 @@ export default defineConfig({
         autoname: true,
         locator: {
           targetIDE: "vscode",
-          key: "Control",
+          key: "Alt",
           jsxLocation: true,
           componentLocation: true,
         },
