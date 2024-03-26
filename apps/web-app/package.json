@@ -54,14 +54,15 @@
     "node": ">=18"
   },
   "devDependencies": {
-    "@types/lodash.capitalize": "^4.2.9",
     "@iconify/json": "^2.2.195",
+    "@types/lodash.capitalize": "^4.2.9",
     "@types/qrcode": "^1.5.5",
     "@unocss/preset-web-fonts": "^0.58.6",
     "@unocss/transformer-directives": "^0.58.6",
     "@unocss/transformer-variant-group": "^0.58.6",
     "drizzle-kit": "^0.20.14",
     "pg": "^8.11.3",
+    "solid-devtools": "^0.29.3",
     "tsx": "^4.7.1",
     "unocss": "^0.58.6",
     "unocss-preset-animations": "^1.0.2",
